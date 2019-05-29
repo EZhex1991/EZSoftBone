@@ -13,6 +13,11 @@ namespace EZUnity.PhysicsBone
         {
             return new Vector3(Mathf.Abs(v.x), Mathf.Abs(v.y), Mathf.Abs(v.z));
         }
+        public static float Max(this Vector3 v)
+        {
+            return Mathf.Max(v.x, v.y, v.z);
+        }
+
         public static bool Contains(this LayerMask mask, int layer)
         {
             return (mask | (1 << layer)) == mask;

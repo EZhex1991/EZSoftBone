@@ -221,6 +221,7 @@ namespace EZUnity.PhysicsBone
         private EZPhysicsBoneForce m_ForceModule;
         public EZPhysicsBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
+        public float globalRadius { get; private set; }
         private List<TreeNode> m_PhysicsTrees = new List<TreeNode>();
 
         private void Start()
@@ -273,11 +274,12 @@ namespace EZUnity.PhysicsBone
         {
             m_PhysicsTrees.Clear();
             if (rootBones == null || rootBones.Count == 0) return;
+            globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
                 TreeNode tree = new TreeNode(rootBones[i], endNodeLength, startDepth, 0, 0, 0);
-                tree.Inflate(radius, radiusCurve);
+                tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
         }
