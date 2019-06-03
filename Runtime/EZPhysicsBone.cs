@@ -14,6 +14,8 @@ namespace EZUnity.PhysicsBone
         public class TreeNode : IDisposable
         {
             public TreeNode parent;
+            public TreeNode leftSibling;
+            public TreeNode rightSibling;
             public List<TreeNode> children = new List<TreeNode>();
 
             public Transform transform;
@@ -21,6 +23,9 @@ namespace EZUnity.PhysicsBone
             public int depth;
             public float nodeLength;
             public float boneLength;
+
+            public float leftLength;
+            public float rightLength;
 
             public float treeLength;
             public float normalizedLength;
@@ -79,6 +84,17 @@ namespace EZUnity.PhysicsBone
                     children.Add(node);
                     treeLength = node.treeLength;
                 }
+            }
+
+            public void SetLeftSibling(TreeNode node)
+            {
+                leftSibling = node;
+                leftLength = (this.position - node.position).magnitude;
+            }
+            public void SetRightSibling(TreeNode node)
+            {
+                rightSibling = node;
+                rightLength = (this.position - node.position).magnitude;
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
@@ -150,18 +166,13 @@ namespace EZUnity.PhysicsBone
 
             public void Dispose()
             {
-                Dispose(true);
-            }
-            public void Dispose(bool recursive = true)
-            {
-                if (recursive)
+                for (int i = 0; i < children.Count; i++)
                 {
-                    for (int i = 0; i < children.Count; i++)
-                    {
-                        children[i].Dispose(recursive);
-                    }
+                    children[i].Dispose();
                 }
                 parent = null;
+                leftSibling = null;
+                rightSibling = null;
                 children.Clear();
                 transform = null;
             }
@@ -174,6 +185,10 @@ namespace EZUnity.PhysicsBone
         [SerializeField]
         private int m_StartDepth;
         public int startDepth { get { return m_StartDepth; } }
+
+        [SerializeField]
+        private bool m_UseSiblingConstraints;
+        public bool useSiblingConstraints { get { return m_UseSiblingConstraints; } }
 
         [SerializeField]
         private float m_EndNodeLength;
@@ -282,7 +297,34 @@ namespace EZUnity.PhysicsBone
                 tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
+            if (useSiblingConstraints)
+            {
+                SetSiblings();
+            }
         }
+        private void SetSiblings()
+        {
+            TreeNode[] currentTier = new TreeNode[m_PhysicsTrees.Count];
+            for (int i = 0; i < currentTier.Length; i++)
+            {
+                currentTier[i] = m_PhysicsTrees[i];
+            }
+            while (currentTier[0].children.Count > 0)
+            {
+                for (int i = 0; i < currentTier.Length; i++)
+                {
+                    int left = (i + currentTier.Length - 1) % currentTier.Length;
+                    int right = (i + 1) % currentTier.Length;
+                    currentTier[i].SetLeftSibling(currentTier[left]);
+                    currentTier[i].SetRightSibling(currentTier[right]);
+                }
+                for (int i = 0; i < currentTier.Length; i++)
+                {
+                    currentTier[i] = currentTier[i].children[0];
+                }
+            }
+        }
+
         private void RevertTransforms()
         {
             for (int i = 0; i < m_PhysicsTrees.Count; i++)
@@ -327,6 +369,9 @@ namespace EZUnity.PhysicsBone
                 {
                     force += forceModule.GetForce(node.normalizedLength);
                 }
+                force.x *= transform.localScale.x;
+                force.y *= transform.localScale.y;
+                force.z *= transform.localScale.z;
                 node.position += force * (1 - sharedMaterial.GetResistance(node.normalizedLength));
 
                 // Stiffness (shape keeper)
@@ -402,6 +447,13 @@ namespace EZUnity.PhysicsBone
                 Gizmos.DrawWireSphere(node.position, node.radius);
             if (node.parent != null)
                 Gizmos.DrawLine(node.parent.position, node.position);
+            if (useSiblingConstraints)
+            {
+                if (node.leftSibling != null)
+                    Gizmos.DrawLine(node.leftSibling.position, node.position);
+                if (node.rightSibling != null)
+                    Gizmos.DrawLine(node.rightSibling.position, node.position);
+            }
         }
     }
 }
