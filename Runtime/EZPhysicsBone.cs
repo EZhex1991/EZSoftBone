@@ -73,11 +73,12 @@ namespace EZUnity.PhysicsBone
                     if (t.parent != null)
                     {
                         // extend last bone to end node using local position
-                        node.originalLocalPosition = t.InverseTransformPoint(t.parent.TransformPoint(t.localPosition * 2)) * endLength;
+                        node.originalLocalPosition = t.InverseTransformVector(t.parent.TransformVector(t.localPosition)) * endLength;
                     }
                     node.depth = depth + 1;
                     node.position = t.TransformPoint(node.originalLocalPosition);
-                    node.nodeLength = node.originalLocalPosition.magnitude;
+                    // nodeLength should be in world space
+                    node.nodeLength = t.TransformVector(node.originalLocalPosition).magnitude;
                     node.boneLength = boneLength + node.nodeLength;
                     node.treeLength = node.boneLength;
                     node.parent = this;
