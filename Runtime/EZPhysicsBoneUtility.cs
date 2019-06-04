@@ -25,7 +25,7 @@ namespace EZUnity.PhysicsBone
 
         public static void GetCapsuleSpheres(CapsuleCollider collider, out Vector3 sphereP0, out Vector3 sphereP1, out float radius)
         {
-            Vector3 scale = collider.transform.localScale.Abs();
+            Vector3 scale = collider.transform.lossyScale.Abs();
             radius = collider.radius;
             sphereP0 = sphereP1 = collider.center;
             float height = collider.height * 0.5f;
@@ -56,7 +56,7 @@ namespace EZUnity.PhysicsBone
 
         public static void PointOutsideSphere(ref Vector3 position, SphereCollider collider, float spacing)
         {
-            Vector3 scale = collider.transform.localScale.Abs();
+            Vector3 scale = collider.transform.lossyScale.Abs();
             float radius = collider.radius * Mathf.Max(scale.x, scale.y, scale.z);
             PointOutsideSphere(ref position, collider.transform.TransformPoint(collider.center), radius + spacing);
         }
