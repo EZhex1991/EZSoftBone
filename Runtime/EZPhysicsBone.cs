@@ -11,6 +11,13 @@ namespace EZUnity.PhysicsBone
 {
     public class EZPhysicsBone : MonoBehaviour
     {
+        public enum SiblingConstraints
+        {
+            None,
+            Root,
+            Depth,
+        }
+
         public class TreeNode : IDisposable
         {
             public TreeNode parent;
@@ -89,11 +96,13 @@ namespace EZUnity.PhysicsBone
 
             public void SetLeftSibling(TreeNode node)
             {
+                if (node == this || node == rightSibling) return;
                 leftSibling = node;
                 leftLength = (this.position - node.position).magnitude;
             }
             public void SetRightSibling(TreeNode node)
             {
+                if (node == this || node == leftSibling) return;
                 rightSibling = node;
                 rightLength = (this.position - node.position).magnitude;
             }
@@ -183,6 +192,7 @@ namespace EZUnity.PhysicsBone
         private List<Transform> m_RootBones;
         public List<Transform> rootBones { get { return m_RootBones; } }
 
+        [Header("Structure")]
         [SerializeField]
         private int m_StartDepth;
         public int startDepth { get { return m_StartDepth; } }
@@ -190,6 +200,19 @@ namespace EZUnity.PhysicsBone
         [SerializeField]
         private float m_EndNodeLength;
         public float endNodeLength { get { return m_EndNodeLength; } }
+
+        [SerializeField]
+        private SiblingConstraints m_SiblingConstraints = SiblingConstraints.None;
+        public SiblingConstraints siblingConstraints { get { return m_SiblingConstraints; } }
+
+        [SerializeField]
+        private bool m_CloseSiblings = false;
+        public bool closeSiblings { get { return m_CloseSiblings; } }
+
+        [Header("Performance")]
+        [SerializeField, Range(1, 10)]
+        private int m_Iterations = 1;
+        public int iterations { get { return m_Iterations; } }
 
         [SerializeField]
         private EZPhysicsBoneMaterial m_Material;
@@ -206,14 +229,6 @@ namespace EZUnity.PhysicsBone
                 m_Material = value;
             }
         }
-
-        [SerializeField]
-        private int m_Iterations = 1;
-        public int iterations { get { return m_Iterations; } }
-
-        [SerializeField]
-        private bool m_UseSiblingConstraints;
-        public bool useSiblingConstraints { get { return m_UseSiblingConstraints; } }
 
         [SerializeField]
         private float m_SleepThreshold = 0.005f;
@@ -263,6 +278,7 @@ namespace EZUnity.PhysicsBone
             RevertTransforms();
         }
 
+#if UNITY_EDITOR
         private void OnValidate()
         {
             m_StartDepth = Mathf.Max(0, m_StartDepth);
@@ -270,9 +286,13 @@ namespace EZUnity.PhysicsBone
             m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
-            if (Application.isEditor && Application.isPlaying)
+            if (Application.isPlaying)
             {
                 RevertTransforms();
+                InitPhysicsTrees();
+            }
+            else
+            {
                 InitPhysicsTrees();
             }
         }
@@ -280,7 +300,7 @@ namespace EZUnity.PhysicsBone
         {
             if (!enabled) return;
 
-            if (Application.isEditor && !Application.isPlaying && transform.hasChanged)
+            if (!Application.isPlaying && transform.hasChanged)
             {
                 InitPhysicsTrees();
             }
@@ -290,6 +310,7 @@ namespace EZUnity.PhysicsBone
                 DrawNodeGizmos(m_PhysicsTrees[i]);
             }
         }
+#endif
 
         private void InitPhysicsTrees()
         {
@@ -303,36 +324,65 @@ namespace EZUnity.PhysicsBone
                 tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
-            if (useSiblingConstraints)
+            if (siblingConstraints == SiblingConstraints.Root)
             {
-                SetSiblings();
-            }
-        }
-        private void SetSiblings()
-        {
-            TreeNode[] currentTier = new TreeNode[m_PhysicsTrees.Count];
-            for (int i = 0; i < currentTier.Length; i++)
-            {
-                currentTier[i] = m_PhysicsTrees[i];
-            }
-            SetSiblings(currentTier);
-            while (currentTier[0].transform != null)
-            {
-                for (int i = 0; i < currentTier.Length; i++)
+                for (int i = 0; i < m_PhysicsTrees.Count; i++)
                 {
-                    currentTier[i] = currentTier[i].children[0];
+                    Queue<TreeNode> nodes = new Queue<TreeNode>();
+                    nodes.Enqueue(m_PhysicsTrees[i]);
+                    SetSiblingsByDepth(nodes, closeSiblings);
                 }
-                SetSiblings(currentTier);
+            }
+            else if (siblingConstraints == SiblingConstraints.Depth)
+            {
+                Queue<TreeNode> nodes = new Queue<TreeNode>();
+                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                {
+                    nodes.Enqueue(m_PhysicsTrees[i]);
+                }
+                if (nodes.Count > 0) SetSiblingsByDepth(nodes, closeSiblings);
             }
         }
-        private void SetSiblings(TreeNode[] tier)
+        private void SetSiblingsByDepth(Queue<TreeNode> nodes, bool closed)
         {
-            for (int i = 0; i < tier.Length; i++)
+            TreeNode first = nodes.Dequeue();
+            for (int i = 0; i < first.children.Count; i++)
             {
-                int left = (i + tier.Length - 1) % tier.Length;
-                int right = (i + 1) % tier.Length;
-                tier[i].SetLeftSibling(tier[left]);
-                tier[i].SetRightSibling(tier[right]);
+                nodes.Enqueue(first.children[i]);
+            }
+            TreeNode left = first;
+            TreeNode right = null;
+            while (nodes.Count > 0)
+            {
+                right = nodes.Dequeue();
+                for (int i = 0; i < right.children.Count; i++)
+                {
+                    nodes.Enqueue(right.children[i]);
+                }
+                if (left.depth == right.depth)
+                {
+                    // same depth
+                    left.SetRightSibling(right);
+                    right.SetLeftSibling(left);
+                }
+                else
+                {
+                    // connect the last node to the first of this tier
+                    if (closed)
+                    {
+                        left.SetRightSibling(first);
+                        first.SetLeftSibling(left);
+                    }
+                    // next depth
+                    first = right;
+                }
+                left = right;
+            }
+            // connect the last node to the first of the last tier
+            if (right != null && closed)
+            {
+                first.SetLeftSibling(right);
+                right.SetRightSibling(first);
             }
         }
 
@@ -414,7 +464,7 @@ namespace EZUnity.PhysicsBone
                 Vector3 nodeDir = (node.position - node.parent.position).normalized;
                 nodeDir = node.parent.position + nodeDir * node.nodeLength;
                 // Siblings
-                if (useSiblingConstraints)
+                if (siblingConstraints != SiblingConstraints.None)
                 {
                     int constraints = 1;
                     if (node.leftSibling != null)
@@ -482,7 +532,7 @@ namespace EZUnity.PhysicsBone
                 Gizmos.DrawWireSphere(node.position, node.radius);
             if (node.parent != null)
                 Gizmos.DrawLine(node.parent.position, node.position);
-            if (useSiblingConstraints)
+            if (siblingConstraints != SiblingConstraints.None)
             {
                 if (node.leftSibling != null)
                     Gizmos.DrawLine(node.leftSibling.position, node.position);
