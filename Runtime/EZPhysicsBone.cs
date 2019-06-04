@@ -188,10 +188,6 @@ namespace EZUnity.PhysicsBone
         public int startDepth { get { return m_StartDepth; } }
 
         [SerializeField]
-        private bool m_UseSiblingConstraints;
-        public bool useSiblingConstraints { get { return m_UseSiblingConstraints; } }
-
-        [SerializeField]
         private float m_EndNodeLength;
         public float endNodeLength { get { return m_EndNodeLength; } }
 
@@ -210,6 +206,14 @@ namespace EZUnity.PhysicsBone
                 m_Material = value;
             }
         }
+
+        [SerializeField]
+        private int m_Iterations = 1;
+        public int iterations { get { return m_Iterations; } }
+
+        [SerializeField]
+        private bool m_UseSiblingConstraints;
+        public bool useSiblingConstraints { get { return m_UseSiblingConstraints; } }
 
         [SerializeField]
         private float m_SleepThreshold = 0.005f;
@@ -263,6 +267,7 @@ namespace EZUnity.PhysicsBone
         {
             m_StartDepth = Mathf.Max(0, m_StartDepth);
             m_EndNodeLength = Mathf.Max(0, m_EndNodeLength);
+            m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
             if (Application.isEditor && Application.isPlaying)
@@ -310,19 +315,24 @@ namespace EZUnity.PhysicsBone
             {
                 currentTier[i] = m_PhysicsTrees[i];
             }
-            while (currentTier[0].children.Count > 0)
+            SetSiblings(currentTier);
+            while (currentTier[0].transform != null)
             {
-                for (int i = 0; i < currentTier.Length; i++)
-                {
-                    int left = (i + currentTier.Length - 1) % currentTier.Length;
-                    int right = (i + 1) % currentTier.Length;
-                    currentTier[i].SetLeftSibling(currentTier[left]);
-                    currentTier[i].SetRightSibling(currentTier[right]);
-                }
                 for (int i = 0; i < currentTier.Length; i++)
                 {
                     currentTier[i] = currentTier[i].children[0];
                 }
+                SetSiblings(currentTier);
+            }
+        }
+        private void SetSiblings(TreeNode[] tier)
+        {
+            for (int i = 0; i < tier.Length; i++)
+            {
+                int left = (i + tier.Length - 1) % tier.Length;
+                int right = (i + 1) % tier.Length;
+                tier[i].SetLeftSibling(tier[left]);
+                tier[i].SetRightSibling(tier[right]);
             }
         }
 
@@ -343,9 +353,12 @@ namespace EZUnity.PhysicsBone
 
         private void UpdatePhysicsTrees(float deltaTime)
         {
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            for (int i = 0; i < iterations; i++)
             {
-                UpdateNode(m_PhysicsTrees[i], deltaTime);
+                for (int j = 0; j < m_PhysicsTrees.Count; j++)
+                {
+                    UpdateNode(m_PhysicsTrees[j], deltaTime);
+                }
             }
         }
         private void UpdateNode(TreeNode node, float deltaTime)
@@ -353,6 +366,7 @@ namespace EZUnity.PhysicsBone
             if (node.depth > startDepth)
             {
                 Vector3 lastPosition = node.position;
+                deltaTime /= iterations;
 
                 // Damping (inertia attenuation)
                 if (node.speed.sqrMagnitude < sleepThreshold)
@@ -373,12 +387,12 @@ namespace EZUnity.PhysicsBone
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                node.position += force * (1 - sharedMaterial.GetResistance(node.normalizedLength));
+                node.position += force * (1 - sharedMaterial.GetResistance(node.normalizedLength)) / iterations;
 
                 // Stiffness (shape keeper)
                 Vector3 parentOffset = node.parent.position - node.parent.transform.position;
                 Vector3 expectedPos = node.parent.transform.TransformPoint(node.originalLocalPosition) + parentOffset;
-                node.position = Vector3.Lerp(node.position, expectedPos, sharedMaterial.GetStiffness(node.normalizedLength));
+                node.position = Vector3.Lerp(node.position, expectedPos, sharedMaterial.GetStiffness(node.normalizedLength) / iterations);
 
                 // Collision
                 if (node.radius > 0)
@@ -398,12 +412,32 @@ namespace EZUnity.PhysicsBone
                 // Slackness (length keeper)
                 float slackness = sharedMaterial.GetSlackness(node.normalizedLength);
                 Vector3 nodeDir = (node.position - node.parent.position).normalized;
-                Vector3 lengthKeeper = node.parent.position + nodeDir * node.nodeLength;
-                node.position = Vector3.Lerp(lengthKeeper, node.position, slackness);
+                nodeDir = node.parent.position + nodeDir * node.nodeLength;
+                // Siblings
+                if (useSiblingConstraints)
+                {
+                    int constraints = 1;
+                    if (node.leftSibling != null)
+                    {
+                        Vector3 leftDir = (node.position - node.leftSibling.position).normalized;
+                        leftDir = node.leftSibling.position + leftDir * node.leftLength;
+                        nodeDir += leftDir;
+                        constraints++;
+                    }
+                    if (node.rightSibling != null)
+                    {
+                        Vector3 rightDir = (node.position - node.rightSibling.position).normalized;
+                        rightDir = node.rightSibling.position + rightDir * node.rightLength;
+                        nodeDir += rightDir;
+                        constraints++;
+                    }
+                    nodeDir /= constraints;
+                }
+                node.position = Vector3.Lerp(nodeDir, node.position, slackness / iterations);
 
                 node.speed = (node.position - lastPosition) / deltaTime;
             }
-            else
+            else if (node.transform != null)
             {
                 node.position = node.transform.position;
             }
