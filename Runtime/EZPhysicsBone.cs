@@ -206,8 +206,8 @@ namespace EZUnity.PhysicsBone
         public SiblingConstraints siblingConstraints { get { return m_SiblingConstraints; } }
 
         [SerializeField]
-        private bool m_CloseSiblings = false;
-        public bool closeSiblings { get { return m_CloseSiblings; } }
+        private bool m_ClosedSiblings = false;
+        public bool closedSiblings { get { return m_ClosedSiblings; } }
 
         [Header("Performance")]
         [SerializeField, Range(1, 10)]
@@ -330,7 +330,7 @@ namespace EZUnity.PhysicsBone
                 {
                     Queue<TreeNode> nodes = new Queue<TreeNode>();
                     nodes.Enqueue(m_PhysicsTrees[i]);
-                    SetSiblingsByDepth(nodes, closeSiblings);
+                    SetSiblingsByDepth(nodes, closedSiblings);
                 }
             }
             else if (siblingConstraints == SiblingConstraints.Depth)
@@ -340,7 +340,7 @@ namespace EZUnity.PhysicsBone
                 {
                     nodes.Enqueue(m_PhysicsTrees[i]);
                 }
-                if (nodes.Count > 0) SetSiblingsByDepth(nodes, closeSiblings);
+                if (nodes.Count > 0) SetSiblingsByDepth(nodes, closedSiblings);
             }
         }
         private void SetSiblingsByDepth(Queue<TreeNode> nodes, bool closed)

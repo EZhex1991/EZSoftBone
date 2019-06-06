@@ -21,7 +21,7 @@
     - None: 无同级约束（链）
     - Root: 约束同一个Root下深度相同的节点
     - Depth: 约束深度相同的节点
-  - CloseSiblings: 是否使用环状约束
+  - ClosedSiblings: 是否使用环状约束
 - Performance
   - Iterations: 迭代计算的次数
   - Material: 使用的材质(`EZPhysicsBoneMaterial`)，如果不指定，运行时会自动使用默认材质
