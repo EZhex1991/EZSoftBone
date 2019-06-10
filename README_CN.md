@@ -7,7 +7,7 @@
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
-- 材质"EZPhysicsBoneMaterial"调节表现效果
+- 材质"EZPhysicsBoneMaterial"调节表现效果，可重用于多个EZPhysicsBone对象
 - 继承EZPhysicsBoneColliderBase创建自定义碰撞
 
 ## EZPhysicsBone

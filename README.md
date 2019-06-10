@@ -7,7 +7,7 @@
 
 - All colliders supported (include MeshCollider)
 - Net structure supported (Cloth simulation)
-- Use EZPhysicsBoneMaterial to adjust its effects, and reuse it on multi-target
+- Use EZPhysicsBoneMaterial to adjust effects, and reuse it on other EZPhysicsBones
 - Inherit EZPhysicsBoneColliderBase to create custom colliders
 
 ## EZPhysicsBone
