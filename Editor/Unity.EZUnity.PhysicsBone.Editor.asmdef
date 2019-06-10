@@ -1,0 +1,10 @@
+{
+    "name": "Unity.EZUnity.PhysicsBone.Editor",
+    "references": [
+        "Unity.EZUnity.PhysicsBone"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

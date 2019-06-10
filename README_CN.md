@@ -1,13 +1,11 @@
 # EZPhysicsBone
 
-**动态骨骼，效果参考来源于AssetStore上的DynamicBone**
-
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
-- 支持网状结构
-- 独立的材质"EZPhysicsBoneMaterial"存放参数，通用性强
-- 代码可读性高，碰撞体可通过继承EZPhysicsBoneColliderBase进行自定义扩展
+- 支持网状结构（模拟布料）
+- 材质"EZPhysicsBoneMaterial"调节表现效果
+- 继承EZPhysicsBoneColliderBase创建自定义碰撞
 
 ## EZPhysicsBone
 
@@ -48,11 +46,17 @@
 
 ## EZPhysicsBoneForce
 
-![EZPhysicsBoneForce](.SamplePicture/EZPhysicsBoneForce.png)
+![EZPhysicsBoneForce_Curve](.SamplePicture/EZPhysicsBoneForce_Curve.png)
+![EZPhysicsBoneForce_Perlin](.SamplePicture/EZPhysicsBoneForce_Perlin.png)
 
 - Use Local Direction: 使用相对于所在的Transform的方向
 - Direction: 基础力的向量
 - Turbulence: 动荡大小
-- Turbulence Time Cycle: 动荡周期
 - Conductivity: 传导性（可理解为风速）
-- Turbulence Curve: 各方向的动荡曲线
+- Turbulence Mode:
+  - Curve:
+    - Turbulence Time Cycle: 动荡周期
+    - Turbulence Curve: 各方向的动荡曲线
+  - Perlin:
+    - Turbulence Speed: 2D柏林噪声在X方向上的移动速度
+    - Random seed: 2D柏林噪声在Y方向上的采样位置

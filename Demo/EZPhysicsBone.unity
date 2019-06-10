@@ -1108,70 +1108,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UseLocalDirection: 0
-  m_Direction: {x: 0, y: -0.03, z: 0}
-  m_Turbulence: {x: 0.25, y: 0.1, z: 0.25}
-  m_TurbulenceTimeCycle: 10
+  m_Direction: {x: -0.25, y: -0.1, z: -0.25}
+  m_Turbulence: {x: 0.5, y: 0.25, z: 0.5}
   m_Conductivity: 0.1
+  m_TurbulenceMode: 0
+  m_TurbulenceTimeCycle: 10
   m_TurbulenceXCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 136
     - serializedVersion: 2
       time: 0.050456524
-      value: 0.51479316
-      inSlope: 3.1410115
-      outSlope: 3.1410115
+      value: 0.73322165
+      inSlope: 1.4220607
+      outSlope: 1.4220607
       tangentMode: 34
     - serializedVersion: 2
       time: 0.13958286
-      value: 0.16535693
-      inSlope: 1.4128478
-      outSlope: 1.4128478
+      value: 0.57474536
+      inSlope: 0.64075464
+      outSlope: 0.64075464
       tangentMode: 34
     - serializedVersion: 2
       time: 0.25062567
       value: 0.9144939
-      inSlope: 0.8984754
-      outSlope: 0.8984754
+      inSlope: 0.40747643
+      outSlope: 0.40747643
       tangentMode: 34
     - serializedVersion: 2
       time: 0.42130065
-      value: 0.06975019
-      inSlope: -2.3111022
-      outSlope: -2.3111022
+      value: 0.5313858
+      inSlope: -1.0481311
+      outSlope: -1.0481311
       tangentMode: 34
     - serializedVersion: 2
       time: 0.5731515
-      value: 0.11943954
-      inSlope: -2.5324163
-      outSlope: -2.5324163
+      value: 0.55392087
+      inSlope: -1.1485014
+      outSlope: -1.1485014
       tangentMode: 34
     - serializedVersion: 2
       time: 0.75855565
-      value: -0.8802701
-      inSlope: 2.0037522
-      outSlope: 2.0037522
+      value: 0.10053259
+      inSlope: 0.9087417
+      outSlope: 0.9087417
       tangentMode: 34
     - serializedVersion: 2
       time: 0.82272243
-      value: -0.27713048
-      inSlope: 4.139091
-      outSlope: 4.139091
+      value: 0.37406847
+      inSlope: 1.8771603
+      outSlope: 1.8771603
       tangentMode: 34
     - serializedVersion: 2
       time: 0.93698955
-      value: -0.4052673
-      inSlope: 2.6551838
-      outSlope: 2.6551838
+      value: 0.31595585
+      inSlope: 1.2061414
+      outSlope: 1.2061414
       tangentMode: 34
     - serializedVersion: 2
       time: 1
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -1183,19 +1184,19 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
       time: 0.06842697
-      value: 0.9073835
+      value: 0.9093884
       inSlope: 1.2334301
       outSlope: 1.2334301
       tangentMode: 0
     - serializedVersion: 2
       time: 0.17805964
-      value: -0.2867502
+      value: 0.36573708
       inSlope: -4.5131364
       outSlope: -4.5131364
       tangentMode: 0
@@ -1207,121 +1208,123 @@ MonoBehaviour:
       tangentMode: 0
     - serializedVersion: 2
       time: 0.46783024
-      value: -0.81897736
+      value: 0.123430885
       inSlope: -0.35317066
       outSlope: -0.35317066
       tangentMode: 0
     - serializedVersion: 2
       time: 0.64237124
-      value: 0.14078683
+      value: 0.5603812
       inSlope: 1.8473045
       outSlope: 1.8473045
       tangentMode: 0
     - serializedVersion: 2
       time: 0.7748588
-      value: -0.10225791
+      value: 0.44973058
       inSlope: -1.440897
       outSlope: -1.440897
       tangentMode: 0
     - serializedVersion: 2
       time: 0.8628914
-      value: 0.14724016
+      value: 0.56331915
       inSlope: 0.22007725
       outSlope: 0.22007725
       tangentMode: 0
     - serializedVersion: 2
       time: 1
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   m_TurbulenceZCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: -1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 136
     - serializedVersion: 2
       time: 0.048665583
-      value: -0.5256567
-      inSlope: 4.185197
-      outSlope: 4.185197
+      value: 0.23685482
+      inSlope: 2.117659
+      outSlope: 2.117659
       tangentMode: 34
     - serializedVersion: 2
       time: 0.13802566
-      value: -0.64867
-      inSlope: 4.308449
-      outSlope: 4.308449
+      value: 0.18040876
+      inSlope: 1.9769806
+      outSlope: 1.9769806
       tangentMode: 34
     - serializedVersion: 2
       time: 0.1880945
-      value: -0.14830709
-      inSlope: 4.8059974
-      outSlope: 4.8059974
+      value: 0.410006
+      inSlope: 2.2052865
+      outSlope: 2.2052865
       tangentMode: 34
     - serializedVersion: 2
       time: 0.30642015
-      value: -0.1934489
-      inSlope: 4.928599
-      outSlope: 4.928599
+      value: 0.38929215
+      inSlope: 2.2615435
+      outSlope: 2.2615435
       tangentMode: 34
     - serializedVersion: 2
       time: 0.34803873
-      value: 0.23267144
-      inSlope: 4.716235
-      outSlope: 4.716235
+      value: 0.5848223
+      inSlope: 2.1640983
+      outSlope: 2.1640983
       tangentMode: 34
     - serializedVersion: 2
       time: 0.42274565
-      value: 0.17244029
-      inSlope: 4.264755
-      outSlope: 4.264755
+      value: 0.5571846
+      inSlope: 1.9569312
+      outSlope: 1.9569312
       tangentMode: 34
     - serializedVersion: 2
       time: 0.4989035
       value: 0.8834305
-      inSlope: 2.482528
-      outSlope: 2.482528
+      inSlope: 1.139136
+      outSlope: 1.139136
       tangentMode: 34
     - serializedVersion: 2
       time: 0.6172381
-      value: 0.36622715
-      inSlope: -1.4761089
-      outSlope: -1.4761089
+      value: 0.6461058
+      inSlope: -0.6773293
+      outSlope: -0.6773293
       tangentMode: 34
     - serializedVersion: 2
       time: 0.73721534
-      value: 0.53641105
-      inSlope: -5.2780714
-      outSlope: -5.2780714
+      value: 0.7241967
+      inSlope: -2.4219031
+      outSlope: -2.4219031
       tangentMode: 34
     - serializedVersion: 2
       time: 0.83952343
-      value: -0.68868864
-      inSlope: -4.925955
-      outSlope: -4.925955
+      value: 0.16204578
+      inSlope: -2.2603307
+      outSlope: -2.2603307
       tangentMode: 34
     - serializedVersion: 2
       time: 0.93004584
-      value: -0.4965366
-      inSlope: -2.537173
-      outSlope: -2.537173
+      value: 0.2502169
+      inSlope: -1.3014221
+      outSlope: -1.3014221
       tangentMode: 34
     - serializedVersion: 2
       time: 1
-      value: -1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 136
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  m_TurbulenceSpeed: {x: 0.2, y: 0.2, z: 0.2}
+  m_TurbulenceRandomSeed: {x: 0, y: 0.5, z: 1}
 --- !u!4 &303139639
 Transform:
   m_ObjectHideFlags: 0
