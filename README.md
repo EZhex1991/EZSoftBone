@@ -1,6 +1,7 @@
 # EZPhysicsBone
 
-[查看中文介绍](README_CN.md)
+[View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
+[查看中文介绍](https://github.com/EZhex1991/EZPhysicsBone/README_CN.md)  
 
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
 
@@ -9,7 +10,7 @@
 - Use EZPhysicsBoneMaterial to adjust its effects, and reuse it on multi-target
 - Inherit EZPhysicsBoneColliderBase to create custom colliders
 
-## EZPhysicsBone Component
+## EZPhysicsBone
 
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.png)
 

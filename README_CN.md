@@ -1,5 +1,8 @@
 # EZPhysicsBone
 
+[View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
+[English Version](https://github.com/EZhex1991/EZPhysicsBone/README.md)  
+
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
