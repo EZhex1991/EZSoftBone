@@ -1,5 +1,7 @@
 # EZPhysicsBone
 
+[查看中文介绍](README_CN.md)
+
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
 
 - All colliders supported (include MeshCollider)
