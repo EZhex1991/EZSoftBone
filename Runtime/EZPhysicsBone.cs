@@ -444,21 +444,6 @@ namespace EZUnity.PhysicsBone
                 Vector3 expectedPos = node.parent.transform.TransformPoint(node.originalLocalPosition) + parentOffset;
                 node.position = Vector3.Lerp(node.position, expectedPos, sharedMaterial.GetStiffness(node.normalizedLength) / iterations);
 
-                // Collision
-                if (node.radius > 0)
-                {
-                    foreach (EZPhysicsBoneColliderBase collider in EZPhysicsBoneColliderBase.EnabledColliders)
-                    {
-                        if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
-                            collider.Collide(ref node.position, node.radius);
-                    }
-                    foreach (Collider collider in extraColliders)
-                    {
-                        if (node.transform != collider.transform && collider.enabled)
-                            EZPhysicsBoneUtility.PointOutsideCollider(ref node.position, collider, node.radius);
-                    }
-                }
-
                 // Slackness (length keeper)
                 float slackness = sharedMaterial.GetSlackness(node.normalizedLength);
                 Vector3 nodeDir = (node.position - node.parent.position).normalized;
@@ -484,6 +469,21 @@ namespace EZUnity.PhysicsBone
                     nodeDir /= constraints;
                 }
                 node.position = Vector3.Lerp(nodeDir, node.position, slackness / iterations);
+
+                // Collision
+                if (node.radius > 0)
+                {
+                    foreach (EZPhysicsBoneColliderBase collider in EZPhysicsBoneColliderBase.EnabledColliders)
+                    {
+                        if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
+                            collider.Collide(ref node.position, node.radius);
+                    }
+                    foreach (Collider collider in extraColliders)
+                    {
+                        if (node.transform != collider.transform && collider.enabled)
+                            EZPhysicsBoneUtility.PointOutsideCollider(ref node.position, collider, node.radius);
+                    }
+                }
 
                 node.speed = (node.position - lastPosition) / deltaTime;
             }
