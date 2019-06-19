@@ -23,35 +23,43 @@ namespace EZUnity.PhysicsBone
             return (mask | (1 << layer)) == mask;
         }
 
-        public static void GetCapsuleSpheres(CapsuleCollider collider, out Vector3 sphereP0, out Vector3 sphereP1, out float radius)
+        public static void GetCapsuleParams(CapsuleCollider collider, out Vector3 center0, out Vector3 center1, out float radius)
         {
             Vector3 scale = collider.transform.lossyScale.Abs();
             radius = collider.radius;
-            sphereP0 = sphereP1 = collider.center;
+            center0 = center1 = collider.center;
             float height = collider.height * 0.5f;
             switch (collider.direction)
             {
                 case 0:
                     radius *= Mathf.Max(scale.y, scale.z);
                     height = Mathf.Max(0, height - radius / scale.x);
-                    sphereP0.x -= height;
-                    sphereP1.x += height;
+                    center0.x -= height;
+                    center1.x += height;
                     break;
                 case 1:
                     radius *= Mathf.Max(scale.x, scale.z);
                     height = Mathf.Max(0, height - radius / scale.y);
-                    sphereP0.y -= height;
-                    sphereP1.y += height;
+                    center0.y -= height;
+                    center1.y += height;
                     break;
                 case 2:
                     radius *= Mathf.Max(scale.x, scale.y);
                     height = Mathf.Max(0, height - radius / scale.z);
-                    sphereP0.z -= height;
-                    sphereP1.z += height;
+                    center0.z -= height;
+                    center1.z += height;
                     break;
             }
-            sphereP0 = collider.transform.TransformPoint(sphereP0);
-            sphereP1 = collider.transform.TransformPoint(sphereP1);
+            center0 = collider.transform.TransformPoint(center0);
+            center1 = collider.transform.TransformPoint(center1);
+        }
+        public static void GetCylinderParams(Transform transform, out Vector3 center, out Vector3 direction, out float radius, out float height)
+        {
+            Vector3 size = transform.lossyScale.Abs();
+            center = transform.position;
+            direction = transform.up;
+            radius = Mathf.Max(size.x, size.z) * 0.5f;
+            height = size.y;
         }
 
         public static void PointOutsideSphere(ref Vector3 position, SphereCollider collider, float spacing)
@@ -84,64 +92,94 @@ namespace EZUnity.PhysicsBone
 
         public static void PointOutsideCapsule(ref Vector3 position, CapsuleCollider collider, float spacing)
         {
-            Vector3 sphereP0, sphereP1;
+            Vector3 center0, center1;
             float radius;
-            GetCapsuleSpheres(collider, out sphereP0, out sphereP1, out radius);
-            PointOutsideCapsule(ref position, sphereP0, sphereP1, radius + spacing);
+            GetCapsuleParams(collider, out center0, out center1, out radius);
+            PointOutsideCapsule(ref position, center0, center1, radius + spacing);
         }
-        public static void PointOutsideCapsule(ref Vector3 position, Vector3 sphereP0, Vector3 sphereP1, float radius)
+        public static void PointOutsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
         {
-            Vector3 capsuleDir = sphereP1 - sphereP0;
-            Vector3 pointDir = position - sphereP0;
+            Vector3 capsuleDir = center1 - center0;
+            Vector3 pointDir = position - center0;
 
             float dot = Vector3.Dot(capsuleDir, pointDir);
             if (dot <= 0)
             {
-                PointOutsideSphere(ref position, sphereP0, radius);
+                PointOutsideSphere(ref position, center0, radius);
             }
             else if (dot >= capsuleDir.sqrMagnitude)
             {
-                PointOutsideSphere(ref position, sphereP1, radius);
+                PointOutsideSphere(ref position, center1, radius);
             }
             else
             {
-                Vector3 bounceDir = pointDir - capsuleDir.normalized * dot / capsuleDir.magnitude;
-                float bounceDis = bounceDir.magnitude;
-                if (bounceDis < radius)
+                Vector3 bounceDir = pointDir - Vector3.Project(pointDir, capsuleDir);
+                float bounceDis = radius - bounceDir.magnitude;
+                if (bounceDis > 0)
                 {
-                    position += bounceDir.normalized * (radius - bounceDis);
+                    position += bounceDir.normalized * bounceDis;
                 }
             }
         }
 
         public static void PointInsideCapsule(ref Vector3 position, CapsuleCollider collider, float spacing)
         {
-            Vector3 sphereP0, sphereP1;
+            Vector3 center0, center1;
             float radius;
-            GetCapsuleSpheres(collider, out sphereP0, out sphereP1, out radius);
-            PointInsideCapsule(ref position, sphereP0, sphereP1, radius - spacing);
+            GetCapsuleParams(collider, out center0, out center1, out radius);
+            PointInsideCapsule(ref position, center0, center1, radius - spacing);
         }
-        public static void PointInsideCapsule(ref Vector3 position, Vector3 sphereP0, Vector3 sphereP1, float radius)
+        public static void PointInsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
         {
-            Vector3 capsuleDir = sphereP1 - sphereP0;
-            Vector3 pointDir = position - sphereP0;
+            Vector3 capsuleDir = center1 - center0;
+            Vector3 pointDir = position - center0;
 
             float dot = Vector3.Dot(capsuleDir, pointDir);
             if (dot <= 0)
             {
-                PointInsideSphere(ref position, sphereP0, radius);
+                PointInsideSphere(ref position, center0, radius);
             }
             else if (dot >= capsuleDir.sqrMagnitude)
             {
-                PointInsideSphere(ref position, sphereP1, radius);
+                PointInsideSphere(ref position, center1, radius);
             }
             else
             {
-                Vector3 bounceDir = pointDir - capsuleDir.normalized * dot / capsuleDir.magnitude;
-                float bounceDis = bounceDir.magnitude;
-                if (bounceDis > radius)
+                Vector3 bounceDir = pointDir - Vector3.Project(pointDir, capsuleDir);
+                float bounceDis = radius - bounceDir.magnitude;
+                if (bounceDis < 0)
                 {
-                    position += bounceDir.normalized * (radius - bounceDis);
+                    position += bounceDir.normalized * bounceDis;
+                }
+            }
+        }
+
+        public static void PointOutsideCylinder(ref Vector3 position, Transform transform, float spacing)
+        {
+            Vector3 center, direction;
+            float radius, height;
+            GetCylinderParams(transform, out center, out direction, out radius, out height);
+            PointOutsideCylinder(ref position, center, direction, radius + spacing, height + spacing);
+        }
+        public static void PointOutsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
+        {
+            Vector3 pointDir = position - center;
+            Vector3 directionAlong = Vector3.Project(pointDir, direction);
+            float distanceAlong = height - directionAlong.magnitude;
+            if (distanceAlong > 0)
+            {
+                Vector3 directionSide = pointDir - directionAlong;
+                float distanceSide = radius - directionSide.magnitude;
+                if (distanceSide > 0)
+                {
+                    if (distanceSide < distanceAlong)
+                    {
+                        position += directionSide.normalized * distanceSide;
+                    }
+                    else
+                    {
+                        position += directionAlong.normalized * distanceAlong;
+                    }
                 }
             }
         }
