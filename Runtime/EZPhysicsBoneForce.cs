@@ -39,11 +39,11 @@ namespace EZUnity.PhysicsBone
         private float m_TurbulenceTimeCycle = 2f;
         public float turbulenceTimeCycle { get { return m_TurbulenceTimeCycle; } set { m_TurbulenceTimeCycle = Mathf.Max(0, value); } }
 
-        [SerializeField, EZCurveRange(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceXCurve = AnimationCurve.Linear(0, 0, 1, 1);
-        [SerializeField, EZCurveRange(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceYCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField, EZCurveRange(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceZCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
         [SerializeField]

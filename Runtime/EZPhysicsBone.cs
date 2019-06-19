@@ -244,7 +244,7 @@ namespace EZUnity.PhysicsBone
         [SerializeField]
         private float m_Radius = 0;
         public float radius { get { return m_Radius; } }
-        [SerializeField, EZCurveRange(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_RadiusCurve = AnimationCurve.Constant(0, 1, 1);
         public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
 
