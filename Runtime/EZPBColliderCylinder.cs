@@ -9,9 +9,18 @@ namespace EZUnity.PhysicsBone
 {
     public class EZPBColliderCylinder : EZPhysicsBoneColliderBase
     {
+        [SerializeField]
+        private float m_Margin;
+        public float margin { get { return m_Margin; } set { m_Margin = value; } }
+
+        [SerializeField]
+        private bool m_InsideMode;
+        public bool insideMode { get { return m_InsideMode; } set { m_InsideMode = value; } }
+
         public override void Collide(ref Vector3 position, float spacing)
         {
-            EZPhysicsBoneUtility.PointOutsideCylinder(ref position, transform, spacing);
+            if (insideMode) EZPhysicsBoneUtility.PointInsideCylinder(ref position, transform, spacing + margin);
+            else EZPhysicsBoneUtility.PointOutsideCylinder(ref position, transform, spacing + margin);
         }
 
 #if UNITY_EDITOR

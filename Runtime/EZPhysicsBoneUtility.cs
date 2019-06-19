@@ -184,6 +184,33 @@ namespace EZUnity.PhysicsBone
             }
         }
 
+        public static void PointInsideCylinder(ref Vector3 position, Transform transform, float spacing)
+        {
+            Vector3 center, direction;
+            float radius, height;
+            GetCylinderParams(transform, out center, out direction, out radius, out height);
+            PointInsideCylinder(ref position, center, direction, radius - spacing, height - spacing);
+        }
+        public static void PointInsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
+        {
+            Vector3 pointDir = position - center;
+            Vector3 directionAlong = Vector3.Project(pointDir, direction);
+            float distanceAlong = height - directionAlong.magnitude;
+            Vector3 directionSide = pointDir - directionAlong;
+            float distanceSide = radius - directionSide.magnitude;
+            if (distanceAlong < 0 || distanceSide < 0)
+            {
+                if (distanceSide < distanceAlong)
+                {
+                    position += directionSide.normalized * distanceSide;
+                }
+                else
+                {
+                    position += directionAlong.normalized * distanceAlong;
+                }
+            }
+        }
+
         public static void PointOutsideBox(ref Vector3 position, BoxCollider collider, float spacing)
         {
             Vector3 positionToCollider = collider.transform.InverseTransformPoint(position) - collider.center;

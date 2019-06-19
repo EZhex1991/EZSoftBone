@@ -24,7 +24,7 @@ namespace EZUnity.PhysicsBone
 
         [SerializeField]
         private float m_Margin;
-        public float margin { get { return m_Margin; } }
+        public float margin { get { return m_Margin; } set { m_Margin = value; } }
 
         [SerializeField]
         private bool m_InsideMode;
