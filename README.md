@@ -1,7 +1,7 @@
 # EZPhysicsBone
 
 [View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
-[查看中文介绍](https://github.com/EZhex1991/EZPhysicsBone/README_CN.md)  
+[查看中文介绍](README_CN.md)  
 
 ![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
 
