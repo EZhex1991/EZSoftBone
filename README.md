@@ -1,5 +1,8 @@
 # EZPhysicsBone
 
+This package is totally **FREE** and open-source.  
+If you feel it helpful, you can buy it on [AssetStore (Pending Review)](https://assetstore.unity.com/packages/slug/148136) to support me. Other than that, [Donations](https://github.com/EZhex1991/Receipts) are always welcome.
+
 [View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
 [查看中文介绍](README_CN.md)  
 
