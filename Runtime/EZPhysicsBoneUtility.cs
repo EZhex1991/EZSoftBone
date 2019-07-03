@@ -5,7 +5,7 @@
  */
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     public static class EZPhysicsBoneUtility
     {

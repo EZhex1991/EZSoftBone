@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     public abstract class EZPhysicsBoneColliderBase : MonoBehaviour
     {

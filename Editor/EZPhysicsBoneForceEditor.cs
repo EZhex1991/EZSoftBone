@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     [CustomEditor(typeof(EZPhysicsBoneForce))]
     public class EZPhysicsBoneForceEditor : Editor

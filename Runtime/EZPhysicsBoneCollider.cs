@@ -5,7 +5,7 @@
  */
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     [RequireComponent(typeof(Collider))]
     public class EZPhysicsBoneCollider : EZPhysicsBoneColliderBase

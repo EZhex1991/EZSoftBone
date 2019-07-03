@@ -5,7 +5,7 @@
  */
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     [CreateAssetMenu(fileName = "PBMat", menuName = "EZUnity/EZPhysicsBoneMaterial", order = 1601)]
     public class EZPhysicsBoneMaterial : ScriptableObject

@@ -6,7 +6,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EZUnity.PhysicsBone
+namespace EZhex1991.EZPhysicsBone
 {
     [CustomPropertyDrawer(typeof(EZCurveRectAttribute))]
     public class EZCurveRectDrawer : PropertyDrawer
