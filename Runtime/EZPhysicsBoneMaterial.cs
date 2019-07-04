@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    [CreateAssetMenu(fileName = "PBMat", menuName = "EZUnity/EZPhysicsBoneMaterial", order = 1601)]
+    [CreateAssetMenu(fileName = "PBMat", menuName = "EZPhysicsBone/EZPhysicsBoneMaterial", order = 1601)]
     public class EZPhysicsBoneMaterial : ScriptableObject
     {
         [SerializeField, Range(0, 1)]
