@@ -1,7 +1,7 @@
 # EZPhysicsBone
 
 该资源完全**免费**并开源。  
-如果你觉得它对你有所帮助，你可以在[AssetStore(还在审核中)](https://assetstore.unity.com/packages/slug/148136)上购买它来表示对作者的支持。或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
+如果你觉得它对你有所帮助，你可以在[AssetStore](https://assetstore.unity.com/packages/slug/148136)上购买它来表示对作者的支持。或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
 
 [View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
 [English Version](README.md)  
