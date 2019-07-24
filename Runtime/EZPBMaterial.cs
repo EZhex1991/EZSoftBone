@@ -7,8 +7,8 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    [CreateAssetMenu(fileName = "PBMat", menuName = "EZPhysicsBone/EZPhysicsBoneMaterial")]
-    public class EZPhysicsBoneMaterial : ScriptableObject
+    [CreateAssetMenu(fileName = "PBMat", menuName = "EZPhysicsBone/PBMaterial")]
+    public class EZPBMaterial : ScriptableObject
     {
         [SerializeField, Range(0, 1)]
         private float m_Damping = 0.2f;
@@ -38,13 +38,13 @@ namespace EZhex1991.EZPhysicsBone
         private AnimationCurve m_SlacknessCurve = AnimationCurve.Linear(0, 1, 1, 0.8f);
         public AnimationCurve slacknessCurve { get { return m_SlacknessCurve; } }
 
-        public static EZPhysicsBoneMaterial m_DefaultMaterial;
-        public static EZPhysicsBoneMaterial defaultMaterial
+        public static EZPBMaterial m_DefaultMaterial;
+        public static EZPBMaterial defaultMaterial
         {
             get
             {
                 if (m_DefaultMaterial == null)
-                    m_DefaultMaterial = CreateInstance<EZPhysicsBoneMaterial>();
+                    m_DefaultMaterial = CreateInstance<EZPBMaterial>();
                 m_DefaultMaterial.name = "PBMat_Default";
                 return m_DefaultMaterial;
             }

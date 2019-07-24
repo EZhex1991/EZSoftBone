@@ -8,7 +8,7 @@ using UnityEngine;
 namespace EZhex1991.EZPhysicsBone
 {
     [RequireComponent(typeof(Collider))]
-    public class EZPhysicsBoneCollider : EZPhysicsBoneColliderBase
+    public class EZPBCollider : EZPBColliderBase
     {
         [SerializeField]
         private Collider m_ReferenceCollider;

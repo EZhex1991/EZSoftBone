@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    public class EZPBColliderCylinder : EZPhysicsBoneColliderBase
+    public class EZPBColliderCylinder : EZPBColliderBase
     {
         [SerializeField]
         private float m_Margin;

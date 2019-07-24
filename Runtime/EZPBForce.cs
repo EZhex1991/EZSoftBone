@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    public class EZPhysicsBoneForce : MonoBehaviour
+    public class EZPBForce : MonoBehaviour
     {
         public enum TurbulenceMode
         {

@@ -10,8 +10,8 @@
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
-- 材质"EZPhysicsBoneMaterial"调节表现效果，可重用于多个EZPhysicsBone对象
-- 继承EZPhysicsBoneColliderBase创建自定义碰撞
+- 材质"EZPBMaterial"调节表现效果，可重用于多个EZPhysicsBone对象
+- 继承EZPBColliderBase创建自定义碰撞
 
 ## EZPhysicsBone
 
@@ -28,7 +28,7 @@
   - ClosedSiblings: 是否使用环状约束
 - Performance
   - Iterations: 迭代计算的次数
-  - Material: 使用的材质(`EZPhysicsBoneMaterial`)，如果不指定，运行时会自动使用默认材质
+  - Material: 使用的材质(`EZPBMaterial`)，如果不指定，运行时会自动使用默认材质
   - Sleep Threshold: 小于该值的速度会视为静止
 - Collidsion
   - Collision Layers: 碰撞作用层
@@ -39,9 +39,9 @@
   - Gravity: 应用于该骨骼的重力
   - Force Module: 应用于该骨骼的其他力（可用来模拟风）
 
-## EZPhysicsBoneMaterial
+## EZPBMaterial
 
-![EZPhysicsBoneMaterial](.SamplePicture/EZPhysicsBoneMaterial.png)
+![EZPBMaterial](.SamplePicture/EZPBMaterial.png)
 
 - Damping: 阻力（数值越大速度衰减越快，显得更“飘”）
 - Stiffness: 强度（数值越大形状越不容易改变，显得更“硬”）
@@ -50,10 +50,10 @@
 
 每个数值对应一个Curve，代表不同骨骼位置的数值分布
 
-## EZPhysicsBoneForce
+## EZPBForce
 
-![EZPhysicsBoneForce_Curve](.SamplePicture/EZPhysicsBoneForce_Curve.png)
-![EZPhysicsBoneForce_Perlin](.SamplePicture/EZPhysicsBoneForce_Perlin.png)
+![EZPBForce_Curve](.SamplePicture/EZPBForce_Curve.png)
+![EZPBForce_Perlin](.SamplePicture/EZPBForce_Perlin.png)
 
 - Use Local Direction: 使用相对于所在的Transform的方向
 - Direction: 基础力的向量

@@ -10,8 +10,8 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 
 - All colliders supported (include MeshCollider)
 - Net structure supported (Cloth simulation)
-- Use EZPhysicsBoneMaterial to adjust effects, and reuse it on other EZPhysicsBones
-- Inherit EZPhysicsBoneColliderBase to create custom colliders
+- Use EZPBMaterial to adjust effects, and reuse it on other EZPhysicsBones
+- Inherit EZPBColliderBase to create custom colliders
 
 ## EZPhysicsBone
 
@@ -28,7 +28,7 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
   - ClosedSiblings: check this to add sibling constraints as a circle
 - Performance
   - Iterations: how many times should the Nodes to be calculated in one frame
-  - Material: `EZPhysicsBoneMaterial`, default material will be used if not specified
+  - Material: `EZPBMaterial`, default material will be used if not specified
   - Sleep Threshold: speed below this threshold will go to sleep
 - Collidsion
   - Collision Layers: which layers the bones collide with
@@ -37,11 +37,11 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
   - Radius Curve: how should the size distribute on the bones
 - Force
   - Gravity: gravity
-  - Force Module: `EZPhysicsBoneForce`, wind simulation
+  - Force Module: `EZPBForce`, wind simulation
 
-## EZPhysicsBoneMaterial
+## EZPBMaterial
 
-![EZPhysicsBoneMaterial](.SamplePicture/EZPhysicsBoneMaterial.png)
+![EZPBMaterial](.SamplePicture/EZPBMaterial.png)
 
 - Damping: speed attenuation
 - Stiffness: shape retention
@@ -50,10 +50,10 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 
 Each value has a corresponding curve represent the value distribution on the bone hierarchy
 
-## EZPhysicsBoneForce
+## EZPBForce
 
-![EZPhysicsBoneForce_Curve](.SamplePicture/EZPhysicsBoneForce_Curve.png)
-![EZPhysicsBoneForce_Perlin](.SamplePicture/EZPhysicsBoneForce_Perlin.png)
+![EZPBForce_Curve](.SamplePicture/EZPBForce_Curve.png)
+![EZPBForce_Perlin](.SamplePicture/EZPBForce_Perlin.png)
 
 - Use Local Direction: check it to use local space direction
 - Direction: base force vector

@@ -8,8 +8,8 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    [CustomPropertyDrawer(typeof(EZPhysicsBoneMaterial))]
-    public class EZPhysicsBoneMaterialDrawer : PropertyDrawer
+    [CustomPropertyDrawer(typeof(EZPBMaterial))]
+    public class EZPBMaterialDrawer : PropertyDrawer
     {
         private SerializedObject m_SerializedObject;
         private SerializedProperty m_Damping;
@@ -56,7 +56,7 @@ namespace EZhex1991.EZPhysicsBone
                 if (property.isExpanded)
                 {
                     EditorGUI.indentLevel++;
-                    GUI.enabled = property.objectReferenceValue != EZPhysicsBoneMaterial.defaultMaterial;
+                    GUI.enabled = property.objectReferenceValue != EZPBMaterial.defaultMaterial;
                     EditorGUILayout.PropertyField(m_Damping);
                     EditorGUILayout.PropertyField(m_DampingCurve);
                     EditorGUILayout.PropertyField(m_Stiffness);

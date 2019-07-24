@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace EZhex1991.EZPhysicsBone
 {
-    public abstract class EZPhysicsBoneColliderBase : MonoBehaviour
+    public abstract class EZPBColliderBase : MonoBehaviour
     {
-        public static List<EZPhysicsBoneColliderBase> EnabledColliders = new List<EZPhysicsBoneColliderBase>();
+        public static List<EZPBColliderBase> EnabledColliders = new List<EZPBColliderBase>();
 
         protected void OnEnable()
         {

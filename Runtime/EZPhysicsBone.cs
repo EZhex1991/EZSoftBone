@@ -216,14 +216,14 @@ namespace EZhex1991.EZPhysicsBone
         public int iterations { get { return m_Iterations; } }
 
         [SerializeField]
-        private EZPhysicsBoneMaterial m_Material;
-        private EZPhysicsBoneMaterial m_InstanceMaterial;
-        public EZPhysicsBoneMaterial sharedMaterial
+        private EZPBMaterial m_Material;
+        private EZPBMaterial m_InstanceMaterial;
+        public EZPBMaterial sharedMaterial
         {
             get
             {
                 if (m_Material == null)
-                    m_Material = EZPhysicsBoneMaterial.defaultMaterial;
+                    m_Material = EZPBMaterial.defaultMaterial;
                 return m_Material;
             }
             set
@@ -231,7 +231,7 @@ namespace EZhex1991.EZPhysicsBone
                 m_Material = value;
             }
         }
-        public EZPhysicsBoneMaterial material
+        public EZPBMaterial material
         {
             get
             {
@@ -270,8 +270,8 @@ namespace EZhex1991.EZPhysicsBone
         private Vector3 m_Gravity;
         public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
         [SerializeField]
-        private EZPhysicsBoneForce m_ForceModule;
-        public EZPhysicsBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
+        private EZPBForce m_ForceModule;
+        public EZPBForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
         public float globalRadius { get; private set; }
         private List<TreeNode> m_PhysicsTrees = new List<TreeNode>();
@@ -490,7 +490,7 @@ namespace EZhex1991.EZPhysicsBone
                 // Collision
                 if (node.radius > 0)
                 {
-                    foreach (EZPhysicsBoneColliderBase collider in EZPhysicsBoneColliderBase.EnabledColliders)
+                    foreach (EZPBColliderBase collider in EZPBColliderBase.EnabledColliders)
                     {
                         if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
                             collider.Collide(ref node.position, node.radius);
