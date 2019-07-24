@@ -215,19 +215,36 @@ namespace EZhex1991.EZPhysicsBone
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } }
 
-        [SerializeField]
-        private EZPhysicsBoneMaterial m_Material;
+        [SerializeField, UnityEngine.Serialization.FormerlySerializedAs("m_Material")]
+        private EZPhysicsBoneMaterial m_SharedMaterial;
         public EZPhysicsBoneMaterial sharedMaterial
         {
             get
             {
+                if (m_SharedMaterial == null)
+                    m_SharedMaterial = EZPhysicsBoneMaterial.defaultMaterial;
+                return m_SharedMaterial;
+            }
+            set
+            {
+                m_SharedMaterial = value;
+            }
+        }
+
+        private EZPhysicsBoneMaterial m_Material;
+        public EZPhysicsBoneMaterial material
+        {
+            get
+            {
                 if (m_Material == null)
-                    m_Material = EZPhysicsBoneMaterial.defaultMaterial;
+                {
+                    m_Material = m_SharedMaterial = Instantiate(sharedMaterial);
+                }
                 return m_Material;
             }
             set
             {
-                m_Material = value;
+                m_Material = m_SharedMaterial = value;
             }
         }
 
