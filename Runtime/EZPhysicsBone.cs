@@ -66,7 +66,7 @@ namespace EZhex1991.EZPhysicsBone
                     for (int i = 0; i < t.childCount; i++)
                     {
                         Transform child = t.GetChild(i);
-                        // local length should ignore parent scales
+                        // local length should ignore parent scale
                         TreeNode node = new TreeNode(transform.GetChild(i), endLength, startDepth, depth + 1, (child.position - t.position).magnitude, boneLength);
                         node.parent = this;
                         children.Add(node);
@@ -79,7 +79,8 @@ namespace EZhex1991.EZPhysicsBone
                     TreeNode node = new TreeNode();
                     if (t.parent != null)
                     {
-                        // extend last bone to end node using local position
+                        // last bone should on the extension of the line that construct by the last two points
+                        // and the length is based on the distance between the last two points
                         node.originalLocalPosition = t.InverseTransformVector(t.parent.TransformVector(t.localPosition)) * endLength;
                     }
                     node.depth = depth + 1;
@@ -144,7 +145,7 @@ namespace EZhex1991.EZPhysicsBone
             }
             public void ApplyRotation()
             {
-                // rotate if has only one child, and this means transform could not be null too
+                // rotate if has only one child, and this means transform is not null
                 if (children.Count == 1)
                 {
                     TreeNode child = children[0];
@@ -428,7 +429,7 @@ namespace EZhex1991.EZPhysicsBone
                     node.position += node.speed * deltaTime * (1 - sharedMaterial.GetDamping(node.normalizedLength));
                 }
 
-                // Resistance (outside force resistance)
+                // Resistance (force resistance)
                 Vector3 force = gravity;
                 if (forceModule != null)
                 {
