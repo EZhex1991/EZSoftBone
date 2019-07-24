@@ -1,3 +1,13 @@
+[0.0.2] - 2019-07-24
+
+# Added
+- Added nested editor for PBMaterials
+
+# Changed
+- Package path changed to Assets/EZhex1991/EZPhysicsBone
+- Shorten material, collider, and force module's name
+- Revised some comments
+
 [0.0.1] - 2019-06-10
 
 # First Release
