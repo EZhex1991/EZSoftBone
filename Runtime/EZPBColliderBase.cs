@@ -10,7 +10,7 @@ namespace EZhex1991.EZPhysicsBone
 {
     public abstract class EZPBColliderBase : MonoBehaviour
     {
-        public static List<EZPBColliderBase> EnabledColliders = new List<EZPBColliderBase>();
+        public static HashSet<EZPBColliderBase> EnabledColliders = new HashSet<EZPBColliderBase>();
 
         protected void OnEnable()
         {
