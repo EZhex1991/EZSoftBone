@@ -55,6 +55,7 @@ namespace EZhex1991.EZPhysicsBone
                 property.isExpanded = EditorGUI.Foldout(new Rect(position) { width = 0 }, property.isExpanded, GUIContent.none, false);
                 if (property.isExpanded)
                 {
+                    m_SerializedObject.Update();
                     EditorGUI.indentLevel++;
                     GUI.enabled = property.objectReferenceValue != EZPBMaterial.defaultMaterial;
                     EditorGUILayout.PropertyField(m_Damping);
@@ -67,6 +68,7 @@ namespace EZhex1991.EZPhysicsBone
                     EditorGUILayout.PropertyField(m_SlacknessCurve);
                     GUI.enabled = true;
                     EditorGUI.indentLevel--;
+                    m_SerializedObject.ApplyModifiedProperties();
                 }
             }
             EditorGUI.EndProperty();
