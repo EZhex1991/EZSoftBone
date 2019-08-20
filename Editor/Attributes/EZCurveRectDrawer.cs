@@ -16,7 +16,14 @@ namespace EZhex1991.EZPhysicsBone
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             EditorGUI.BeginProperty(position, label, property);
-            EditorGUI.CurveField(position, property, curveRectAttribute.color, curveRectAttribute.rect, label);
+            if (property.propertyType == SerializedPropertyType.AnimationCurve)
+            {
+                EditorGUI.CurveField(position, property, curveRectAttribute.color, curveRectAttribute.rect, label);
+            }
+            else
+            {
+                EditorGUI.HelpBox(position, typeof(EZCurveRectAttribute).Name + " used on a non-AnimationCurve field", MessageType.Warning);
+            }
             EditorGUI.EndProperty();
         }
     }

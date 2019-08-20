@@ -9,9 +9,13 @@ namespace EZhex1991.EZPhysicsBone
 {
     public class EZCurveRectAttribute : PropertyAttribute
     {
-        public Color color = Color.green;
         public Rect rect;
+        public Color color = Color.green;
 
+        public EZCurveRectAttribute()
+        {
+            this.rect = new Rect(0, 0, 1, 1);
+        }
         public EZCurveRectAttribute(Rect rect)
         {
             this.rect = rect;
