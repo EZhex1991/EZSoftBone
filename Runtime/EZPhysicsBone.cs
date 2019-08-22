@@ -97,7 +97,7 @@ namespace EZhex1991.EZPhysicsBone
                     children[i].Inflate(baseRadius, radiusCurve);
                 }
             }
-            public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZPBMaterial material = null)
+            public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZPBMaterial material)
             {
                 radius = radiusCurve.Evaluate(normalizedLength) * baseRadius;
                 damping = material.GetDamping(normalizedLength);
