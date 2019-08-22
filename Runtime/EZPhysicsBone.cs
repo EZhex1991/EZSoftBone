@@ -387,7 +387,7 @@ namespace EZhex1991.EZPhysicsBone
             globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int j = 0; j < m_PhysicsTrees.Count; j++)
             {
-                m_PhysicsTrees[j].Inflate(globalRadius, radiusCurve, material);
+                m_PhysicsTrees[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
             }
             for (int i = 0; i < iterations; i++)
             {
