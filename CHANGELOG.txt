@@ -1,3 +1,13 @@
+[1.2.0] - Not Released
+
+# Changed
+
+- Now the restrictions' length will be scaled with the related transforms
+
+# Removed
+
+- End Node: That's modeler's responsibility (and remove it makes the code looks so much better)
+
 [1.1.0] - 2019-07-24
 
 # Added

@@ -20,7 +20,6 @@
 - Root Bones: 骨骼根节点列表
 - Structure
   - Start Depth: 从第几个层级开始起作用
-  - End Node Length: 如果骨骼末端节点不在蒙皮末端，调节该数值补充节点，可以让蒙皮末端的朝向更加自然
   - Sibling Constraints: 同级约束，让深度相同的节点相互产生作用
     - None: 无同级约束（链）
     - Root: 约束同一个Root下深度相同的节点

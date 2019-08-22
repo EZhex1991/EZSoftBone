@@ -20,7 +20,6 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 - Root Bones: a list of root bone Transforms
 - Structure
   - Start Depth: the start depth of the dynamic bones, depth below this value will be static
-  - End Node Length: use this to create a additional node, it will makes the end of the mesh looks more natural
   - Sibling Constraints: add constrains on the nodes that have the same depth
     - None: no sibling constraints
     - Root: use sibling constraints for each Root Bone separately
