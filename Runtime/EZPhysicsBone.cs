@@ -426,7 +426,8 @@ namespace EZhex1991.EZPhysicsBone
                 // Slackness (length keeper)
                 float slackness = sharedMaterial.GetSlackness(node.normalizedLength);
                 Vector3 nodeDir = (node.position - node.parent.position).normalized;
-                nodeDir = node.parent.position + nodeDir * node.nodeLength;
+                float nodeLength = node.parent.transform.TransformVector(nodeDir).magnitude * node.nodeLength;
+                nodeDir = node.parent.position + nodeDir * nodeLength;
                 // Siblings
                 if (siblingConstraints != SiblingConstraints.None)
                 {
@@ -434,14 +435,16 @@ namespace EZhex1991.EZPhysicsBone
                     if (node.leftSibling != null)
                     {
                         Vector3 leftDir = (node.position - node.leftSibling.position).normalized;
-                        leftDir = node.leftSibling.position + leftDir * node.leftLength;
+                        float leftLength = node.leftSibling.transform.TransformVector(leftDir).magnitude * node.leftLength;
+                        leftDir = node.leftSibling.position + leftDir * leftLength;
                         nodeDir += leftDir;
                         constraints++;
                     }
                     if (node.rightSibling != null)
                     {
                         Vector3 rightDir = (node.position - node.rightSibling.position).normalized;
-                        rightDir = node.rightSibling.position + rightDir * node.rightLength;
+                        float rightLength = node.rightSibling.transform.TransformVector(rightDir).magnitude * node.rightLength;
+                        rightDir = node.rightSibling.position + rightDir * rightLength;
                         nodeDir += rightDir;
                         constraints++;
                     }
