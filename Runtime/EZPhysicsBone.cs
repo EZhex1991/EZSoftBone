@@ -30,13 +30,17 @@ namespace EZhex1991.EZPhysicsBone
             public int depth;
             public float nodeLength;
             public float boneLength;
+            public float treeLength;
 
             public float leftLength;
             public float rightLength;
 
-            public float treeLength;
             public float normalizedLength;
             public float radius;
+            public float damping;
+            public float stiffness;
+            public float resistance;
+            public float slackness;
 
             public Vector3 position;
             public Vector3 speed;
@@ -69,6 +73,7 @@ namespace EZhex1991.EZPhysicsBone
                         treeLength = Mathf.Max(treeLength, node.treeLength);
                     }
                 }
+                normalizedLength = treeLength == 0 ? 0 : boneLength / treeLength;
             }
 
             public void SetLeftSibling(TreeNode node)
@@ -86,12 +91,22 @@ namespace EZhex1991.EZPhysicsBone
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
             {
-                if (treeLength <= 0) return;
-                normalizedLength = boneLength / treeLength;
                 radius = radiusCurve.Evaluate(normalizedLength) * baseRadius;
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].Inflate(baseRadius, radiusCurve);
+                }
+            }
+            public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZPBMaterial material = null)
+            {
+                radius = radiusCurve.Evaluate(normalizedLength) * baseRadius;
+                damping = material.GetDamping(normalizedLength);
+                stiffness = material.GetStiffness(normalizedLength);
+                resistance = material.GetResistance(normalizedLength);
+                slackness = material.GetSlackness(normalizedLength);
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].Inflate(baseRadius, radiusCurve, material);
                 }
             }
 
@@ -382,6 +397,11 @@ namespace EZhex1991.EZPhysicsBone
 
         private void UpdatePhysicsTrees(float deltaTime)
         {
+            globalRadius = transform.lossyScale.Abs().Max() * radius;
+            for (int j = 0; j < m_PhysicsTrees.Count; j++)
+            {
+                m_PhysicsTrees[j].Inflate(globalRadius, radiusCurve, material);
+            }
             for (int i = 0; i < iterations; i++)
             {
                 for (int j = 0; j < m_PhysicsTrees.Count; j++)
@@ -404,7 +424,7 @@ namespace EZhex1991.EZPhysicsBone
                 }
                 else
                 {
-                    node.position += node.speed * deltaTime * (1 - sharedMaterial.GetDamping(node.normalizedLength));
+                    node.position += node.speed * deltaTime * (1 - node.damping);
                 }
 
                 // Resistance (force resistance)
@@ -416,15 +436,14 @@ namespace EZhex1991.EZPhysicsBone
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                node.position += force * (1 - sharedMaterial.GetResistance(node.normalizedLength)) / iterations;
+                node.position += force * (1 - node.resistance) / iterations;
 
                 // Stiffness (shape keeper)
                 Vector3 parentOffset = node.parent.position - node.parent.transform.position;
                 Vector3 expectedPos = node.parent.transform.TransformPoint(node.originalLocalPosition) + parentOffset;
-                node.position = Vector3.Lerp(node.position, expectedPos, sharedMaterial.GetStiffness(node.normalizedLength) / iterations);
+                node.position = Vector3.Lerp(node.position, expectedPos, node.stiffness / iterations);
 
                 // Slackness (length keeper)
-                float slackness = sharedMaterial.GetSlackness(node.normalizedLength);
                 Vector3 nodeDir = (node.position - node.parent.position).normalized;
                 float nodeLength = node.parent.transform.TransformVector(nodeDir).magnitude * node.nodeLength;
                 nodeDir = node.parent.position + nodeDir * nodeLength;
@@ -450,7 +469,7 @@ namespace EZhex1991.EZPhysicsBone
                     }
                     nodeDir /= constraints;
                 }
-                node.position = Vector3.Lerp(nodeDir, node.position, slackness / iterations);
+                node.position = Vector3.Lerp(nodeDir, node.position, node.slackness / iterations);
 
                 // Collision
                 if (node.radius > 0)
