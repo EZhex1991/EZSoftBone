@@ -80,13 +80,13 @@ namespace EZhex1991.EZPhysicsBone
             {
                 if (node == this || node == rightSibling) return;
                 leftSibling = node;
-                leftLength = (this.position - node.position).magnitude;
+                leftLength = node.transform.InverseTransformPoint(transform.position).magnitude;
             }
             public void SetRightSibling(TreeNode node)
             {
                 if (node == this || node == leftSibling) return;
                 rightSibling = node;
-                rightLength = (this.position - node.position).magnitude;
+                rightLength = node.transform.InverseTransformPoint(transform.position).magnitude;
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
