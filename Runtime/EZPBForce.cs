@@ -39,11 +39,11 @@ namespace EZhex1991.EZPhysicsBone
         private float m_TurbulenceTimeCycle = 2f;
         public float turbulenceTimeCycle { get { return m_TurbulenceTimeCycle; } set { m_TurbulenceTimeCycle = Mathf.Max(0, value); } }
 
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_TurbulenceXCurve = AnimationCurve.Linear(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_TurbulenceYCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_TurbulenceZCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
         [SerializeField]
@@ -58,18 +58,16 @@ namespace EZhex1991.EZPhysicsBone
         {
             if (!isActiveAndEnabled) return Vector3.zero;
             Vector3 tbl = turbulence;
-            float time = Time.time;
+            float time = Time.time - conductivity * normalizedLength;
             switch (turbulenceMode)
             {
                 case TurbulenceMode.Curve:
-                    time = (time % m_TurbulenceTimeCycle) / m_TurbulenceTimeCycle;
-                    time = (time - conductivity * normalizedLength) % 1f;
+                    time = Mathf.Repeat(time, m_TurbulenceTimeCycle) / m_TurbulenceTimeCycle;
                     tbl.x *= m_TurbulenceXCurve.Evaluate(time);
                     tbl.y *= m_TurbulenceYCurve.Evaluate(time);
                     tbl.z *= m_TurbulenceZCurve.Evaluate(time);
                     break;
                 case TurbulenceMode.Perlin:
-                    time -= conductivity * normalizedLength;
                     tbl.x *= Mathf.PerlinNoise(time * turbulenceSpeed.x, turbulenceRandomSeed.x);
                     tbl.y *= Mathf.PerlinNoise(time * turbulenceSpeed.y, turbulenceRandomSeed.y);
                     tbl.z *= Mathf.PerlinNoise(time * turbulenceSpeed.z, turbulenceRandomSeed.z);
