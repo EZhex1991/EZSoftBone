@@ -45,53 +45,29 @@ namespace EZhex1991.EZPhysicsBone
             public Quaternion originalLocalRotation = Quaternion.identity;
 
             public TreeNode() { }
-            public TreeNode(Transform t, float endLength, int startDepth, int depth, float localLength, float parentLength)
+            public TreeNode(Transform transform, int startDepth, int depth, float parentLength)
             {
-                transform = t;
-                if (t != null)
-                {
-                    position = t.position;
-                    originalLocalPosition = t.localPosition;
-                    originalLocalRotation = t.localRotation;
-                }
+                if (transform == null) return;
+                this.transform = transform;
+                position = transform.position;
+                originalLocalPosition = transform.localPosition;
+                originalLocalRotation = transform.localRotation;
                 this.depth = depth;
-                nodeLength = localLength;
+                nodeLength = transform.localPosition.magnitude;
                 if (depth > startDepth)
                 {
                     boneLength = parentLength + nodeLength;
                 }
                 treeLength = boneLength;
-                if (t.childCount > 0)
+                if (transform.childCount > 0)
                 {
-                    for (int i = 0; i < t.childCount; i++)
+                    for (int i = 0; i < transform.childCount; i++)
                     {
-                        Transform child = t.GetChild(i);
-                        // local length should ignore parent scale
-                        TreeNode node = new TreeNode(transform.GetChild(i), endLength, startDepth, depth + 1, (child.position - t.position).magnitude, boneLength);
+                        TreeNode node = new TreeNode(this.transform.GetChild(i), startDepth, depth + 1, boneLength);
                         node.parent = this;
                         children.Add(node);
                         treeLength = Mathf.Max(treeLength, node.treeLength);
                     }
-                }
-                else
-                {
-                    // end node
-                    TreeNode node = new TreeNode();
-                    if (t.parent != null)
-                    {
-                        // last bone should on the extension of the line that construct by the last two points
-                        // and the length is based on the distance between the last two points
-                        node.originalLocalPosition = t.InverseTransformVector(t.parent.TransformVector(t.localPosition)) * endLength;
-                    }
-                    node.depth = depth + 1;
-                    node.position = t.TransformPoint(node.originalLocalPosition);
-                    // nodeLength should be in world space
-                    node.nodeLength = t.TransformVector(node.originalLocalPosition).magnitude;
-                    node.boneLength = boneLength + node.nodeLength;
-                    node.treeLength = node.boneLength;
-                    node.parent = this;
-                    children.Add(node);
-                    treeLength = node.treeLength;
                 }
             }
 
@@ -121,11 +97,8 @@ namespace EZhex1991.EZPhysicsBone
 
             public void RevertTransforms()
             {
-                if (transform != null)
-                {
-                    transform.localPosition = originalLocalPosition;
-                    transform.localRotation = originalLocalRotation;
-                }
+                transform.localPosition = originalLocalPosition;
+                transform.localRotation = originalLocalRotation;
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].RevertTransforms();
@@ -145,7 +118,7 @@ namespace EZhex1991.EZPhysicsBone
             }
             public void ApplyRotation()
             {
-                // rotate if has only one child, and this means transform is not null
+                // rotate if has only one child
                 if (children.Count == 1)
                 {
                     TreeNode child = children[0];
@@ -155,17 +128,11 @@ namespace EZhex1991.EZPhysicsBone
             }
             public void ApplyPosition()
             {
-                if (transform != null)
-                {
-                    transform.position = position;
-                }
+                transform.position = position;
             }
             public void SyncPosition(bool recursive)
             {
-                if (transform != null)
-                {
-                    position = transform.position;
-                }
+                position = transform.position;
                 if (recursive)
                 {
                     for (int i = 0; i < children.Count; i++)
@@ -197,10 +164,6 @@ namespace EZhex1991.EZPhysicsBone
         [SerializeField]
         private int m_StartDepth;
         public int startDepth { get { return m_StartDepth; } }
-
-        [SerializeField]
-        private float m_EndNodeLength;
-        public float endNodeLength { get { return m_EndNodeLength; } }
 
         [SerializeField]
         private SiblingConstraints m_SiblingConstraints = SiblingConstraints.None;
@@ -299,7 +262,6 @@ namespace EZhex1991.EZPhysicsBone
         private void OnValidate()
         {
             m_StartDepth = Mathf.Max(0, m_StartDepth);
-            m_EndNodeLength = Mathf.Max(0, m_EndNodeLength);
             m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
@@ -337,7 +299,7 @@ namespace EZhex1991.EZPhysicsBone
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
-                TreeNode tree = new TreeNode(rootBones[i], endNodeLength, startDepth, 0, 0, 0);
+                TreeNode tree = new TreeNode(rootBones[i], startDepth, 0, 0);
                 tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
@@ -504,7 +466,7 @@ namespace EZhex1991.EZPhysicsBone
 
                 node.speed = (node.position - lastPosition) / deltaTime;
             }
-            else if (node.transform != null)
+            else
             {
                 node.position = node.transform.position;
             }
