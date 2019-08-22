@@ -127,7 +127,7 @@ namespace EZhex1991.EZPhysicsBone
                     TreeNode child = children[0];
                     Quaternion rotation = Quaternion.FromToRotation(child.originalLocalPosition,
                                                                     transform.InverseTransformVector(child.position - position));
-                    transform.rotation = rotation * transform.rotation;
+                    transform.rotation = transform.rotation * rotation;
                 }
                 transform.position = position;
                 for (int i = 0; i < children.Count; i++)
