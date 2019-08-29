@@ -1,3 +1,9 @@
+[1.2.1] - Unreleased
+
+# Changed
+
+- Rotation will be affected by SiblingConstraints
+
 [1.2.0] - 2019-08-23
 
 # Changed
