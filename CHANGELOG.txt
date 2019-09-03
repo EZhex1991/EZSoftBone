@@ -1,6 +1,8 @@
 [1.2.1] - Unreleased
 
-# Changed
+# Added
+
+- SiblingRotationConstraints: Rotation will be affected by Sibling Constraints if enabled
 
 [1.2.0] - 2019-08-23
 
@@ -15,9 +17,11 @@
 [1.1.0] - 2019-07-24
 
 # Added
+
 - Added nested editor for PBMaterials
 
 # Changed
+
 - Package path changed to Assets/EZhex1991/EZPhysicsBone
 - Shorten material, collider, and force module's name
 - Revised some comments

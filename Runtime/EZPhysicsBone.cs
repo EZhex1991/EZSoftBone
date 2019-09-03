@@ -80,13 +80,13 @@ namespace EZhex1991.EZPhysicsBone
             {
                 if (node == this || node == rightSibling) return;
                 leftSibling = node;
-                positionToLeft = node.transform.InverseTransformVector(position - node.position);
+                positionToLeft = transform.InverseTransformVector(node.position - position);
             }
             public void SetRightSibling(TreeNode node)
             {
                 if (node == this || node == leftSibling) return;
                 rightSibling = node;
-                positionToRight = node.transform.InverseTransformVector(position - node.position);
+                positionToRight = transform.InverseTransformVector(node.position - position);
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
@@ -119,19 +119,50 @@ namespace EZhex1991.EZPhysicsBone
                     children[i].RevertTransforms();
                 }
             }
-            public void ApplyToTransform()
+            public void ApplyToTransform(bool siblingRotationConstraints)
             {
-                // rotate if has only one child
                 if (children.Count == 1)
                 {
                     TreeNode child = children[0];
                     transform.rotation *= Quaternion.FromToRotation(child.originalLocalPosition,
                                                                     transform.InverseTransformVector(child.position - position));
+
+                    if (siblingRotationConstraints)
+                    {
+                        if (leftSibling != null && rightSibling != null)
+                        {
+                            Vector3 directionLeft0 = positionToLeft;
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.position - position);
+                            Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
+
+                            Vector3 directionRight0 = positionToRight;
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.position - position);
+                            Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
+
+                            transform.rotation *= Quaternion.Lerp(rotationLeft, rotationRight, 0.5f);
+                        }
+                        else if (leftSibling != null)
+                        {
+                            Vector3 directionLeft0 = positionToLeft;
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.position - position);
+                            Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
+                            transform.rotation *= rotationLeft;
+                        }
+                        else if (rightSibling != null)
+                        {
+                            Vector3 directionRight0 = positionToRight;
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.position - position);
+                            Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
+                            transform.rotation *= rotationRight;
+                        }
+                    }
                 }
+
                 transform.position = position;
+
                 for (int i = 0; i < children.Count; i++)
                 {
-                    children[i].ApplyToTransform();
+                    children[i].ApplyToTransform(siblingRotationConstraints);
                 }
             }
             public void SyncPosition()
@@ -169,6 +200,10 @@ namespace EZhex1991.EZPhysicsBone
         [SerializeField]
         private SiblingConstraints m_SiblingConstraints = SiblingConstraints.None;
         public SiblingConstraints siblingConstraints { get { return m_SiblingConstraints; } }
+
+        [SerializeField]
+        private bool m_SiblingRotationConstraints = true;
+        public bool siblingRotationConstraints { get { return m_SiblingRotationConstraints; } }
 
         [SerializeField]
         private bool m_ClosedSiblings = false;
@@ -440,7 +475,7 @@ namespace EZhex1991.EZPhysicsBone
                     if (node.leftSibling != null)
                     {
                         Vector3 leftDir = (position - node.leftSibling.position).normalized;
-                        float leftLength = node.leftSibling.transform.TransformVector(node.positionToLeft).magnitude;
+                        float leftLength = node.transform.TransformVector(node.positionToLeft).magnitude;
                         leftDir = node.leftSibling.position + leftDir * leftLength;
                         nodeDir += leftDir;
                         constraints++;
@@ -448,7 +483,7 @@ namespace EZhex1991.EZPhysicsBone
                     if (node.rightSibling != null)
                     {
                         Vector3 rightDir = (position - node.rightSibling.position).normalized;
-                        float rightLength = node.rightSibling.transform.TransformVector(node.positionToRight).magnitude;
+                        float rightLength = node.transform.TransformVector(node.positionToRight).magnitude;
                         rightDir = node.rightSibling.position + rightDir * rightLength;
                         nodeDir += rightDir;
                         constraints++;
@@ -491,7 +526,7 @@ namespace EZhex1991.EZPhysicsBone
         {
             for (int i = 0; i < m_PhysicsTrees.Count; i++)
             {
-                m_PhysicsTrees[i].ApplyToTransform();
+                m_PhysicsTrees[i].ApplyToTransform(siblingRotationConstraints);
             }
         }
 
