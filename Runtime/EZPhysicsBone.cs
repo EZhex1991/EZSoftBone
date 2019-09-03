@@ -125,26 +125,8 @@ namespace EZhex1991.EZPhysicsBone
                 if (children.Count == 1)
                 {
                     TreeNode child = children[0];
-                    Quaternion rotation = Quaternion.FromToRotation(child.originalLocalPosition,
+                    transform.rotation *= Quaternion.FromToRotation(child.originalLocalPosition,
                                                                     transform.InverseTransformVector(child.position - position));
-                    transform.rotation *= rotation;
-
-                    if (leftSibling != null && rightSibling != null)
-                    {
-                        Quaternion leftRotation = Quaternion.FromToRotation(positionToLeft, transform.InverseTransformVector(position - leftSibling.position));
-                        Quaternion rightRotation = Quaternion.FromToRotation(positionToRight, transform.InverseTransformVector(position - rightSibling.position));
-                        transform.rotation *= Quaternion.Lerp(leftRotation, rightRotation, 0.5f);
-                    }
-                    else if (leftSibling != null)
-                    {
-                        Quaternion leftRotation = Quaternion.FromToRotation(positionToLeft, transform.InverseTransformVector(position - leftSibling.position));
-                        transform.rotation *= leftRotation;
-                    }
-                    else if (rightSibling != null)
-                    {
-                        Quaternion rightRotation = Quaternion.FromToRotation(positionToRight, transform.InverseTransformVector(position - rightSibling.position));
-                        transform.rotation *= rightRotation;
-                    }
                 }
                 transform.position = position;
                 for (int i = 0; i < children.Count; i++)
