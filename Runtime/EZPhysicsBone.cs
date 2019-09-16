@@ -269,6 +269,9 @@ namespace EZhex1991.EZPhysicsBone
         private Vector3 m_Gravity;
         public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
         [SerializeField]
+        private Transform m_GravityAligner;
+        public Transform gravityAligner { get { return m_GravityAligner; } set { m_GravityAligner = value; } }
+        [SerializeField]
         private EZPBForce m_ForceModule;
         public EZPBForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
@@ -450,6 +453,13 @@ namespace EZhex1991.EZPhysicsBone
 
                 // Resistance (force resistance)
                 Vector3 force = gravity;
+                if (gravityAligner != null)
+                {
+                    Vector3 alignedDir = gravityAligner.TransformDirection(gravity).normalized;
+                    Vector3 globalDir = gravity.normalized;
+                    float attenuation = Mathf.Acos(Vector3.Dot(alignedDir, globalDir)) / Mathf.PI;
+                    force *= attenuation;
+                }
                 if (forceModule != null)
                 {
                     force += forceModule.GetForce(node.normalizedLength);
