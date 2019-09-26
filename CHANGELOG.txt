@@ -3,6 +3,7 @@
 # Added
 
 - SiblingRotationConstraints: Rotation will be affected by Sibling Constraints if enabled
+- Delta_Min: a constant value (1e-6), Pasue if deltaTime is under this value
 
 [1.2.0] - 2019-08-23
 

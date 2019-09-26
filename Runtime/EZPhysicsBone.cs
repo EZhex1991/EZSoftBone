@@ -11,6 +11,8 @@ namespace EZhex1991.EZPhysicsBone
 {
     public class EZPhysicsBone : MonoBehaviour
     {
+        public static readonly double Delta_Min = 1e-6;
+
         public enum SiblingConstraints
         {
             None,
@@ -421,6 +423,7 @@ namespace EZhex1991.EZPhysicsBone
 
         private void UpdatePhysicsTrees(float deltaTime)
         {
+            if (deltaTime <= Delta_Min) return;
             globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int j = 0; j < m_PhysicsTrees.Count; j++)
             {
