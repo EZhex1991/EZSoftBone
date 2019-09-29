@@ -21,7 +21,7 @@ namespace EZhex1991.EZPhysicsBone
         private float m_Stiffness = 0.1f;
         public float stiffness { get { return m_Stiffness; } set { m_Stiffness = Mathf.Clamp01(value); } }
         [SerializeField, EZCurveRect(0, 0, 1, 1)]
-        private AnimationCurve m_StiffnessCurve = AnimationCurve.Constant(0, 1, 1);
+        private AnimationCurve m_StiffnessCurve = AnimationCurve.Linear(0, 1, 1, 1);
         public AnimationCurve stiffnessCurve { get { return m_StiffnessCurve; } }
 
         [SerializeField, Range(0, 1)]

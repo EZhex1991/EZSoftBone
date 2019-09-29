@@ -263,7 +263,7 @@ namespace EZhex1991.EZPhysicsBone
         private float m_Radius = 0;
         public float radius { get { return m_Radius; } }
         [SerializeField, EZCurveRect(0, 0, 1, 1)]
-        private AnimationCurve m_RadiusCurve = AnimationCurve.Constant(0, 1, 1);
+        private AnimationCurve m_RadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
         public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
 
         [Header("Force")]
