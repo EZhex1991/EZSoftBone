@@ -28,7 +28,7 @@
 - Performance
   - Iterations: 迭代计算的次数
   - Material: 使用的材质(`EZPBMaterial`)，如果不指定，运行时会自动使用默认材质
-  - Sleep Threshold: 小于该值的速度会视为静止
+  - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
 - Collidsion
   - Collision Layers: 碰撞作用层
   - Extra Colliders: 让普通Collider也能起作用（本来是为了兼容老代码，不过有一定适用范围就保留了）
@@ -37,6 +37,12 @@
 - Force
   - Gravity: 应用于该骨骼的重力
   - Force Module: 应用于该骨骼的其他力（可用来模拟风）
+- References:
+  - Gravity Aligner: 指定一个Transform作为重力的参考系，重力对骨骼系统的影响大小与参考系的Y轴和世界坐标系的Y轴的点乘成负相关  
+    - *例：创建新物体保持其世界坐标下的旋转为0，拖拽到人物头部节点下，将其作为头发的Aligner，则人物站立时头发不受重力影响，躺下或低头时重力影响加大*
+    - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+  - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
+    - *例：人坐在移动的车中，头发应保持相对静止*
 
 ## EZPBMaterial
 

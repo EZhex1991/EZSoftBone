@@ -1,3 +1,14 @@
+[1.3.0] - Unreleased
+
+# Added
+
+- GravityAligner: A transform can be specified to determine how much the gravity effects the system (inversely correlated to dot product of aligner's y direction and world's y direction)
+- SimulateSpace: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (like the hair in a car)
+
+# Fixed
+
+- Fixed wrong calculations on Iterations
+
 [1.2.1] - 2019-10-11
 
 # Added

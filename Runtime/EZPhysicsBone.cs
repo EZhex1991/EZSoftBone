@@ -28,6 +28,7 @@ namespace EZhex1991.EZPhysicsBone
             public List<TreeNode> children = new List<TreeNode>();
 
             public Transform transform;
+            public Transform systemSpace;
 
             public int depth;
             public float nodeLength;
@@ -41,7 +42,8 @@ namespace EZhex1991.EZPhysicsBone
             public float resistance;
             public float slackness;
 
-            public Vector3 position;
+            public Vector3 worldPosition;
+            public Vector3 systemPosition;
             public Vector3 speed;
 
             public Vector3 originalLocalPosition;
@@ -50,11 +52,13 @@ namespace EZhex1991.EZPhysicsBone
             public Vector3 positionToRight;
 
             public TreeNode() { }
-            public TreeNode(Transform transform, int startDepth, int depth, float nodeLength, float boneLength)
+            public TreeNode(Transform systemSpace, Transform transform, int startDepth, int depth, float nodeLength, float boneLength)
             {
                 if (transform == null) return;
                 this.transform = transform;
-                position = transform.position;
+                this.systemSpace = systemSpace;
+                worldPosition = transform.position;
+                systemPosition = systemSpace == null ? worldPosition : systemSpace.InverseTransformPoint(worldPosition);
                 originalLocalPosition = transform.localPosition;
                 originalLocalRotation = transform.localRotation;
                 this.depth = depth;
@@ -69,7 +73,7 @@ namespace EZhex1991.EZPhysicsBone
                     for (int i = 0; i < transform.childCount; i++)
                     {
                         Transform child = transform.GetChild(i);
-                        TreeNode node = new TreeNode(child, startDepth, depth + 1, (child.position - transform.position).magnitude, this.boneLength);
+                        TreeNode node = new TreeNode(systemSpace, child, startDepth, depth + 1, (child.position - transform.position).magnitude, this.boneLength);
                         node.parent = this;
                         children.Add(node);
                         treeLength = Mathf.Max(treeLength, node.treeLength);
@@ -82,13 +86,13 @@ namespace EZhex1991.EZPhysicsBone
             {
                 if (node == this || node == rightSibling) return;
                 leftSibling = node;
-                positionToLeft = transform.InverseTransformVector(node.position - position);
+                positionToLeft = transform.InverseTransformVector(node.worldPosition - worldPosition);
             }
             public void SetRightSibling(TreeNode node)
             {
                 if (node == this || node == leftSibling) return;
                 rightSibling = node;
-                positionToRight = transform.InverseTransformVector(node.position - position);
+                positionToRight = transform.InverseTransformVector(node.worldPosition - worldPosition);
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
@@ -127,18 +131,18 @@ namespace EZhex1991.EZPhysicsBone
                 {
                     TreeNode child = children[0];
                     transform.rotation *= Quaternion.FromToRotation(child.originalLocalPosition,
-                                                                    transform.InverseTransformVector(child.position - position));
+                                                                    transform.InverseTransformVector(child.worldPosition - worldPosition));
 
                     if (siblingRotationConstraints)
                     {
                         if (leftSibling != null && rightSibling != null)
                         {
                             Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.position - position);
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.worldPosition - worldPosition);
                             Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
 
                             Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.position - position);
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.worldPosition - worldPosition);
                             Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
 
                             transform.rotation *= Quaternion.Lerp(rotationLeft, rotationRight, 0.5f);
@@ -146,33 +150,46 @@ namespace EZhex1991.EZPhysicsBone
                         else if (leftSibling != null)
                         {
                             Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.position - position);
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.worldPosition - worldPosition);
                             Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
                             transform.rotation *= rotationLeft;
                         }
                         else if (rightSibling != null)
                         {
                             Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.position - position);
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.worldPosition - worldPosition);
                             Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
                             transform.rotation *= rotationRight;
                         }
                     }
                 }
 
-                transform.position = position;
+                transform.position = worldPosition;
+                if (systemSpace != null) systemPosition = systemSpace.InverseTransformPoint(worldPosition);
 
                 for (int i = 0; i < children.Count; i++)
                 {
                     children[i].ApplyToTransform(siblingRotationConstraints);
                 }
             }
-            public void SyncPosition()
+
+            public void ResetSystem()
             {
-                position = transform.position;
+                worldPosition = transform.position;
+                systemPosition = systemSpace == null ? worldPosition : systemSpace.InverseTransformPoint(worldPosition);
+                speed = Vector3.zero;
                 for (int i = 0; i < children.Count; i++)
                 {
-                    children[i].SyncPosition();
+                    children[i].ResetSystem();
+                }
+            }
+            public void UpdateSpace()
+            {
+                if (systemSpace == null) return;
+                worldPosition = systemSpace.TransformPoint(systemPosition);
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].UpdateSpace();
                 }
             }
 
@@ -271,13 +288,19 @@ namespace EZhex1991.EZPhysicsBone
         private Vector3 m_Gravity;
         public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
         [SerializeField]
-        private Transform m_GravityAligner;
-        public Transform gravityAligner { get { return m_GravityAligner; } set { m_GravityAligner = value; } }
-        [SerializeField]
         private EZPBForce m_ForceModule;
         public EZPBForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
+        [Header("References")]
+        [SerializeField]
+        private Transform m_GravityAligner;
+        public Transform gravityAligner { get { return m_GravityAligner; } }
+        [SerializeField]
+        private Transform m_SimulateSpace;
+        public Transform simulateSpace { get { return m_SimulateSpace; } }
+
         public float globalRadius { get; private set; }
+
         private List<TreeNode> m_PhysicsTrees = new List<TreeNode>();
 
         private void Start()
@@ -286,7 +309,7 @@ namespace EZhex1991.EZPhysicsBone
         }
         private void OnEnable()
         {
-            SyncPhysicsTrees();
+            ResetSystem();
         }
         private void LateUpdate()
         {
@@ -340,7 +363,7 @@ namespace EZhex1991.EZPhysicsBone
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
-                TreeNode tree = new TreeNode(rootBones[i], startDepth, 0, 0, 0);
+                TreeNode tree = new TreeNode(simulateSpace, rootBones[i], startDepth, 0, 0, 0);
                 tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
@@ -406,18 +429,18 @@ namespace EZhex1991.EZPhysicsBone
             }
         }
 
+        private void ResetSystem()
+        {
+            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            {
+                m_PhysicsTrees[i].ResetSystem();
+            }
+        }
         private void RevertTransforms()
         {
             for (int i = 0; i < m_PhysicsTrees.Count; i++)
             {
                 m_PhysicsTrees[i].RevertTransforms();
-            }
-        }
-        private void SyncPhysicsTrees()
-        {
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
-            {
-                m_PhysicsTrees[i].SyncPosition();
             }
         }
 
@@ -428,10 +451,12 @@ namespace EZhex1991.EZPhysicsBone
             for (int j = 0; j < m_PhysicsTrees.Count; j++)
             {
                 m_PhysicsTrees[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
+                if (simulateSpace != null) m_PhysicsTrees[j].UpdateSpace();
             }
+
+            deltaTime /= iterations;
             for (int i = 0; i < iterations; i++)
             {
-                deltaTime /= iterations;
                 for (int j = 0; j < m_PhysicsTrees.Count; j++)
                 {
                     UpdateNode(m_PhysicsTrees[j], deltaTime);
@@ -442,7 +467,8 @@ namespace EZhex1991.EZPhysicsBone
         {
             if (node.depth > startDepth)
             {
-                Vector3 position = node.position;
+                Vector3 oldWorldPosition, newWorldPosition;
+                oldWorldPosition = newWorldPosition = node.worldPosition;
 
                 // Damping (inertia attenuation)
                 if (node.speed.sqrMagnitude < sleepThreshold)
@@ -451,7 +477,7 @@ namespace EZhex1991.EZPhysicsBone
                 }
                 else
                 {
-                    position += node.speed * deltaTime * (1 - node.damping);
+                    newWorldPosition += node.speed * deltaTime * (1 - node.damping);
                 }
 
                 // Resistance (force resistance)
@@ -470,40 +496,40 @@ namespace EZhex1991.EZPhysicsBone
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                position += force * (1 - node.resistance) / iterations;
+                newWorldPosition += force * (1 - node.resistance) / iterations;
 
                 // Stiffness (shape keeper)
-                Vector3 parentOffset = node.parent.position - node.parent.transform.position;
+                Vector3 parentOffset = node.parent.worldPosition - node.parent.transform.position;
                 Vector3 expectedPos = node.parent.transform.TransformPoint(node.originalLocalPosition) + parentOffset;
-                position = Vector3.Lerp(position, expectedPos, node.stiffness / iterations);
+                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPos, node.stiffness / iterations);
 
                 // Slackness (length keeper)
-                Vector3 nodeDir = (position - node.parent.position).normalized;
+                Vector3 nodeDir = (newWorldPosition - node.parent.worldPosition).normalized;
                 float nodeLength = node.parent.transform.TransformVector(node.originalLocalPosition).magnitude;
-                nodeDir = node.parent.position + nodeDir * nodeLength;
+                nodeDir = node.parent.worldPosition + nodeDir * nodeLength;
                 // Siblings
                 if (siblingConstraints != SiblingConstraints.None)
                 {
                     int constraints = 1;
                     if (node.leftSibling != null)
                     {
-                        Vector3 leftDir = (position - node.leftSibling.position).normalized;
+                        Vector3 leftDir = (newWorldPosition - node.leftSibling.worldPosition).normalized;
                         float leftLength = node.transform.TransformVector(node.positionToLeft).magnitude;
-                        leftDir = node.leftSibling.position + leftDir * leftLength;
+                        leftDir = node.leftSibling.worldPosition + leftDir * leftLength;
                         nodeDir += leftDir;
                         constraints++;
                     }
                     if (node.rightSibling != null)
                     {
-                        Vector3 rightDir = (position - node.rightSibling.position).normalized;
+                        Vector3 rightDir = (newWorldPosition - node.rightSibling.worldPosition).normalized;
                         float rightLength = node.transform.TransformVector(node.positionToRight).magnitude;
-                        rightDir = node.rightSibling.position + rightDir * rightLength;
+                        rightDir = node.rightSibling.worldPosition + rightDir * rightLength;
                         nodeDir += rightDir;
                         constraints++;
                     }
                     nodeDir /= constraints;
                 }
-                position = Vector3.Lerp(nodeDir, position, node.slackness / iterations);
+                newWorldPosition = Vector3.Lerp(nodeDir, newWorldPosition, node.slackness / iterations);
 
                 // Collision
                 if (node.radius > 0)
@@ -511,22 +537,22 @@ namespace EZhex1991.EZPhysicsBone
                     foreach (EZPBColliderBase collider in EZPBColliderBase.EnabledColliders)
                     {
                         if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
-                            collider.Collide(ref position, node.radius);
+                            collider.Collide(ref newWorldPosition, node.radius);
                     }
                     foreach (Collider collider in extraColliders)
                     {
                         if (node.transform != collider.transform && collider.enabled)
-                            EZPhysicsBoneUtility.PointOutsideCollider(ref position, collider, node.radius);
+                            EZPhysicsBoneUtility.PointOutsideCollider(ref newWorldPosition, collider, node.radius);
                     }
                 }
 
-                node.speed = (position - node.position) / deltaTime;
-                node.position = position;
+                node.speed = (newWorldPosition - oldWorldPosition) / deltaTime;
+                node.worldPosition = newWorldPosition;
             }
             else
             {
                 node.transform.localPosition = node.originalLocalPosition;
-                node.position = node.transform.position;
+                node.worldPosition = node.transform.position;
             }
 
             for (int i = 0; i < node.children.Count; i++)
@@ -551,15 +577,15 @@ namespace EZhex1991.EZPhysicsBone
             }
             Gizmos.color = Color.Lerp(Color.white, Color.red, node.normalizedLength);
             if (node.depth > startDepth)
-                Gizmos.DrawWireSphere(node.position, node.radius);
+                Gizmos.DrawWireSphere(node.worldPosition, node.radius);
             if (node.parent != null)
-                Gizmos.DrawLine(node.parent.position, node.position);
+                Gizmos.DrawLine(node.parent.worldPosition, node.worldPosition);
             if (siblingConstraints != SiblingConstraints.None)
             {
                 if (node.leftSibling != null)
-                    Gizmos.DrawLine(node.leftSibling.position, node.position);
+                    Gizmos.DrawLine(node.leftSibling.worldPosition, node.worldPosition);
                 if (node.rightSibling != null)
-                    Gizmos.DrawLine(node.rightSibling.position, node.position);
+                    Gizmos.DrawLine(node.rightSibling.worldPosition, node.worldPosition);
             }
         }
     }

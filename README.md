@@ -28,7 +28,7 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 - Performance
   - Iterations: how many times should the Nodes to be calculated in one frame
   - Material: `EZPBMaterial`, default material will be used if not specified
-  - Sleep Threshold: speed below this threshold will go to sleep
+  - Sleep Threshold: speed below this threshold will go to sleep (useful for high frame rate)
 - Collidsion
   - Collision Layers: which layers the bones collide with
   - Extra Colliders: extra colliders (normal colliders required, this is for compatible purpose)
@@ -37,6 +37,12 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 - Force
   - Gravity: gravity
   - Force Module: `EZPBForce`, wind simulation
+- References
+  - Gravity Aligner: A transform can be specified to determine how much the gravity effects the system, inversely correlated to dot product of aligner's y direction and world's y direction  
+    - *eg: Create a new GameObject, leave its rotation unchanged (identical to the world space), drag it down to the head of a character, and set it as the aligner of the Hair system. You will see the grivity has no effect on the hair when the character stands still, and has maximum effect when the character lies down or bows*
+    - To create a context menu to reset Transform's world rotation easily, Check this page: [EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+  - Simulate Space: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (relatively static)  
+    - *eg: a character in a moving car, hair should be relatively static to the car*
 
 ## EZPBMaterial
 
