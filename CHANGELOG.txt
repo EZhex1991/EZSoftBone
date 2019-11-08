@@ -1,4 +1,4 @@
-[1.3.0] - Unreleased
+[1.3.0] - 2019-11-08
 
 # Added
 
@@ -8,6 +8,10 @@
 # Fixed
 
 - Fixed wrong calculations on Iterations
+
+# Changed
+
+- Call RevertTransforms on Update instead of LateUpdate, InternalAnimationUpdate will be called between them
 
 [1.2.1] - 2019-10-11
 

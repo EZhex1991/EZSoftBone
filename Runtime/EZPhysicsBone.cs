@@ -311,9 +311,12 @@ namespace EZhex1991.EZPhysicsBone
         {
             ResetSystem();
         }
-        private void LateUpdate()
+        private void Update()
         {
             RevertTransforms();
+        }
+        private void LateUpdate()
+        {
             UpdatePhysicsTrees(Time.deltaTime);
             ApplyPhysicsTrees();
         }
