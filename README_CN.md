@@ -1,21 +1,23 @@
-# EZPhysicsBone
+# EZSoftBone
 
 该资源完全**免费**并开源。  
 如果你觉得它对你有所帮助，你可以在[AssetStore](https://assetstore.unity.com/packages/slug/148136)上购买它来表示对作者的支持。或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
 
-[View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
+EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头发、尾巴、胸部、裙子等柔性物体的运动效果。
+
+[View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 [English Version](README.md)  
 
-![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
+![EZSoftBone](.SamplePicture/EZSoftBone.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
-- 材质"EZPBMaterial"调节表现效果，可重用于多个EZPhysicsBone对象
-- 继承EZPBColliderBase创建自定义碰撞
+- 材质"EZSoftBoneMaterial"调节表现效果，可重用于多个EZSoftBone对象
+- 继承EZSoftBoneColliderBase创建自定义碰撞
 
-## EZPhysicsBone
+## EZSoftBone
 
-![EZPhysicsBone](.SamplePicture/EZPhysicsBone.png)
+![EZSoftBone](.SamplePicture/EZSoftBone.png)
 
 - Root Bones: 骨骼根节点列表
 - Structure
@@ -27,7 +29,7 @@
   - ClosedSiblings: 是否使用环状约束
 - Performance
   - Iterations: 迭代计算的次数
-  - Material: 使用的材质(`EZPBMaterial`)，如果不指定，运行时会自动使用默认材质
+  - Material: 使用的材质(`EZSoftBoneMaterial`)，如果不指定，运行时会自动使用默认材质
   - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
 - Collidsion
   - Collision Layers: 碰撞作用层
@@ -44,9 +46,9 @@
   - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
     - *例：人坐在移动的车中，头发应保持相对静止*
 
-## EZPBMaterial
+## EZSoftBoneMaterial
 
-![EZPBMaterial](.SamplePicture/EZPBMaterial.png)
+![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial.png)
 
 - Damping: 阻力（数值越大速度衰减越快，显得更“飘”）
 - Stiffness: 强度（数值越大形状越不容易改变，显得更“硬”）
@@ -55,10 +57,10 @@
 
 每个数值对应一个Curve，代表不同骨骼位置的数值分布
 
-## EZPBForce
+## EZSoftBoneForce
 
-![EZPBForce_Curve](.SamplePicture/EZPBForce_Curve.png)
-![EZPBForce_Perlin](.SamplePicture/EZPBForce_Perlin.png)
+![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Curve.png)
+![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Perlin.png)
 
 - Use Local Direction: 使用相对于所在的Transform的方向
 - Direction: 基础力的向量

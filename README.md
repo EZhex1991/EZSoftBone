@@ -1,21 +1,23 @@
-# EZPhysicsBone
+# EZSoftBone
 
 This package is totally **FREE** and open-source.  
 If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.com/packages/slug/148136) to support me. Other than that, [Donations](https://github.com/EZhex1991/Receipts) are always welcome.
 
-[View it on GitHub](https://github.com/EZhex1991/EZPhysicsBone)  
+EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate hair/tail/breast/skirt and other soft objects.
+
+[View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 [查看中文介绍](README_CN.md)  
 
-![EZPhysicsBone](.SamplePicture/EZPhysicsBone.gif)
+![EZSoftBone](.SamplePicture/EZSoftBone.gif)
 
 - All colliders supported (include MeshCollider)
 - Net structure supported (Cloth simulation)
-- Use EZPBMaterial to adjust effects, and reuse it on other EZPhysicsBones
-- Inherit EZPBColliderBase to create custom colliders
+- Use EZSoftBoneMaterial to adjust effects, and reuse it on other EZSoftBones
+- Inherit EZSoftBoneColliderBase to create custom colliders
 
-## EZPhysicsBone
+## EZSoftBone
 
-![EZPhysicsBone](.SamplePicture/EZPhysicsBone.png)
+![EZSoftBone](.SamplePicture/EZSoftBone.png)
 
 - Root Bones: a list of root bone Transforms
 - Structure
@@ -27,7 +29,7 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
   - ClosedSiblings: check this to add sibling constraints as a circle
 - Performance
   - Iterations: how many times should the Nodes to be calculated in one frame
-  - Material: `EZPBMaterial`, default material will be used if not specified
+  - Material: `EZSoftBoneMaterial`, default material will be used if not specified
   - Sleep Threshold: speed below this threshold will go to sleep (useful for high frame rate)
 - Collidsion
   - Collision Layers: which layers the bones collide with
@@ -36,7 +38,7 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
   - Radius Curve: how should the size distribute on the bones
 - Force
   - Gravity: gravity
-  - Force Module: `EZPBForce`, wind simulation
+  - Force Module: `EZSoftBoneForce`, wind simulation
 - References
   - Gravity Aligner: A transform can be specified to determine how much the gravity effects the system, inversely correlated to dot product of aligner's y direction and world's y direction  
     - *eg: Create a new GameObject, leave its rotation unchanged (identical to the world space), drag it down to the head of a character, and set it as the aligner of the Hair system. You will see the grivity has no effect on the hair when the character stands still, and has maximum effect when the character lies down or bows*
@@ -44,9 +46,9 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
   - Simulate Space: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (relatively static)  
     - *eg: a character in a moving car, hair should be relatively static to the car*
 
-## EZPBMaterial
+## EZSoftBoneMaterial
 
-![EZPBMaterial](.SamplePicture/EZPBMaterial.png)
+![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial.png)
 
 - Damping: speed attenuation
 - Stiffness: shape retention
@@ -55,10 +57,10 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 
 Each value has a corresponding curve represent the value distribution on the bone hierarchy
 
-## EZPBForce
+## EZSoftBoneForce
 
-![EZPBForce_Curve](.SamplePicture/EZPBForce_Curve.png)
-![EZPBForce_Perlin](.SamplePicture/EZPBForce_Perlin.png)
+![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Curve.png)
+![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Perlin.png)
 
 - Use Local Direction: check it to use local space direction
 - Direction: base force vector
