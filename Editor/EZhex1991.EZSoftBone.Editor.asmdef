@@ -1,7 +1,7 @@
 {
-    "name": "EZhex1991.EZPhysicsBone.Editor",
+    "name": "EZhex1991.EZSoftBone.Editor",
     "references": [
-        "EZhex1991.EZPhysicsBone"
+        "EZhex1991.EZSoftBone"
     ],
     "includePlatforms": [
         "Editor"

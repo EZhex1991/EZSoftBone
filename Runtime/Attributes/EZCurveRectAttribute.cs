@@ -5,7 +5,7 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
     public class EZCurveRectAttribute : PropertyAttribute
     {

@@ -5,10 +5,10 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    [CreateAssetMenu(fileName = "PBMat", menuName = "EZPhysicsBone/PBMaterial")]
-    public class EZPBMaterial : ScriptableObject
+    [CreateAssetMenu(fileName = "SBMat", menuName = "EZSoftBone/SBMaterial")]
+    public class EZSoftBoneMaterial : ScriptableObject
     {
         [SerializeField, Range(0, 1)]
         private float m_Damping = 0.2f;
@@ -38,14 +38,14 @@ namespace EZhex1991.EZPhysicsBone
         private AnimationCurve m_SlacknessCurve = AnimationCurve.Linear(0, 1, 1, 0.8f);
         public AnimationCurve slacknessCurve { get { return m_SlacknessCurve; } }
 
-        public static EZPBMaterial m_DefaultMaterial;
-        public static EZPBMaterial defaultMaterial
+        public static EZSoftBoneMaterial m_DefaultMaterial;
+        public static EZSoftBoneMaterial defaultMaterial
         {
             get
             {
                 if (m_DefaultMaterial == null)
-                    m_DefaultMaterial = CreateInstance<EZPBMaterial>();
-                m_DefaultMaterial.name = "PBMat_Default";
+                    m_DefaultMaterial = CreateInstance<EZSoftBoneMaterial>();
+                m_DefaultMaterial.name = "SBMat_Default";
                 return m_DefaultMaterial;
             }
         }

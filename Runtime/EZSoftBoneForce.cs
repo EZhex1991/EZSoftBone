@@ -5,9 +5,9 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    public class EZPBForce : MonoBehaviour
+    public class EZSoftBoneForce : MonoBehaviour
     {
         public enum TurbulenceMode
         {
@@ -88,8 +88,8 @@ namespace EZhex1991.EZPhysicsBone
             Vector3 force0 = GetForce(0) * 50;
             float width = force0.magnitude * 0.2f;
             Gizmos.DrawRay(transform.position, force0);
-            EZPhysicsBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.up);
-            EZPhysicsBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.right);
+            EZSoftBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.up);
+            EZSoftBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.right);
         }
     }
 }

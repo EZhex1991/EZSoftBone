@@ -5,9 +5,9 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    public class EZPBColliderCylinder : EZPBColliderBase
+    public class EZSoftBoneColliderCylinder : EZSoftBoneColliderBase
     {
         [SerializeField]
         private float m_Margin;
@@ -19,8 +19,8 @@ namespace EZhex1991.EZPhysicsBone
 
         public override void Collide(ref Vector3 position, float spacing)
         {
-            if (insideMode) EZPhysicsBoneUtility.PointInsideCylinder(ref position, transform, spacing + margin);
-            else EZPhysicsBoneUtility.PointOutsideCylinder(ref position, transform, spacing + margin);
+            if (insideMode) EZSoftBoneUtility.PointInsideCylinder(ref position, transform, spacing + margin);
+            else EZSoftBoneUtility.PointOutsideCylinder(ref position, transform, spacing + margin);
         }
 
 #if UNITY_EDITOR
@@ -28,7 +28,7 @@ namespace EZhex1991.EZPhysicsBone
         {
             Vector3 center, direction;
             float radius, height;
-            EZPhysicsBoneUtility.GetCylinderParams(transform, out center, out direction, out radius, out height);
+            EZSoftBoneUtility.GetCylinderParams(transform, out center, out direction, out radius, out height);
             UnityEditor.Handles.color = Color.red;
             UnityEditor.Handles.matrix = Matrix4x4.identity;
             Vector3 p0 = center + direction * height;

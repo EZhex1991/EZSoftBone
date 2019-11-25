@@ -5,10 +5,10 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
     [RequireComponent(typeof(Collider))]
-    public class EZPBCollider : EZPBColliderBase
+    public class EZSoftBoneCollider : EZSoftBoneColliderBase
     {
         [SerializeField]
         private Collider m_ReferenceCollider;
@@ -35,20 +35,20 @@ namespace EZhex1991.EZPhysicsBone
             if (referenceCollider is SphereCollider)
             {
                 SphereCollider collider = referenceCollider as SphereCollider;
-                if (insideMode) EZPhysicsBoneUtility.PointInsideSphere(ref position, collider, spacing + margin);
-                else EZPhysicsBoneUtility.PointOutsideSphere(ref position, collider, spacing + margin);
+                if (insideMode) EZSoftBoneUtility.PointInsideSphere(ref position, collider, spacing + margin);
+                else EZSoftBoneUtility.PointOutsideSphere(ref position, collider, spacing + margin);
             }
             else if (referenceCollider is CapsuleCollider)
             {
                 CapsuleCollider collider = referenceCollider as CapsuleCollider;
-                if (insideMode) EZPhysicsBoneUtility.PointInsideCapsule(ref position, collider, spacing + margin);
-                else EZPhysicsBoneUtility.PointOutsideCapsule(ref position, collider, spacing + margin);
+                if (insideMode) EZSoftBoneUtility.PointInsideCapsule(ref position, collider, spacing + margin);
+                else EZSoftBoneUtility.PointOutsideCapsule(ref position, collider, spacing + margin);
             }
             else if (referenceCollider is BoxCollider)
             {
                 BoxCollider collider = referenceCollider as BoxCollider;
-                if (insideMode) EZPhysicsBoneUtility.PointInsideBox(ref position, collider, spacing + margin);
-                else EZPhysicsBoneUtility.PointOutsideBox(ref position, collider, spacing + margin);
+                if (insideMode) EZSoftBoneUtility.PointInsideBox(ref position, collider, spacing + margin);
+                else EZSoftBoneUtility.PointOutsideBox(ref position, collider, spacing + margin);
             }
             else if (referenceCollider is MeshCollider)
             {
@@ -64,7 +64,7 @@ namespace EZhex1991.EZPhysicsBone
                     insideMode = false;
                     return;
                 }
-                EZPhysicsBoneUtility.PointOutsideCollider(ref position, referenceCollider, spacing + margin);
+                EZSoftBoneUtility.PointOutsideCollider(ref position, referenceCollider, spacing + margin);
             }
         }
 

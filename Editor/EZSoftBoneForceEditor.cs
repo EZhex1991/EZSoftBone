@@ -6,10 +6,10 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    [CustomEditor(typeof(EZPBForce))]
-    public class EZPBForceEditor : Editor
+    [CustomEditor(typeof(EZSoftBoneForce))]
+    public class EZSoftBoneForceEditor : Editor
     {
         private SerializedProperty m_UseLocalDirection;
         private SerializedProperty m_Direction;
@@ -59,14 +59,14 @@ namespace EZhex1991.EZPhysicsBone
             EditorGUILayout.PropertyField(m_Conductivity);
             EditorGUILayout.PropertyField(m_TurbulenceMode);
 
-            if (m_TurbulenceMode.intValue == (int)EZPBForce.TurbulenceMode.Curve)
+            if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Curve)
             {
                 EditorGUILayout.PropertyField(m_TurbulenceTimeCycle);
                 EditorGUILayout.PropertyField(m_TurbulenceXCurve);
                 EditorGUILayout.PropertyField(m_TurbulenceYCurve);
                 EditorGUILayout.PropertyField(m_TurbulenceZCurve);
             }
-            else if (m_TurbulenceMode.intValue == (int)EZPBForce.TurbulenceMode.Perlin)
+            else if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Perlin)
             {
                 EditorGUILayout.PropertyField(m_TurbulenceSpeed);
                 EditorGUILayout.PropertyField(m_TurbulenceRandomSeed);

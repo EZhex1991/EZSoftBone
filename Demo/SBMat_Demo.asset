@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4d9d9656f4da33d48a28beaf0dfd13df, type: 3}
-  m_Name: PBMat_Demo
+  m_Name: SBMat_Demo
   m_EditorClassIdentifier: 
   m_Damping: 0.3
   m_DampingCurve:

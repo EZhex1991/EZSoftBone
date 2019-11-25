@@ -5,9 +5,9 @@
  */
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    public static class EZPhysicsBoneUtility
+    public static class EZSoftBoneUtility
     {
         public static Vector3 Abs(this Vector3 v)
         {

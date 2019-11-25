@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    public class EZPhysicsBone : MonoBehaviour
+    public class EZSoftBone : MonoBehaviour
     {
         public static readonly double Delta_Min = 1e-6;
 
@@ -103,7 +103,7 @@ namespace EZhex1991.EZPhysicsBone
                     children[i].Inflate(baseRadius, radiusCurve);
                 }
             }
-            public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZPBMaterial material)
+            public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZSoftBoneMaterial material)
             {
                 radius = radiusCurve.Evaluate(normalizedLength) * baseRadius;
                 damping = material.GetDamping(normalizedLength);
@@ -228,20 +228,34 @@ namespace EZhex1991.EZPhysicsBone
         private bool m_ClosedSiblings = false;
         public bool closedSiblings { get { return m_ClosedSiblings; } }
 
+        [Header("Collision")]
+        [SerializeField]
+        private LayerMask m_CollisionLayers = 0;
+        public LayerMask collisionLayers { get { return m_CollisionLayers; } }
+        [SerializeField]
+        private List<Collider> m_ExtraColliders = new List<Collider>();
+        public List<Collider> extraColliders { get { return m_ExtraColliders; } }
+        [SerializeField]
+        private float m_Radius = 0;
+        public float radius { get { return m_Radius; } }
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        private AnimationCurve m_RadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
+        public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
+
         [Header("Performance")]
         [SerializeField, Range(1, 10)]
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } }
 
         [SerializeField]
-        private EZPBMaterial m_Material;
-        private EZPBMaterial m_InstanceMaterial;
-        public EZPBMaterial sharedMaterial
+        private EZSoftBoneMaterial m_Material;
+        private EZSoftBoneMaterial m_InstanceMaterial;
+        public EZSoftBoneMaterial sharedMaterial
         {
             get
             {
                 if (m_Material == null)
-                    m_Material = EZPBMaterial.defaultMaterial;
+                    m_Material = EZSoftBoneMaterial.defaultMaterial;
                 return m_Material;
             }
             set
@@ -249,7 +263,7 @@ namespace EZhex1991.EZPhysicsBone
                 m_Material = value;
             }
         }
-        public EZPBMaterial material
+        public EZSoftBoneMaterial material
         {
             get
             {
@@ -269,27 +283,13 @@ namespace EZhex1991.EZPhysicsBone
         private float m_SleepThreshold = 0.005f;
         public float sleepThreshold { get { return m_SleepThreshold; } set { m_SleepThreshold = Mathf.Max(0, value); } }
 
-        [Header("Collision")]
-        [SerializeField]
-        private LayerMask m_CollisionLayers = 0;
-        public LayerMask collisionLayers { get { return m_CollisionLayers; } }
-        [SerializeField]
-        private List<Collider> m_ExtraColliders = new List<Collider>();
-        public List<Collider> extraColliders { get { return m_ExtraColliders; } }
-        [SerializeField]
-        private float m_Radius = 0;
-        public float radius { get { return m_Radius; } }
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
-        private AnimationCurve m_RadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
-        public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
-
         [Header("Force")]
         [SerializeField]
         private Vector3 m_Gravity;
         public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
         [SerializeField]
-        private EZPBForce m_ForceModule;
-        public EZPBForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
+        private EZSoftBoneForce m_ForceModule;
+        public EZSoftBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
         [Header("References")]
         [SerializeField]
@@ -537,7 +537,7 @@ namespace EZhex1991.EZPhysicsBone
                 // Collision
                 if (node.radius > 0)
                 {
-                    foreach (EZPBColliderBase collider in EZPBColliderBase.EnabledColliders)
+                    foreach (EZSoftBoneColliderBase collider in EZSoftBoneColliderBase.EnabledColliders)
                     {
                         if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
                             collider.Collide(ref newWorldPosition, node.radius);
@@ -545,7 +545,7 @@ namespace EZhex1991.EZPhysicsBone
                     foreach (Collider collider in extraColliders)
                     {
                         if (node.transform != collider.transform && collider.enabled)
-                            EZPhysicsBoneUtility.PointOutsideCollider(ref newWorldPosition, collider, node.radius);
+                            EZSoftBoneUtility.PointOutsideCollider(ref newWorldPosition, collider, node.radius);
                     }
                 }
 

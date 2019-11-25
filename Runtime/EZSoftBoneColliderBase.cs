@@ -6,11 +6,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EZhex1991.EZPhysicsBone
+namespace EZhex1991.EZSoftBone
 {
-    public abstract class EZPBColliderBase : MonoBehaviour
+    public abstract class EZSoftBoneColliderBase : MonoBehaviour
     {
-        public static HashSet<EZPBColliderBase> EnabledColliders = new HashSet<EZPBColliderBase>();
+        public static HashSet<EZSoftBoneColliderBase> EnabledColliders = new HashSet<EZSoftBoneColliderBase>();
 
         protected void OnEnable()
         {
