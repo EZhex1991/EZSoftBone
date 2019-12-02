@@ -5,6 +5,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
@@ -13,14 +14,14 @@ namespace EZhex1991.EZSoftBone
     {
         public static readonly double Delta_Min = 1e-6;
 
-        public enum SiblingConstraints
+        public enum UnificationMode
         {
             None,
-            Root,
-            Depth,
+            Rooted,
+            Unified,
         }
 
-        public class TreeNode : IDisposable
+        private class TreeNode : IDisposable
         {
             public TreeNode parent;
             public TreeNode leftSibling;
@@ -51,10 +52,8 @@ namespace EZhex1991.EZSoftBone
             public Vector3 positionToLeft;
             public Vector3 positionToRight;
 
-            public TreeNode() { }
-            public TreeNode(Transform systemSpace, Transform transform, int startDepth, int depth, float nodeLength, float boneLength)
+            public TreeNode(Transform systemSpace, Transform transform, IEnumerable<Transform> endBones, int startDepth, int depth, float nodeLength, float boneLength)
             {
-                if (transform == null) return;
                 this.transform = transform;
                 this.systemSpace = systemSpace;
                 worldPosition = transform.position;
@@ -67,19 +66,33 @@ namespace EZhex1991.EZSoftBone
                 {
                     this.boneLength = boneLength + this.nodeLength;
                 }
-                treeLength = this.boneLength;
-                if (transform.childCount > 0)
+                treeLength = Mathf.Max(treeLength, this.boneLength);
+                if (transform.childCount > 0 && !endBones.Contains(transform))
                 {
                     for (int i = 0; i < transform.childCount; i++)
                     {
                         Transform child = transform.GetChild(i);
-                        TreeNode node = new TreeNode(systemSpace, child, startDepth, depth + 1, (child.position - transform.position).magnitude, this.boneLength);
+                        TreeNode node = new TreeNode(systemSpace, child, endBones, startDepth, depth + 1, (child.position - transform.position).magnitude, this.boneLength);
                         node.parent = this;
                         children.Add(node);
                         treeLength = Mathf.Max(treeLength, node.treeLength);
                     }
                 }
-                normalizedLength = treeLength == 0 ? 0 : this.boneLength / treeLength;
+                normalizedLength = treeLength == 0 ? 0 : (this.boneLength / treeLength);
+            }
+
+            public void SetTreeLength()
+            {
+                SetTreeLength(treeLength);
+            }
+            public void SetTreeLength(float treeLength)
+            {
+                this.treeLength = treeLength;
+                normalizedLength = treeLength == 0 ? 0 : (boneLength / treeLength);
+                for (int i = 0; i < children.Count; i++)
+                {
+                    children[i].SetTreeLength(treeLength);
+                }
             }
 
             public void SetLeftSibling(TreeNode node)
@@ -210,34 +223,40 @@ namespace EZhex1991.EZSoftBone
         [SerializeField]
         private List<Transform> m_RootBones;
         public List<Transform> rootBones { get { return m_RootBones; } }
+        [SerializeField]
+        private List<Transform> m_EndBones;
+        public List<Transform> endBones { get { return m_EndBones; } }
 
         [Header("Structure")]
         [SerializeField]
         private int m_StartDepth;
-        public int startDepth { get { return m_StartDepth; } }
+        public int startDepth { get { return m_StartDepth; } set { m_StartDepth = value; } }
 
         [SerializeField]
-        private SiblingConstraints m_SiblingConstraints = SiblingConstraints.None;
-        public SiblingConstraints siblingConstraints { get { return m_SiblingConstraints; } }
+        private UnificationMode m_SiblingConstraints = UnificationMode.None;
+        public UnificationMode siblingConstraints { get { return m_SiblingConstraints; } set { m_SiblingConstraints = value; } }
+        [SerializeField]
+        private UnificationMode m_LengthUnification = UnificationMode.None;
+        public UnificationMode lengthUnification { get { return m_LengthUnification; } set { m_LengthUnification = value; } }
 
         [SerializeField]
         private bool m_SiblingRotationConstraints = true;
-        public bool siblingRotationConstraints { get { return m_SiblingRotationConstraints; } }
+        public bool siblingRotationConstraints { get { return m_SiblingRotationConstraints; } set { m_SiblingRotationConstraints = value; } }
 
         [SerializeField]
         private bool m_ClosedSiblings = false;
-        public bool closedSiblings { get { return m_ClosedSiblings; } }
+        public bool closedSiblings { get { return m_ClosedSiblings; } set { m_ClosedSiblings = value; } }
 
         [Header("Collision")]
         [SerializeField]
         private LayerMask m_CollisionLayers = 0;
-        public LayerMask collisionLayers { get { return m_CollisionLayers; } }
+        public LayerMask collisionLayers { get { return m_CollisionLayers; } set { m_CollisionLayers = value; } }
         [SerializeField]
         private List<Collider> m_ExtraColliders = new List<Collider>();
         public List<Collider> extraColliders { get { return m_ExtraColliders; } }
         [SerializeField]
         private float m_Radius = 0;
-        public float radius { get { return m_Radius; } }
+        public float radius { get { return m_Radius; } set { m_Radius = value; } }
         [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_RadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
         public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
@@ -245,7 +264,7 @@ namespace EZhex1991.EZSoftBone
         [Header("Performance")]
         [SerializeField, Range(1, 10)]
         private int m_Iterations = 1;
-        public int iterations { get { return m_Iterations; } }
+        public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
 
         [SerializeField]
         private EZSoftBoneMaterial m_Material;
@@ -294,10 +313,10 @@ namespace EZhex1991.EZSoftBone
         [Header("References")]
         [SerializeField]
         private Transform m_GravityAligner;
-        public Transform gravityAligner { get { return m_GravityAligner; } }
+        public Transform gravityAligner { get { return m_GravityAligner; } set { m_GravityAligner = value; } }
         [SerializeField]
         private Transform m_SimulateSpace;
-        public Transform simulateSpace { get { return m_SimulateSpace; } }
+        public Transform simulateSpace { get { return m_SimulateSpace; } set { m_SimulateSpace = value; } }
 
         public float globalRadius { get; private set; }
 
@@ -358,6 +377,12 @@ namespace EZhex1991.EZSoftBone
         }
 #endif
 
+        public void Reconstructure()
+        {
+            RevertTransforms();
+            InitPhysicsTrees();
+        }
+
         private void InitPhysicsTrees()
         {
             m_PhysicsTrees.Clear();
@@ -366,11 +391,12 @@ namespace EZhex1991.EZSoftBone
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
-                TreeNode tree = new TreeNode(simulateSpace, rootBones[i], startDepth, 0, 0, 0);
+                TreeNode tree = new TreeNode(simulateSpace, rootBones[i], endBones, startDepth, 0, 0, 0);
                 tree.Inflate(globalRadius, radiusCurve);
                 m_PhysicsTrees.Add(tree);
             }
-            if (siblingConstraints == SiblingConstraints.Root)
+
+            if (siblingConstraints == UnificationMode.Rooted)
             {
                 for (int i = 0; i < m_PhysicsTrees.Count; i++)
                 {
@@ -379,7 +405,7 @@ namespace EZhex1991.EZSoftBone
                     SetSiblingsByDepth(nodes, closedSiblings);
                 }
             }
-            else if (siblingConstraints == SiblingConstraints.Depth)
+            else if (siblingConstraints == UnificationMode.Unified)
             {
                 Queue<TreeNode> nodes = new Queue<TreeNode>();
                 for (int i = 0; i < m_PhysicsTrees.Count; i++)
@@ -387,6 +413,26 @@ namespace EZhex1991.EZSoftBone
                     nodes.Enqueue(m_PhysicsTrees[i]);
                 }
                 if (nodes.Count > 0) SetSiblingsByDepth(nodes, closedSiblings);
+            }
+
+            if (lengthUnification == UnificationMode.Rooted)
+            {
+                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                {
+                    m_PhysicsTrees[i].SetTreeLength();
+                }
+            }
+            else if (lengthUnification == UnificationMode.Unified)
+            {
+                float maxLength = 0;
+                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                {
+                    maxLength = Mathf.Max(maxLength, m_PhysicsTrees[i].treeLength);
+                }
+                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                {
+                    m_PhysicsTrees[i].SetTreeLength(maxLength);
+                }
             }
         }
         private void SetSiblingsByDepth(Queue<TreeNode> nodes, bool closed)
@@ -511,7 +557,7 @@ namespace EZhex1991.EZSoftBone
                 float nodeLength = node.parent.transform.TransformVector(node.originalLocalPosition).magnitude;
                 nodeDir = node.parent.worldPosition + nodeDir * nodeLength;
                 // Siblings
-                if (siblingConstraints != SiblingConstraints.None)
+                if (siblingConstraints != UnificationMode.None)
                 {
                     int constraints = 1;
                     if (node.leftSibling != null)
@@ -583,7 +629,7 @@ namespace EZhex1991.EZSoftBone
                 Gizmos.DrawWireSphere(node.worldPosition, node.radius);
             if (node.parent != null)
                 Gizmos.DrawLine(node.parent.worldPosition, node.worldPosition);
-            if (siblingConstraints != SiblingConstraints.None)
+            if (siblingConstraints != UnificationMode.None)
             {
                 if (node.leftSibling != null)
                     Gizmos.DrawLine(node.leftSibling.worldPosition, node.worldPosition);
