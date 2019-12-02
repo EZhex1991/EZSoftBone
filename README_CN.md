@@ -8,7 +8,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 [English Version](README.md)  
 
-![EZSoftBone](.SamplePicture/EZSoftBone.gif)
+![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
@@ -17,25 +17,31 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 ## EZSoftBone
 
-![EZSoftBone](.SamplePicture/EZSoftBone.png)
+![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
 
 - Root Bones: 骨骼根节点列表
+- End Bones: 末端节点列表
 - Structure
   - Start Depth: 从第几个层级开始起作用
   - Sibling Constraints: 同级约束，让深度相同的节点相互产生作用
     - None: 无同级约束（链）
-    - Root: 约束同一个Root下深度相同的节点
-    - Depth: 约束深度相同的节点
-  - ClosedSiblings: 是否使用环状约束
-- Performance
-  - Iterations: 迭代计算的次数
-  - Material: 使用的材质(`EZSoftBoneMaterial`)，如果不指定，运行时会自动使用默认材质
-  - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
-- Collidsion
+    - Rooted: 约束同一个Root下深度相同的节点
+    - Unified: 约束整个系统中深度相同的节点
+  - Length Unification: 树的总长度计算方式，参数的数值分布与该数值相关
+    - None: 每个链单独计算（分叉点用最长子链的长度）
+    - Rooted: 各Root使用其最长子链的长度
+    - Unified: 使用整个系统中最长子链的长度
+  - Sibling Rotation Constraints: 同级约束是否带动节点旋转
+  - Closed Siblings: 是否使用环状约束
+- Collision
   - Collision Layers: 碰撞作用层
   - Extra Colliders: 让普通Collider也能起作用（本来是为了兼容老代码，不过有一定适用范围就保留了）
   - Radius: 骨骼的碰撞球大小
   - Radius Curve: 碰撞球大小的分布
+- Performance
+  - Iterations: 迭代计算的次数
+  - Material: 使用的材质(`EZSoftBoneMaterial`)，如果不指定，运行时会自动使用默认材质
+  - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
 - Force
   - Gravity: 应用于该骨骼的重力
   - Force Module: 应用于该骨骼的其他力（可用来模拟风）
@@ -48,7 +54,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 ## EZSoftBoneMaterial
 
-![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial.png)
+![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial_Inspector.png)
 
 - Damping: 阻力（数值越大速度衰减越快，显得更“飘”）
 - Stiffness: 强度（数值越大形状越不容易改变，显得更“硬”）
@@ -59,8 +65,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 ## EZSoftBoneForce
 
-![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Curve.png)
-![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Perlin.png)
+![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
+![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
 
 - Use Local Direction: 使用相对于所在的Transform的方向
 - Direction: 基础力的向量
