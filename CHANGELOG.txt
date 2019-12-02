@@ -1,3 +1,12 @@
+[1.5.0] - unreleased
+
+# Added
+
+- End Bones: end bones can be specified
+- Length Unification: there are 3 length calculation modes now, just like the "Sibling Constraints"
+- Add set accessor to some properties
+- Add a public function `Reconstructure` so you can reinitialize the system after you changed some properties at runtime.
+
 [1.4.0] - 2019-11-25
 
 # Changed
