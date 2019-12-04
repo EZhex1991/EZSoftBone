@@ -1,62 +1,64 @@
-[1.5.0] - unreleased
+# Changelog
 
-# Added
+## [1.5.0] - unreleased
+
+### Added
 
 - End Bones: end bones can be specified
 - Length Unification: there are 3 length calculation modes now, just like the "Sibling Constraints"
 - Add set accessor to some properties
 - Add a public function `Reconstructure` so you can reinitialize the system after you changed some properties at runtime.
 
-[1.4.0] - 2019-11-25
+## [1.4.0] - 2019-11-25
 
-# Changed
+### Changed
 
 - Change Name to EZSoftBone.
 
-[1.3.0] - 2019-11-08
+## [1.3.0] - 2019-11-08
 
-# Added
+### Added
 
 - GravityAligner: A transform can be specified to determine how much the gravity effects the system (inversely correlated to dot product of aligner's y direction and world's y direction)
 - SimulateSpace: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (like the hair in a car)
 
-# Fixed
+### Fixed
 
 - Fixed wrong calculations on Iterations
 
-# Changed
+### Changed
 
 - Call RevertTransforms on Update instead of LateUpdate, InternalAnimationUpdate will be called between them
 
-[1.2.1] - 2019-10-11
+## [1.2.1] - 2019-10-11
 
-# Added
+### Added
 
 - SiblingRotationConstraints: Rotation will be affected by Sibling Constraints if enabled
 - Delta_Min: a constant value (1e-6), Pasue if deltaTime is under this value
 
-[1.2.0] - 2019-08-23
+## [1.2.0] - 2019-08-23
 
-# Changed
+### Changed
 
 - Now the restrictions' length will be scaled with the related transforms
 
-# Removed
+### Removed
 
 - End Node: That's modeler's responsibility (and remove it makes the code looks so much better)
 
-[1.1.0] - 2019-07-24
+## [1.1.0] - 2019-07-24
 
-# Added
+### Added
 
 - Added nested editor for PBMaterials
 
-# Changed
+### Changed
 
 - Package path changed to Assets/EZhex1991/EZPhysicsBone
 - Shorten material, collider, and force module's name
 - Revised some comments
 
-[1.0.0] - 2019-06-10
+## [1.0.0] - 2019-06-10
 
-# First Release
+- First Release
