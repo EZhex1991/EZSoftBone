@@ -1,13 +1,18 @@
 # Changelog
 
-## [1.5.0] - unreleased
+## [1.5.0] - 2019-12-11
 
 ### Added
 
 - End Bones: end bones can be specified
 - Length Unification: there are 3 length calculation modes now, just like the "Sibling Constraints"
 - Add set accessor to some properties
-- Add a public function `Reconstructure` so you can reinitialize the system after you changed some properties at runtime.
+- Add a public function `Reconstructure` so you can reinitialize the system after you changed properties at runtime.
+
+### Changed
+
+- Change some variables' name
+- replace enum SiblingConstraintMode with UnificationMode
 
 ## [1.4.0] - 2019-11-25
 

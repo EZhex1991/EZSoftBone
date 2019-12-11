@@ -3,6 +3,8 @@
 This package is totally **FREE** and open-source.  
 If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.com/packages/slug/148136) to support me. Other than that, [Donations](https://github.com/EZhex1991/Receipts) are always welcome.
 
+If you need a refund, send your Invoice Number to ezhex1991@outlook.com. **Refund for any reason will be accepted**.
+
 EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate hair/tail/breast/skirt and other soft objects.
 
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
