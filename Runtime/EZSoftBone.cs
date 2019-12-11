@@ -21,22 +21,21 @@ namespace EZhex1991.EZSoftBone
             Unified,
         }
 
-        private class TreeNode : IDisposable
+        private class Bone : IDisposable
         {
-            public TreeNode parent;
-            public TreeNode leftSibling;
-            public TreeNode rightSibling;
-            public List<TreeNode> children = new List<TreeNode>();
+            public Bone parentBone;
+            public Bone leftBone;
+            public Bone rightBone;
+            public List<Bone> childBones = new List<Bone>();
 
             public Transform transform;
             public Transform systemSpace;
 
             public int depth;
-            public float nodeLength;
             public float boneLength;
             public float treeLength;
-
             public float normalizedLength;
+
             public float radius;
             public float damping;
             public float stiffness;
@@ -52,7 +51,7 @@ namespace EZhex1991.EZSoftBone
             public Vector3 positionToLeft;
             public Vector3 positionToRight;
 
-            public TreeNode(Transform systemSpace, Transform transform, IEnumerable<Transform> endBones, int startDepth, int depth, float nodeLength, float boneLength)
+            public Bone(Transform systemSpace, Transform transform, IEnumerable<Transform> endBones, int startDepth, int depth, float nodeLength, float boneLength)
             {
                 this.transform = transform;
                 this.systemSpace = systemSpace;
@@ -61,10 +60,9 @@ namespace EZhex1991.EZSoftBone
                 originalLocalPosition = transform.localPosition;
                 originalLocalRotation = transform.localRotation;
                 this.depth = depth;
-                this.nodeLength = nodeLength;
                 if (depth > startDepth)
                 {
-                    this.boneLength = boneLength + this.nodeLength;
+                    this.boneLength = boneLength + nodeLength;
                 }
                 treeLength = Mathf.Max(treeLength, this.boneLength);
                 if (transform.childCount > 0 && !endBones.Contains(transform))
@@ -72,10 +70,11 @@ namespace EZhex1991.EZSoftBone
                     for (int i = 0; i < transform.childCount; i++)
                     {
                         Transform child = transform.GetChild(i);
-                        TreeNode node = new TreeNode(systemSpace, child, endBones, startDepth, depth + 1, (child.position - transform.position).magnitude, this.boneLength);
-                        node.parent = this;
-                        children.Add(node);
-                        treeLength = Mathf.Max(treeLength, node.treeLength);
+                        if (!child.gameObject.activeSelf) continue;
+                        Bone childBone = new Bone(systemSpace, child, endBones, startDepth, depth + 1, Vector3.Distance(child.position, transform.position), this.boneLength);
+                        childBone.parentBone = this;
+                        childBones.Add(childBone);
+                        treeLength = Mathf.Max(treeLength, childBone.treeLength);
                     }
                 }
                 normalizedLength = treeLength == 0 ? 0 : (this.boneLength / treeLength);
@@ -89,31 +88,31 @@ namespace EZhex1991.EZSoftBone
             {
                 this.treeLength = treeLength;
                 normalizedLength = treeLength == 0 ? 0 : (boneLength / treeLength);
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].SetTreeLength(treeLength);
+                    childBones[i].SetTreeLength(treeLength);
                 }
             }
 
-            public void SetLeftSibling(TreeNode node)
+            public void SetLeftSibling(Bone bone)
             {
-                if (node == this || node == rightSibling) return;
-                leftSibling = node;
-                positionToLeft = transform.InverseTransformVector(node.worldPosition - worldPosition);
+                if (bone == this || bone == rightBone) return;
+                leftBone = bone;
+                positionToLeft = transform.InverseTransformVector(bone.worldPosition - worldPosition);
             }
-            public void SetRightSibling(TreeNode node)
+            public void SetRightSibling(Bone bone)
             {
-                if (node == this || node == leftSibling) return;
-                rightSibling = node;
-                positionToRight = transform.InverseTransformVector(node.worldPosition - worldPosition);
+                if (bone == this || bone == leftBone) return;
+                rightBone = bone;
+                positionToRight = transform.InverseTransformVector(bone.worldPosition - worldPosition);
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
             {
                 radius = radiusCurve.Evaluate(normalizedLength) * baseRadius;
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].Inflate(baseRadius, radiusCurve);
+                    childBones[i].Inflate(baseRadius, radiusCurve);
                 }
             }
             public void Inflate(float baseRadius, AnimationCurve radiusCurve, EZSoftBoneMaterial material)
@@ -123,9 +122,9 @@ namespace EZhex1991.EZSoftBone
                 stiffness = material.GetStiffness(normalizedLength);
                 resistance = material.GetResistance(normalizedLength);
                 slackness = material.GetSlackness(normalizedLength);
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].Inflate(baseRadius, radiusCurve, material);
+                    childBones[i].Inflate(baseRadius, radiusCurve, material);
                 }
             }
 
@@ -133,44 +132,44 @@ namespace EZhex1991.EZSoftBone
             {
                 transform.localPosition = originalLocalPosition;
                 transform.localRotation = originalLocalRotation;
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].RevertTransforms();
+                    childBones[i].RevertTransforms();
                 }
             }
             public void ApplyToTransform(bool siblingRotationConstraints)
             {
-                if (children.Count == 1)
+                if (childBones.Count == 1)
                 {
-                    TreeNode child = children[0];
-                    transform.rotation *= Quaternion.FromToRotation(child.originalLocalPosition,
-                                                                    transform.InverseTransformVector(child.worldPosition - worldPosition));
+                    Bone childBone = childBones[0];
+                    transform.rotation *= Quaternion.FromToRotation(childBone.originalLocalPosition,
+                                                                    transform.InverseTransformVector(childBone.worldPosition - worldPosition));
 
                     if (siblingRotationConstraints)
                     {
-                        if (leftSibling != null && rightSibling != null)
+                        if (leftBone != null && rightBone != null)
                         {
                             Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.worldPosition - worldPosition);
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
                             Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
 
                             Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.worldPosition - worldPosition);
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
                             Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
 
                             transform.rotation *= Quaternion.Lerp(rotationLeft, rotationRight, 0.5f);
                         }
-                        else if (leftSibling != null)
+                        else if (leftBone != null)
                         {
                             Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftSibling.worldPosition - worldPosition);
+                            Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
                             Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
                             transform.rotation *= rotationLeft;
                         }
-                        else if (rightSibling != null)
+                        else if (rightBone != null)
                         {
                             Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightSibling.worldPosition - worldPosition);
+                            Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
                             Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
                             transform.rotation *= rotationRight;
                         }
@@ -180,9 +179,9 @@ namespace EZhex1991.EZSoftBone
                 transform.position = worldPosition;
                 if (systemSpace != null) systemPosition = systemSpace.InverseTransformPoint(worldPosition);
 
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].ApplyToTransform(siblingRotationConstraints);
+                    childBones[i].ApplyToTransform(siblingRotationConstraints);
                 }
             }
 
@@ -191,31 +190,31 @@ namespace EZhex1991.EZSoftBone
                 worldPosition = transform.position;
                 systemPosition = systemSpace == null ? worldPosition : systemSpace.InverseTransformPoint(worldPosition);
                 speed = Vector3.zero;
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].ResetSystem();
+                    childBones[i].ResetSystem();
                 }
             }
             public void UpdateSpace()
             {
                 if (systemSpace == null) return;
                 worldPosition = systemSpace.TransformPoint(systemPosition);
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].UpdateSpace();
+                    childBones[i].UpdateSpace();
                 }
             }
 
             public void Dispose()
             {
-                for (int i = 0; i < children.Count; i++)
+                for (int i = 0; i < childBones.Count; i++)
                 {
-                    children[i].Dispose();
+                    childBones[i].Dispose();
                 }
-                parent = null;
-                leftSibling = null;
-                rightSibling = null;
-                children.Clear();
+                parentBone = null;
+                leftBone = null;
+                rightBone = null;
+                childBones.Clear();
                 transform = null;
             }
         }
@@ -320,11 +319,11 @@ namespace EZhex1991.EZSoftBone
 
         public float globalRadius { get; private set; }
 
-        private List<TreeNode> m_PhysicsTrees = new List<TreeNode>();
+        private List<Bone> m_Structures = new List<Bone>();
 
         private void Start()
         {
-            InitPhysicsTrees();
+            InitStructures();
         }
         private void OnEnable()
         {
@@ -336,8 +335,8 @@ namespace EZhex1991.EZSoftBone
         }
         private void LateUpdate()
         {
-            UpdatePhysicsTrees(Time.deltaTime);
-            ApplyPhysicsTrees();
+            UpdateStructures(Time.deltaTime);
+            ApplyStructures();
         }
         private void OnDisable()
         {
@@ -354,11 +353,11 @@ namespace EZhex1991.EZSoftBone
             if (Application.isPlaying)
             {
                 RevertTransforms();
-                InitPhysicsTrees();
+                InitStructures();
             }
             else
             {
-                InitPhysicsTrees();
+                InitStructures();
             }
         }
         private void OnDrawGizmosSelected()
@@ -367,89 +366,89 @@ namespace EZhex1991.EZSoftBone
 
             if (!Application.isPlaying && transform.hasChanged)
             {
-                InitPhysicsTrees();
+                InitStructures();
             }
 
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            for (int i = 0; i < m_Structures.Count; i++)
             {
-                DrawNodeGizmos(m_PhysicsTrees[i]);
+                DrawBoneGizmos(m_Structures[i]);
             }
         }
 #endif
 
-        public void Reconstructure()
+        public void Reconstruct()
         {
             RevertTransforms();
-            InitPhysicsTrees();
+            InitStructures();
         }
 
-        private void InitPhysicsTrees()
+        private void InitStructures()
         {
-            m_PhysicsTrees.Clear();
+            m_Structures.Clear();
             if (rootBones == null || rootBones.Count == 0) return;
             globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
-                TreeNode tree = new TreeNode(simulateSpace, rootBones[i], endBones, startDepth, 0, 0, 0);
-                tree.Inflate(globalRadius, radiusCurve);
-                m_PhysicsTrees.Add(tree);
+                Bone bone = new Bone(simulateSpace, rootBones[i], endBones, startDepth, 0, 0, 0);
+                bone.Inflate(globalRadius, radiusCurve);
+                m_Structures.Add(bone);
             }
 
             if (siblingConstraints == UnificationMode.Rooted)
             {
-                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                for (int i = 0; i < m_Structures.Count; i++)
                 {
-                    Queue<TreeNode> nodes = new Queue<TreeNode>();
-                    nodes.Enqueue(m_PhysicsTrees[i]);
-                    SetSiblingsByDepth(nodes, closedSiblings);
+                    Queue<Bone> bones = new Queue<Bone>();
+                    bones.Enqueue(m_Structures[i]);
+                    SetSiblingsByDepth(bones, closedSiblings);
                 }
             }
             else if (siblingConstraints == UnificationMode.Unified)
             {
-                Queue<TreeNode> nodes = new Queue<TreeNode>();
-                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                Queue<Bone> bones = new Queue<Bone>();
+                for (int i = 0; i < m_Structures.Count; i++)
                 {
-                    nodes.Enqueue(m_PhysicsTrees[i]);
+                    bones.Enqueue(m_Structures[i]);
                 }
-                if (nodes.Count > 0) SetSiblingsByDepth(nodes, closedSiblings);
+                if (bones.Count > 0) SetSiblingsByDepth(bones, closedSiblings);
             }
 
             if (lengthUnification == UnificationMode.Rooted)
             {
-                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                for (int i = 0; i < m_Structures.Count; i++)
                 {
-                    m_PhysicsTrees[i].SetTreeLength();
+                    m_Structures[i].SetTreeLength();
                 }
             }
             else if (lengthUnification == UnificationMode.Unified)
             {
                 float maxLength = 0;
-                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                for (int i = 0; i < m_Structures.Count; i++)
                 {
-                    maxLength = Mathf.Max(maxLength, m_PhysicsTrees[i].treeLength);
+                    maxLength = Mathf.Max(maxLength, m_Structures[i].treeLength);
                 }
-                for (int i = 0; i < m_PhysicsTrees.Count; i++)
+                for (int i = 0; i < m_Structures.Count; i++)
                 {
-                    m_PhysicsTrees[i].SetTreeLength(maxLength);
+                    m_Structures[i].SetTreeLength(maxLength);
                 }
             }
         }
-        private void SetSiblingsByDepth(Queue<TreeNode> nodes, bool closed)
+        private void SetSiblingsByDepth(Queue<Bone> bones, bool closed)
         {
-            TreeNode first = nodes.Dequeue();
-            for (int i = 0; i < first.children.Count; i++)
+            Bone first = bones.Dequeue();
+            for (int i = 0; i < first.childBones.Count; i++)
             {
-                nodes.Enqueue(first.children[i]);
+                bones.Enqueue(first.childBones[i]);
             }
-            TreeNode left = first;
-            TreeNode right = null;
-            while (nodes.Count > 0)
+            Bone left = first;
+            Bone right = null;
+            while (bones.Count > 0)
             {
-                right = nodes.Dequeue();
-                for (int i = 0; i < right.children.Count; i++)
+                right = bones.Dequeue();
+                for (int i = 0; i < right.childBones.Count; i++)
                 {
-                    nodes.Enqueue(right.children[i]);
+                    bones.Enqueue(right.childBones[i]);
                 }
                 if (left.depth == right.depth)
                 {
@@ -480,53 +479,53 @@ namespace EZhex1991.EZSoftBone
 
         private void ResetSystem()
         {
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_PhysicsTrees[i].ResetSystem();
+                m_Structures[i].ResetSystem();
             }
         }
         private void RevertTransforms()
         {
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_PhysicsTrees[i].RevertTransforms();
+                m_Structures[i].RevertTransforms();
             }
         }
 
-        private void UpdatePhysicsTrees(float deltaTime)
+        private void UpdateStructures(float deltaTime)
         {
             if (deltaTime <= Delta_Min) return;
             globalRadius = transform.lossyScale.Abs().Max() * radius;
-            for (int j = 0; j < m_PhysicsTrees.Count; j++)
+            for (int j = 0; j < m_Structures.Count; j++)
             {
-                m_PhysicsTrees[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
-                if (simulateSpace != null) m_PhysicsTrees[j].UpdateSpace();
+                m_Structures[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
+                if (simulateSpace != null) m_Structures[j].UpdateSpace();
             }
 
             deltaTime /= iterations;
             for (int i = 0; i < iterations; i++)
             {
-                for (int j = 0; j < m_PhysicsTrees.Count; j++)
+                for (int j = 0; j < m_Structures.Count; j++)
                 {
-                    UpdateNode(m_PhysicsTrees[j], deltaTime);
+                    UpdateNode(m_Structures[j], deltaTime);
                 }
             }
         }
-        private void UpdateNode(TreeNode node, float deltaTime)
+        private void UpdateNode(Bone bone, float deltaTime)
         {
-            if (node.depth > startDepth)
+            if (bone.depth > startDepth)
             {
                 Vector3 oldWorldPosition, newWorldPosition;
-                oldWorldPosition = newWorldPosition = node.worldPosition;
+                oldWorldPosition = newWorldPosition = bone.worldPosition;
 
                 // Damping (inertia attenuation)
-                if (node.speed.sqrMagnitude < sleepThreshold)
+                if (bone.speed.sqrMagnitude < sleepThreshold)
                 {
-                    node.speed = Vector3.zero;
+                    bone.speed = Vector3.zero;
                 }
                 else
                 {
-                    newWorldPosition += node.speed * deltaTime * (1 - node.damping);
+                    newWorldPosition += bone.speed * deltaTime * (1 - bone.damping);
                 }
 
                 // Resistance (force resistance)
@@ -540,101 +539,102 @@ namespace EZhex1991.EZSoftBone
                 }
                 if (forceModule != null)
                 {
-                    force += forceModule.GetForce(node.normalizedLength);
+                    force += forceModule.GetForce(bone.normalizedLength);
                 }
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                newWorldPosition += force * (1 - node.resistance) / iterations;
+                newWorldPosition += force * (1 - bone.resistance) / iterations;
 
                 // Stiffness (shape keeper)
-                Vector3 parentOffset = node.parent.worldPosition - node.parent.transform.position;
-                Vector3 expectedPos = node.parent.transform.TransformPoint(node.originalLocalPosition) + parentOffset;
-                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPos, node.stiffness / iterations);
+                Vector3 parentOffset = bone.parentBone.worldPosition - bone.parentBone.transform.position;
+                Vector3 expectedPos = bone.parentBone.transform.TransformPoint(bone.originalLocalPosition) + parentOffset;
+                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPos, bone.stiffness / iterations);
 
                 // Slackness (length keeper)
-                Vector3 nodeDir = (newWorldPosition - node.parent.worldPosition).normalized;
-                float nodeLength = node.parent.transform.TransformVector(node.originalLocalPosition).magnitude;
-                nodeDir = node.parent.worldPosition + nodeDir * nodeLength;
+                Vector3 nodeDir = (newWorldPosition - bone.parentBone.worldPosition).normalized;
+                float nodeLength = bone.parentBone.transform.TransformVector(bone.originalLocalPosition).magnitude;
+                nodeDir = bone.parentBone.worldPosition + nodeDir * nodeLength;
                 // Siblings
                 if (siblingConstraints != UnificationMode.None)
                 {
                     int constraints = 1;
-                    if (node.leftSibling != null)
+                    if (bone.leftBone != null)
                     {
-                        Vector3 leftDir = (newWorldPosition - node.leftSibling.worldPosition).normalized;
-                        float leftLength = node.transform.TransformVector(node.positionToLeft).magnitude;
-                        leftDir = node.leftSibling.worldPosition + leftDir * leftLength;
+                        Vector3 leftDir = (newWorldPosition - bone.leftBone.worldPosition).normalized;
+                        float leftLength = bone.transform.TransformVector(bone.positionToLeft).magnitude;
+                        leftDir = bone.leftBone.worldPosition + leftDir * leftLength;
                         nodeDir += leftDir;
                         constraints++;
                     }
-                    if (node.rightSibling != null)
+                    if (bone.rightBone != null)
                     {
-                        Vector3 rightDir = (newWorldPosition - node.rightSibling.worldPosition).normalized;
-                        float rightLength = node.transform.TransformVector(node.positionToRight).magnitude;
-                        rightDir = node.rightSibling.worldPosition + rightDir * rightLength;
+                        Vector3 rightDir = (newWorldPosition - bone.rightBone.worldPosition).normalized;
+                        float rightLength = bone.transform.TransformVector(bone.positionToRight).magnitude;
+                        rightDir = bone.rightBone.worldPosition + rightDir * rightLength;
                         nodeDir += rightDir;
                         constraints++;
                     }
                     nodeDir /= constraints;
                 }
-                newWorldPosition = Vector3.Lerp(nodeDir, newWorldPosition, node.slackness / iterations);
+                newWorldPosition = Vector3.Lerp(nodeDir, newWorldPosition, bone.slackness / iterations);
 
                 // Collision
-                if (node.radius > 0)
+                if (bone.radius > 0)
                 {
                     foreach (EZSoftBoneColliderBase collider in EZSoftBoneColliderBase.EnabledColliders)
                     {
-                        if (node.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
-                            collider.Collide(ref newWorldPosition, node.radius);
+                        if (bone.transform != collider.transform && collisionLayers.Contains(collider.gameObject.layer))
+                            collider.Collide(ref newWorldPosition, bone.radius);
                     }
                     foreach (Collider collider in extraColliders)
                     {
-                        if (node.transform != collider.transform && collider.enabled)
-                            EZSoftBoneUtility.PointOutsideCollider(ref newWorldPosition, collider, node.radius);
+                        if (bone.transform != collider.transform && collider.enabled)
+                            EZSoftBoneUtility.PointOutsideCollider(ref newWorldPosition, collider, bone.radius);
                     }
                 }
 
-                node.speed = (newWorldPosition - oldWorldPosition) / deltaTime;
-                node.worldPosition = newWorldPosition;
+                bone.speed = (newWorldPosition - oldWorldPosition) / deltaTime;
+                bone.worldPosition = newWorldPosition;
             }
             else
             {
-                node.transform.localPosition = node.originalLocalPosition;
-                node.worldPosition = node.transform.position;
+                bone.transform.localPosition = bone.originalLocalPosition;
+                bone.worldPosition = bone.transform.position;
             }
 
-            for (int i = 0; i < node.children.Count; i++)
+            for (int i = 0; i < bone.childBones.Count; i++)
             {
-                UpdateNode(node.children[i], deltaTime);
+                UpdateNode(bone.childBones[i], deltaTime);
             }
         }
 
-        private void ApplyPhysicsTrees()
+        private void ApplyStructures()
         {
-            for (int i = 0; i < m_PhysicsTrees.Count; i++)
+            for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_PhysicsTrees[i].ApplyToTransform(siblingRotationConstraints);
+                m_Structures[i].ApplyToTransform(siblingRotationConstraints);
             }
         }
 
-        private void DrawNodeGizmos(TreeNode node)
+        private void DrawBoneGizmos(Bone bone)
         {
-            for (int i = 0; i < node.children.Count; i++)
+            for (int i = 0; i < bone.childBones.Count; i++)
             {
-                DrawNodeGizmos(node.children[i]);
+                DrawBoneGizmos(bone.childBones[i]);
             }
-            Gizmos.color = Color.Lerp(Color.white, Color.red, node.normalizedLength);
-            if (node.depth > startDepth)
-                Gizmos.DrawWireSphere(node.worldPosition, node.radius);
-            if (node.parent != null)
-                Gizmos.DrawLine(node.parent.worldPosition, node.worldPosition);
+
+            Gizmos.color = Color.Lerp(Color.white, Color.red, bone.normalizedLength);
+            if (bone.parentBone != null)
+                Gizmos.DrawLine(bone.worldPosition, bone.parentBone.worldPosition);
+            if (bone.depth > startDepth)
+                Gizmos.DrawWireSphere(bone.worldPosition, bone.radius);
             if (siblingConstraints != UnificationMode.None)
             {
-                if (node.leftSibling != null)
-                    Gizmos.DrawLine(node.leftSibling.worldPosition, node.worldPosition);
-                if (node.rightSibling != null)
-                    Gizmos.DrawLine(node.rightSibling.worldPosition, node.worldPosition);
+                if (bone.leftBone != null)
+                    Gizmos.DrawLine(bone.leftBone.worldPosition, bone.worldPosition);
+                if (bone.rightBone != null)
+                    Gizmos.DrawLine(bone.rightBone.worldPosition, bone.worldPosition);
             }
         }
     }
