@@ -11,6 +11,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 [English Version](README.md)  
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
+![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
@@ -64,6 +65,14 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 - Slackness: 松弛度（数值越大长度越容易改变，更容易被拉伸）
 
 每个数值对应一个Curve，代表不同骨骼位置的数值分布
+
+## EZSoftBoneCollider
+
+![EZSoftBoneCollider](.SamplePicture/EZSoftBoneCollider_Inspector.png)
+
+- Reference Collider: 所有类型的Collider都可以作为Reference，**EZSoftBoneCollider并不需要和它的ReferenceCollider在同一GameObject上**
+- Margin:
+- Inside Mode: 
 
 ## EZSoftBoneForce
 

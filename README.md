@@ -11,6 +11,7 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 [查看中文介绍](README_CN.md)  
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
+![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
 
 - All colliders supported (include MeshCollider)
 - Net structure supported (Cloth simulation)
@@ -64,6 +65,14 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 - Slackness: length retention
 
 Each value has a corresponding curve represent the value distribution on the bone hierarchy
+
+## EZSoftBoneCollider
+
+![EZSoftBoneCollider](.SamplePicture/EZSoftBoneCollider_Inspector.png)
+
+- Reference Collider: All types of colliders could be referenced, **EZSoftBoneCollider don't have to be on the same GameObject with its reference collider**
+- Margin:
+- Inside Mode: 
 
 ## EZSoftBoneForce
 
