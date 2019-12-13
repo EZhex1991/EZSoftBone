@@ -72,6 +72,7 @@ namespace EZhex1991.EZSoftBone
 
             serializedObject.Update();
 
+            bool initRequired = false;
             EditorGUI.BeginChangeCheck();
             {
                 EditorGUILayout.PropertyField(m_RootBones, true);
@@ -85,15 +86,7 @@ namespace EZhex1991.EZSoftBone
             }
             if (EditorGUI.EndChangeCheck())
             {
-                if (Application.isPlaying)
-                {
-                    softBone.RevertTransforms();
-                    softBone.InitStructures();
-                }
-                else
-                {
-                    softBone.InitStructures();
-                }
+                initRequired = true;
             }
 
             EditorGUILayout.PropertyField(m_CollisionLayers);
@@ -113,9 +106,27 @@ namespace EZhex1991.EZSoftBone
             EditorGUILayout.PropertyField(m_ForceModule);
 
             EditorGUILayout.PropertyField(m_GravityAligner);
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(m_SimulateSpace);
+            if (EditorGUI.EndChangeCheck())
+            {
+                initRequired = true;
+            }
 
             serializedObject.ApplyModifiedProperties();
+
+            if (initRequired)
+            {
+                if (Application.isPlaying)
+                {
+                    softBone.RevertTransforms();
+                    softBone.InitStructures();
+                }
+                else
+                {
+                    softBone.InitStructures();
+                }
+            }
         }
     }
 }
