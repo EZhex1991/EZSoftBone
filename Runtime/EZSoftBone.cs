@@ -137,7 +137,7 @@ namespace EZhex1991.EZSoftBone
                     childBones[i].RevertTransforms();
                 }
             }
-            public void ApplyToTransform(bool siblingRotationConstraints)
+            public void UpdateTransform(bool siblingRotationConstraints)
             {
                 if (childBones.Count == 1)
                 {
@@ -181,18 +181,18 @@ namespace EZhex1991.EZSoftBone
 
                 for (int i = 0; i < childBones.Count; i++)
                 {
-                    childBones[i].ApplyToTransform(siblingRotationConstraints);
+                    childBones[i].UpdateTransform(siblingRotationConstraints);
                 }
             }
 
-            public void ResetSystem()
+            public void SetRestState()
             {
                 worldPosition = transform.position;
                 systemPosition = systemSpace == null ? worldPosition : systemSpace.InverseTransformPoint(worldPosition);
                 speed = Vector3.zero;
                 for (int i = 0; i < childBones.Count; i++)
                 {
-                    childBones[i].ResetSystem();
+                    childBones[i].SetRestState();
                 }
             }
             public void UpdateSpace()
@@ -321,13 +321,13 @@ namespace EZhex1991.EZSoftBone
 
         private List<Bone> m_Structures = new List<Bone>();
 
-        private void Start()
+        private void Awake()
         {
             InitStructures();
         }
         private void OnEnable()
         {
-            ResetSystem();
+            SetRestState();
         }
         private void Update()
         {
@@ -336,7 +336,7 @@ namespace EZhex1991.EZSoftBone
         private void LateUpdate()
         {
             UpdateStructures(Time.deltaTime);
-            ApplyStructures();
+            UpdateTransforms();
         }
         private void OnDisable()
         {
@@ -350,21 +350,12 @@ namespace EZhex1991.EZSoftBone
             m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
-            if (Application.isPlaying)
-            {
-                RevertTransforms();
-                InitStructures();
-            }
-            else
-            {
-                InitStructures();
-            }
         }
         private void OnDrawGizmosSelected()
         {
             if (!enabled) return;
 
-            if (!Application.isPlaying && transform.hasChanged)
+            if (!Application.isPlaying)
             {
                 InitStructures();
             }
@@ -376,25 +367,41 @@ namespace EZhex1991.EZSoftBone
         }
 #endif
 
-        public void Reconstruct()
+        public void RevertTransforms()
         {
-            RevertTransforms();
-            InitStructures();
+            for (int i = 0; i < m_Structures.Count; i++)
+            {
+                m_Structures[i].RevertTransforms();
+            }
+        }
+        public void InitStructures()
+        {
+            CreateBones();
+            SetSiblings();
+            SetTreeLength();
+            RefreshRadius();
+        }
+        public void SetRestState()
+        {
+            for (int i = 0; i < m_Structures.Count; i++)
+            {
+                m_Structures[i].SetRestState();
+            }
         }
 
-        private void InitStructures()
+        private void CreateBones()
         {
             m_Structures.Clear();
             if (rootBones == null || rootBones.Count == 0) return;
-            globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int i = 0; i < rootBones.Count; i++)
             {
                 if (rootBones[i] == null) continue;
                 Bone bone = new Bone(simulateSpace, rootBones[i], endBones, startDepth, 0, 0, 0);
-                bone.Inflate(globalRadius, radiusCurve);
                 m_Structures.Add(bone);
             }
-
+        }
+        private void SetSiblings()
+        {
             if (siblingConstraints == UnificationMode.Rooted)
             {
                 for (int i = 0; i < m_Structures.Count; i++)
@@ -412,26 +419,6 @@ namespace EZhex1991.EZSoftBone
                     bones.Enqueue(m_Structures[i]);
                 }
                 if (bones.Count > 0) SetSiblingsByDepth(bones, closedSiblings);
-            }
-
-            if (lengthUnification == UnificationMode.Rooted)
-            {
-                for (int i = 0; i < m_Structures.Count; i++)
-                {
-                    m_Structures[i].SetTreeLength();
-                }
-            }
-            else if (lengthUnification == UnificationMode.Unified)
-            {
-                float maxLength = 0;
-                for (int i = 0; i < m_Structures.Count; i++)
-                {
-                    maxLength = Mathf.Max(maxLength, m_Structures[i].treeLength);
-                }
-                for (int i = 0; i < m_Structures.Count; i++)
-                {
-                    m_Structures[i].SetTreeLength(maxLength);
-                }
             }
         }
         private void SetSiblingsByDepth(Queue<Bone> bones, bool closed)
@@ -476,19 +463,34 @@ namespace EZhex1991.EZSoftBone
                 right.SetRightSibling(first);
             }
         }
-
-        private void ResetSystem()
+        private void SetTreeLength()
         {
-            for (int i = 0; i < m_Structures.Count; i++)
+            if (lengthUnification == UnificationMode.Rooted)
             {
-                m_Structures[i].ResetSystem();
+                for (int i = 0; i < m_Structures.Count; i++)
+                {
+                    m_Structures[i].SetTreeLength();
+                }
+            }
+            else if (lengthUnification == UnificationMode.Unified)
+            {
+                float maxLength = 0;
+                for (int i = 0; i < m_Structures.Count; i++)
+                {
+                    maxLength = Mathf.Max(maxLength, m_Structures[i].treeLength);
+                }
+                for (int i = 0; i < m_Structures.Count; i++)
+                {
+                    m_Structures[i].SetTreeLength(maxLength);
+                }
             }
         }
-        private void RevertTransforms()
+        public void RefreshRadius()
         {
+            globalRadius = transform.lossyScale.Abs().Max() * radius;
             for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_Structures[i].RevertTransforms();
+                m_Structures[i].Inflate(globalRadius, radiusCurve);
             }
         }
 
@@ -608,12 +610,11 @@ namespace EZhex1991.EZSoftBone
                 UpdateNode(bone.childBones[i], deltaTime);
             }
         }
-
-        private void ApplyStructures()
+        private void UpdateTransforms()
         {
             for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_Structures[i].ApplyToTransform(siblingRotationConstraints);
+                m_Structures[i].UpdateTransform(siblingRotationConstraints);
             }
         }
 
