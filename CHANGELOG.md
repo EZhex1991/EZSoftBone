@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.1] - 2019-12-13
+
+### Fixed
+
+- Bug fixed on LengthUnification (Wrong length calculation)
+
+### Added
+
+- Added an custom inspector for `EZSoftBone`, not all changes will trigger a reconstruction now
+
+### Changed
+
+- Changed some function names
+
 ## [1.5.0] - 2019-12-11
 
 ### Added
