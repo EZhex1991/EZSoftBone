@@ -15,7 +15,7 @@ namespace EZhex1991.EZSoftBone
         }
         public static float Max(this Vector3 v)
         {
-            return Mathf.Max(v.x, v.y, v.z);
+            return Mathf.Max(v.x, Mathf.Max(v.y, v.z));
         }
 
         public static bool Contains(this LayerMask mask, int layer)
@@ -65,7 +65,7 @@ namespace EZhex1991.EZSoftBone
         public static void PointOutsideSphere(ref Vector3 position, SphereCollider collider, float spacing)
         {
             Vector3 scale = collider.transform.lossyScale.Abs();
-            float radius = collider.radius * Mathf.Max(scale.x, scale.y, scale.z);
+            float radius = collider.radius * Mathf.Max(scale.x, Mathf.Max(scale.y, scale.z));
             PointOutsideSphere(ref position, collider.transform.TransformPoint(collider.center), radius + spacing);
         }
         public static void PointOutsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
