@@ -65,7 +65,7 @@ namespace EZhex1991.EZSoftBone
         public static void PointOutsideSphere(ref Vector3 position, SphereCollider collider, float spacing)
         {
             Vector3 scale = collider.transform.lossyScale.Abs();
-            float radius = collider.radius * Mathf.Max(scale.x, Mathf.Max(scale.y, scale.z));
+            float radius = collider.radius * scale.Max();
             PointOutsideSphere(ref position, collider.transform.TransformPoint(collider.center), radius + spacing);
         }
         public static void PointOutsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
