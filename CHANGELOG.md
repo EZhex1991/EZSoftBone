@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.2] - 2020-01-06
+
+### Changed
+
+- Garbage Collection Optimize: replace Mathf.Max(a, b, c) with Mathf.Max(a, Mathf.Max(b, c))
+
 ## [1.5.1] - 2019-12-13
 
 ### Fixed
