@@ -141,7 +141,7 @@ Transform:
   - {fileID: 26147731}
   - {fileID: 665093534}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8758795
 Prefab:
@@ -316,8 +316,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!1001 &40678504
 Prefab:
@@ -615,7 +616,7 @@ Transform:
   - {fileID: 2005015407}
   - {fileID: 78165564}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &151113909
 Prefab:
@@ -918,8 +919,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!1001 &245294618
 Prefab:
@@ -1051,264 +1053,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4625559626815628, guid: 6791b0cd2c8fc4b44842ddd332c78b18,
     type: 2}
   m_PrefabInternal: {fileID: 247756326}
---- !u!1 &303139637
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 303139639}
-  - component: {fileID: 303139638}
-  m_Layer: 0
-  m_Name: Force
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &303139638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 303139637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3e0e7a7eb454834a9a4d800966e3c40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_UseLocalDirection: 0
-  m_Direction: {x: -0.25, y: -0.1, z: -0.25}
-  m_Turbulence: {x: 0.5, y: 0.25, z: 0.5}
-  m_Conductivity: 0.1
-  m_TurbulenceMode: 0
-  m_TurbulenceTimeCycle: 10
-  m_TurbulenceXCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-    - serializedVersion: 2
-      time: 0.050456524
-      value: 0.73322165
-      inSlope: 1.4220607
-      outSlope: 1.4220607
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.13958286
-      value: 0.57474536
-      inSlope: 0.64075464
-      outSlope: 0.64075464
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.25062567
-      value: 0.9144939
-      inSlope: 0.40747643
-      outSlope: 0.40747643
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.42130065
-      value: 0.5313858
-      inSlope: -1.0481311
-      outSlope: -1.0481311
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.5731515
-      value: 0.55392087
-      inSlope: -1.1485014
-      outSlope: -1.1485014
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.75855565
-      value: 0.10053259
-      inSlope: 0.9087417
-      outSlope: 0.9087417
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.82272243
-      value: 0.37406847
-      inSlope: 1.8771603
-      outSlope: 1.8771603
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.93698955
-      value: 0.31595585
-      inSlope: 1.2061414
-      outSlope: 1.2061414
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 1
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  m_TurbulenceYCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.06842697
-      value: 0.9093884
-      inSlope: 1.2334301
-      outSlope: 1.2334301
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.17805964
-      value: 0.36573708
-      inSlope: -4.5131364
-      outSlope: -4.5131364
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.33034962
-      value: 0.911064
-      inSlope: 0.3768455
-      outSlope: 0.3768455
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.46783024
-      value: 0.123430885
-      inSlope: -0.35317066
-      outSlope: -0.35317066
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.64237124
-      value: 0.5603812
-      inSlope: 1.8473045
-      outSlope: 1.8473045
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.7748588
-      value: 0.44973058
-      inSlope: -1.440897
-      outSlope: -1.440897
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.8628914
-      value: 0.56331915
-      inSlope: 0.22007725
-      outSlope: 0.22007725
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 0.5
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  m_TurbulenceZCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-    - serializedVersion: 2
-      time: 0.048665583
-      value: 0.23685482
-      inSlope: 2.117659
-      outSlope: 2.117659
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.13802566
-      value: 0.18040876
-      inSlope: 1.9769806
-      outSlope: 1.9769806
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.1880945
-      value: 0.410006
-      inSlope: 2.2052865
-      outSlope: 2.2052865
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.30642015
-      value: 0.38929215
-      inSlope: 2.2615435
-      outSlope: 2.2615435
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.34803873
-      value: 0.5848223
-      inSlope: 2.1640983
-      outSlope: 2.1640983
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.42274565
-      value: 0.5571846
-      inSlope: 1.9569312
-      outSlope: 1.9569312
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.4989035
-      value: 0.8834305
-      inSlope: 1.139136
-      outSlope: 1.139136
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.6172381
-      value: 0.6461058
-      inSlope: -0.6773293
-      outSlope: -0.6773293
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.73721534
-      value: 0.7241967
-      inSlope: -2.4219031
-      outSlope: -2.4219031
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.83952343
-      value: 0.16204578
-      inSlope: -2.2603307
-      outSlope: -2.2603307
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 0.93004584
-      value: 0.2502169
-      inSlope: -1.3014221
-      outSlope: -1.3014221
-      tangentMode: 34
-    - serializedVersion: 2
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  m_TurbulenceSpeed: {x: 0.2, y: 0.2, z: 0.2}
-  m_TurbulenceRandomSeed: {x: 0, y: 0.5, z: 1}
---- !u!4 &303139639
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 303139637}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &317852646
 Prefab:
   m_ObjectHideFlags: 0
@@ -2731,7 +2475,7 @@ Transform:
   - {fileID: 242984377}
   - {fileID: 733288325}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1194510739
 Prefab:
@@ -3303,8 +3047,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!1001 &1461623113
 Prefab:
@@ -3539,7 +3284,7 @@ Transform:
   - {fileID: 2106809915}
   - {fileID: 245294619}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1707695556
 Prefab:
@@ -3636,7 +3381,7 @@ Transform:
   - {fileID: 1956134873}
   - {fileID: 1968527668}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1767407159
 Prefab:
@@ -4474,8 +4219,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!4 &1956134873
 Transform:
@@ -4614,8 +4360,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!1 &2086887599
 GameObject:
@@ -4645,7 +4392,7 @@ Transform:
   - {fileID: 1457520851}
   - {fileID: 2124831109}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2106809914
 GameObject:
@@ -4755,8 +4502,9 @@ MonoBehaviour:
   m_Material: {fileID: 11400000, guid: 6bafdd184b3f2f943a3b246637874ca2, type: 2}
   m_SleepThreshold: 0.05
   m_Gravity: {x: 0, y: -0.05, z: 0}
-  m_ForceModule: {fileID: 303139638}
+  m_ForceModule: {fileID: 11400000, guid: de73835b5de58f741a6af5ce6efcae10, type: 2}
   m_GravityAligner: {fileID: 0}
+  m_ForceSpace: {fileID: 0}
   m_SimulateSpace: {fileID: 0}
 --- !u!4 &2124831109 stripped
 Transform:

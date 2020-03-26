@@ -17,6 +17,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 - 支持网状结构（模拟布料）
 - 材质"EZSoftBoneMaterial"调节表现效果，可重用于多个EZSoftBone对象
 - 继承EZSoftBoneColliderBase创建自定义碰撞
+- 自然风力模拟
 
 ## EZSoftBone
 
@@ -35,7 +36,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
     - Rooted: 各Root使用其最长子链的长度
     - Unified: 使用整个系统中最长子链的长度
   - Sibling Rotation Constraints: 同级约束是否带动节点旋转
-  - Closed Siblings: 是否使用环状约束
+  - Closed Siblings: 是否使用闭合环状约束
 - Collision
   - Collision Layers: 碰撞作用层
   - Extra Colliders: 让普通Collider也能起作用（本来是为了兼容老代码，不过有一定适用范围就保留了）
@@ -52,6 +53,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
   - Gravity Aligner: 指定一个Transform作为重力的参考系，重力对骨骼系统的影响大小与参考系的Y轴和世界坐标系的Y轴的点乘成负相关  
     - *例：创建新物体保持其世界坐标下的旋转为0，拖拽到人物头部节点下，将其作为头发的Aligner，则人物站立时头发不受重力影响，躺下或低头时重力影响加大*
     - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+  - Force Space: Force Module的参考系
   - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
     - *例：人坐在移动的车中，头发应保持相对静止*
 
@@ -79,10 +81,9 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
 
-- Use Local Direction: 使用相对于所在的Transform的方向
 - Direction: 基础力的向量
+- Conductivity: 传导性
 - Turbulence: 动荡大小
-- Conductivity: 传导性（可理解为风速）
 - Turbulence Mode:
   - Curve:
     - Turbulence Time Cycle: 动荡周期

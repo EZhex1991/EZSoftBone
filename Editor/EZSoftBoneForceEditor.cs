@@ -11,11 +11,10 @@ namespace EZhex1991.EZSoftBone
     [CustomEditor(typeof(EZSoftBoneForce))]
     public class EZSoftBoneForceEditor : Editor
     {
-        private SerializedProperty m_UseLocalDirection;
         private SerializedProperty m_Direction;
+        private SerializedProperty m_Conductivity;
 
         private SerializedProperty m_Turbulence;
-        private SerializedProperty m_Conductivity;
         private SerializedProperty m_TurbulenceMode;
 
         private SerializedProperty m_TurbulenceTimeCycle;
@@ -28,11 +27,10 @@ namespace EZhex1991.EZSoftBone
 
         private void OnEnable()
         {
-            m_UseLocalDirection = serializedObject.FindProperty("m_UseLocalDirection");
             m_Direction = serializedObject.FindProperty("m_Direction");
+            m_Conductivity = serializedObject.FindProperty("m_Conductivity");
 
             m_Turbulence = serializedObject.FindProperty("m_Turbulence");
-            m_Conductivity = serializedObject.FindProperty("m_Conductivity");
             m_TurbulenceMode = serializedObject.FindProperty("m_TurbulenceMode");
 
             m_TurbulenceTimeCycle = serializedObject.FindProperty("m_TurbulenceTimeCycle");
@@ -47,16 +45,15 @@ namespace EZhex1991.EZSoftBone
         public override void OnInspectorGUI()
         {
             GUI.enabled = false;
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(target as MonoBehaviour), typeof(MonoScript), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromScriptableObject(target as ScriptableObject), typeof(MonoScript), false);
             GUI.enabled = true;
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(m_UseLocalDirection);
             EditorGUILayout.PropertyField(m_Direction);
+            EditorGUILayout.PropertyField(m_Conductivity);
 
             EditorGUILayout.PropertyField(m_Turbulence);
-            EditorGUILayout.PropertyField(m_Conductivity);
             EditorGUILayout.PropertyField(m_TurbulenceMode);
 
             if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Curve)
@@ -73,6 +70,101 @@ namespace EZhex1991.EZSoftBone
             }
 
             if (GUI.changed) serializedObject.ApplyModifiedProperties();
+        }
+    }
+
+    [CustomPropertyDrawer(typeof(EZSoftBoneForce))]
+    public class EZSoftBoneForceDrawer : PropertyDrawer
+    {
+        private SerializedObject serializedObject;
+
+        private SerializedProperty m_Direction;
+        private SerializedProperty m_Conductivity;
+
+        private SerializedProperty m_Turbulence;
+        private SerializedProperty m_TurbulenceMode;
+
+        private SerializedProperty m_TurbulenceTimeCycle;
+        private SerializedProperty m_TurbulenceXCurve;
+        private SerializedProperty m_TurbulenceYCurve;
+        private SerializedProperty m_TurbulenceZCurve;
+
+        private SerializedProperty m_TurbulenceSpeed;
+        private SerializedProperty m_TurbulenceRandomSeed;
+
+        private void GetSerializedProperties(Object material)
+        {
+            if (material == null)
+            {
+                serializedObject = null;
+            }
+            else
+            {
+                serializedObject = new SerializedObject(material);
+                m_Direction = serializedObject.FindProperty("m_Direction");
+                m_Conductivity = serializedObject.FindProperty("m_Conductivity");
+
+                m_Turbulence = serializedObject.FindProperty("m_Turbulence");
+                m_TurbulenceMode = serializedObject.FindProperty("m_TurbulenceMode");
+
+                m_TurbulenceTimeCycle = serializedObject.FindProperty("m_TurbulenceTimeCycle");
+                m_TurbulenceXCurve = serializedObject.FindProperty("m_TurbulenceXCurve");
+                m_TurbulenceYCurve = serializedObject.FindProperty("m_TurbulenceYCurve");
+                m_TurbulenceZCurve = serializedObject.FindProperty("m_TurbulenceZCurve");
+
+                m_TurbulenceSpeed = serializedObject.FindProperty("m_TurbulenceSpeed");
+                m_TurbulenceRandomSeed = serializedObject.FindProperty("m_TurbulenceRandomSeed");
+            }
+        }
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+            if (property.hasMultipleDifferentValues)
+            {
+                EditorGUI.PropertyField(position, property);
+            }
+            else
+            {
+                EditorGUI.BeginChangeCheck();
+                EditorGUI.PropertyField(position, property);
+                if (EditorGUI.EndChangeCheck() || serializedObject == null)
+                {
+                    GetSerializedProperties(property.objectReferenceValue);
+                }
+                if (serializedObject != null)
+                {
+                    property.isExpanded = EditorGUI.Foldout(new Rect(position) { width = 0 }, property.isExpanded, GUIContent.none, false);
+                    if (property.isExpanded)
+                    {
+                        serializedObject.Update();
+                        EditorGUI.indentLevel++;
+
+                        EditorGUILayout.PropertyField(m_Direction);
+                        EditorGUILayout.PropertyField(m_Conductivity);
+
+                        EditorGUILayout.PropertyField(m_Turbulence);
+                        EditorGUILayout.PropertyField(m_TurbulenceMode);
+
+                        if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Curve)
+                        {
+                            EditorGUILayout.PropertyField(m_TurbulenceTimeCycle);
+                            EditorGUILayout.PropertyField(m_TurbulenceXCurve);
+                            EditorGUILayout.PropertyField(m_TurbulenceYCurve);
+                            EditorGUILayout.PropertyField(m_TurbulenceZCurve);
+                        }
+                        else if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Perlin)
+                        {
+                            EditorGUILayout.PropertyField(m_TurbulenceSpeed);
+                            EditorGUILayout.PropertyField(m_TurbulenceRandomSeed);
+                        }
+
+                        EditorGUI.indentLevel--;
+                        serializedObject.ApplyModifiedProperties();
+                    }
+                }
+            }
+            EditorGUI.EndProperty();
         }
     }
 }

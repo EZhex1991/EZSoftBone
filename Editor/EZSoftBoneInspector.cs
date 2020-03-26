@@ -34,6 +34,7 @@ namespace EZhex1991.EZSoftBone
         private SerializedProperty m_ForceModule;
 
         private SerializedProperty m_GravityAligner;
+        private SerializedProperty m_ForceSpace;
         private SerializedProperty m_SimulateSpace;
 
         private void OnEnable()
@@ -61,6 +62,7 @@ namespace EZhex1991.EZSoftBone
             m_ForceModule = serializedObject.FindProperty("m_ForceModule");
 
             m_GravityAligner = serializedObject.FindProperty("m_GravityAligner");
+            m_ForceSpace = serializedObject.FindProperty("m_ForceSpace");
             m_SimulateSpace = serializedObject.FindProperty("m_SimulateSpace");
         }
 
@@ -106,6 +108,7 @@ namespace EZhex1991.EZSoftBone
             EditorGUILayout.PropertyField(m_ForceModule);
 
             EditorGUILayout.PropertyField(m_GravityAligner);
+            EditorGUILayout.PropertyField(m_ForceSpace);
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(m_SimulateSpace);
             if (EditorGUI.EndChangeCheck())

@@ -7,7 +7,8 @@ using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
 {
-    public class EZSoftBoneForce : MonoBehaviour
+    [CreateAssetMenu(fileName = "SBForce", menuName = "EZSoftBone/SBForce")]
+    public class EZSoftBoneForce : ScriptableObject
     {
         public enum TurbulenceMode
         {
@@ -16,23 +17,19 @@ namespace EZhex1991.EZSoftBone
         }
 
         [SerializeField]
-        private bool m_UseLocalDirection;
-        public bool useLocalDirection { get { return m_UseLocalDirection; } }
-
-        [SerializeField]
         private Vector3 m_Direction;
         public Vector3 direction { get { return m_Direction; } set { m_Direction = value; } }
-
-        [SerializeField]
-        private Vector3 m_Turbulence = new Vector3(0.1f, 0.02f, 0.1f);
-        public Vector3 turbulence { get { return m_Turbulence; } set { m_Turbulence = value; } }
 
         [SerializeField, Range(0, 1)]
         private float m_Conductivity = 0.15f;
         public float conductivity { get { return m_Conductivity; } set { m_Conductivity = value; } }
 
         [SerializeField]
-        private TurbulenceMode m_TurbulenceMode = TurbulenceMode.Curve;
+        private Vector3 m_Turbulence = new Vector3(0.1f, 0.02f, 0.1f);
+        public Vector3 turbulence { get { return m_Turbulence; } set { m_Turbulence = value; } }
+
+        [SerializeField]
+        private TurbulenceMode m_TurbulenceMode = TurbulenceMode.Perlin;
         public TurbulenceMode turbulenceMode { get { return m_TurbulenceMode; } }
 
         [SerializeField]
@@ -54,9 +51,8 @@ namespace EZhex1991.EZSoftBone
         private Vector3 m_TurbulenceRandomSeed = new Vector3(0, 0.5f, 1);
         public Vector3 turbulenceRandomSeed { get { return m_TurbulenceRandomSeed; } set { m_TurbulenceRandomSeed = value; } }
 
-        public Vector3 GetForce(float normalizedLength)
+        public Vector3 GetForce(float normalizedLength, Transform forceSpace)
         {
-            if (!isActiveAndEnabled) return Vector3.zero;
             Vector3 tbl = turbulence;
             float time = Time.time - conductivity * normalizedLength;
             switch (turbulenceMode)
@@ -73,9 +69,9 @@ namespace EZhex1991.EZSoftBone
                     tbl.z *= Mathf.PerlinNoise(time * turbulenceSpeed.z, turbulenceRandomSeed.z);
                     break;
             }
-            if (useLocalDirection)
+            if (forceSpace != null)
             {
-                return transform.TransformDirection(direction + tbl);
+                return forceSpace.TransformDirection(direction + tbl);
             }
             else
             {
@@ -83,13 +79,25 @@ namespace EZhex1991.EZSoftBone
             }
         }
 
-        private void OnDrawGizmosSelected()
+#if UNITY_EDITOR
+        public void DrawGizmos(Transform gizmosReference, Transform forceSpace)
         {
-            Vector3 force0 = GetForce(0) * 50;
+            Vector3 force0 = GetForce(0, forceSpace) * UnityEditor.HandleUtility.GetHandleSize(gizmosReference.position);
             float width = force0.magnitude * 0.2f;
-            Gizmos.DrawRay(transform.position, force0);
-            EZSoftBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.up);
-            EZSoftBoneUtility.DrawGizmosArrow(transform.position, force0, width, transform.right);
+
+            if (forceSpace == null)
+            {
+                Gizmos.DrawRay(gizmosReference.position, force0);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, Vector3.up);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, Vector3.right);
+            }
+            else
+            {
+                Gizmos.DrawRay(gizmosReference.position, force0);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, gizmosReference.up);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, gizmosReference.right);
+            }
         }
+#endif
     }
 }

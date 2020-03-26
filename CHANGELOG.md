@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0] - 2020-03-26
+
+### Changed
+
+- EZSoftBoneForce: it drives from ScriptObject now
+- EZSoftBone: a force space could be specified for EZSoftBoneForce
+
 ## [1.5.2] - 2020-01-06
 
 ### Changed

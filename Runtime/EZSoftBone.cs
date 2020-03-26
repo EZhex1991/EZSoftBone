@@ -248,7 +248,7 @@ namespace EZhex1991.EZSoftBone
 
         [Header("Collision")]
         [SerializeField]
-        private LayerMask m_CollisionLayers = 0;
+        private LayerMask m_CollisionLayers = 1;
         public LayerMask collisionLayers { get { return m_CollisionLayers; } set { m_CollisionLayers = value; } }
         [SerializeField]
         private List<Collider> m_ExtraColliders = new List<Collider>();
@@ -314,6 +314,9 @@ namespace EZhex1991.EZSoftBone
         private Transform m_GravityAligner;
         public Transform gravityAligner { get { return m_GravityAligner; } set { m_GravityAligner = value; } }
         [SerializeField]
+        private Transform m_ForceSpace;
+        public Transform forceSpace { get { return m_ForceSpace; } set { m_ForceSpace = value; } }
+        [SerializeField]
         private Transform m_SimulateSpace;
         public Transform simulateSpace { get { return m_SimulateSpace; } set { m_SimulateSpace = value; } }
 
@@ -363,6 +366,31 @@ namespace EZhex1991.EZSoftBone
             for (int i = 0; i < m_Structures.Count; i++)
             {
                 DrawBoneGizmos(m_Structures[i]);
+            }
+
+            if (forceModule != null)
+            {
+                forceModule.DrawGizmos(transform, forceSpace);
+            }
+        }
+        private void DrawBoneGizmos(Bone bone)
+        {
+            for (int i = 0; i < bone.childBones.Count; i++)
+            {
+                DrawBoneGizmos(bone.childBones[i]);
+            }
+
+            Gizmos.color = Color.Lerp(Color.white, Color.red, bone.normalizedLength);
+            if (bone.parentBone != null)
+                Gizmos.DrawLine(bone.worldPosition, bone.parentBone.worldPosition);
+            if (bone.depth > startDepth)
+                Gizmos.DrawWireSphere(bone.worldPosition, bone.radius);
+            if (siblingConstraints != UnificationMode.None)
+            {
+                if (bone.leftBone != null)
+                    Gizmos.DrawLine(bone.leftBone.worldPosition, bone.worldPosition);
+                if (bone.rightBone != null)
+                    Gizmos.DrawLine(bone.rightBone.worldPosition, bone.worldPosition);
             }
         }
 #endif
@@ -541,7 +569,7 @@ namespace EZhex1991.EZSoftBone
                 }
                 if (forceModule != null)
                 {
-                    force += forceModule.GetForce(bone.normalizedLength);
+                    force += forceModule.GetForce(bone.normalizedLength, forceSpace);
                 }
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
@@ -615,27 +643,6 @@ namespace EZhex1991.EZSoftBone
             for (int i = 0; i < m_Structures.Count; i++)
             {
                 m_Structures[i].UpdateTransform(siblingRotationConstraints);
-            }
-        }
-
-        private void DrawBoneGizmos(Bone bone)
-        {
-            for (int i = 0; i < bone.childBones.Count; i++)
-            {
-                DrawBoneGizmos(bone.childBones[i]);
-            }
-
-            Gizmos.color = Color.Lerp(Color.white, Color.red, bone.normalizedLength);
-            if (bone.parentBone != null)
-                Gizmos.DrawLine(bone.worldPosition, bone.parentBone.worldPosition);
-            if (bone.depth > startDepth)
-                Gizmos.DrawWireSphere(bone.worldPosition, bone.radius);
-            if (siblingConstraints != UnificationMode.None)
-            {
-                if (bone.leftBone != null)
-                    Gizmos.DrawLine(bone.leftBone.worldPosition, bone.worldPosition);
-                if (bone.rightBone != null)
-                    Gizmos.DrawLine(bone.rightBone.worldPosition, bone.worldPosition);
             }
         }
     }

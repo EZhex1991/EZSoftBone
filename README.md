@@ -17,6 +17,7 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 - Net structure supported (Cloth simulation)
 - Use EZSoftBoneMaterial to adjust effects, and reuse it on other EZSoftBones
 - Inherit EZSoftBoneColliderBase to create custom colliders
+- Beautiful wind simulator
 
 ## EZSoftBone
 
@@ -35,7 +36,7 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
     - Rooted: each root use the length of its longest child chain
     - Unified: use the length of the longest chain for the entire system
   - Sibling Rotation Constraints: should sibling constraints affect rotations
-  - Closed Siblings: check this to add sibling constraints as a loop circle
+  - Closed Siblings: check this to use closed loop circle
 - Collision
   - Collision Layers: which layers should the system collide with
   - Extra Colliders: extra colliders (normal colliders required, this is for compatible purpose)
@@ -52,6 +53,7 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
   - Gravity Aligner: A transform can be specified to determine how much the gravity affects the system, inversely correlated to dot-production of aligner's y direction and world's y direction  
     - *eg: Create a new GameObject, leave its rotation unchanged (identical to the world space), drag it down to the head of a character, and set it as the aligner of the Hair system. You will see the grivity has no effect on the hair when the character stands still, and has maximum effect when the character lies down or bows*
     - To create a context menu to reset Transform's world rotation easily, Check this page: [EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+  - Force Space: reference system of the Force Module
   - Simulate Space: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (relatively static)  
     - *eg: a character in a moving car, hair should be relatively static to the car*
 
@@ -79,10 +81,9 @@ Each value has a corresponding curve represent the value distribution on the bon
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
 
-- Use Local Direction: check it to use local space direction
 - Direction: base force vector
+- Conductivity:
 - Turbulence: force turbulence vector
-- Conductivity: (wind speed)
 - Turbulence Mode:
   - Curve:
     - Turbulence Time Cycle: turbulence time cycle
