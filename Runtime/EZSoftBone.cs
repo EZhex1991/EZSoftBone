@@ -265,7 +265,7 @@ namespace EZhex1991.EZSoftBone
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
 
-        [SerializeField]
+        [SerializeField, EZNestedEditor]
         private EZSoftBoneMaterial m_Material;
         private EZSoftBoneMaterial m_InstanceMaterial;
         public EZSoftBoneMaterial sharedMaterial
@@ -305,7 +305,7 @@ namespace EZhex1991.EZSoftBone
         [SerializeField]
         private Vector3 m_Gravity;
         public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
-        [SerializeField]
+        [SerializeField, EZNestedEditor]
         private EZSoftBoneForce m_ForceModule;
         public EZSoftBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
 
