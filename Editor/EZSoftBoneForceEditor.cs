@@ -58,15 +58,19 @@ namespace EZhex1991.EZSoftBone
 
             if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Curve)
             {
+                EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(m_TurbulenceTimeCycle);
                 EditorGUILayout.PropertyField(m_TurbulenceXCurve);
                 EditorGUILayout.PropertyField(m_TurbulenceYCurve);
                 EditorGUILayout.PropertyField(m_TurbulenceZCurve);
+                EditorGUI.indentLevel--;
             }
             else if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Perlin)
             {
+                EditorGUI.indentLevel++;
                 EditorGUILayout.PropertyField(m_TurbulenceSpeed);
                 EditorGUILayout.PropertyField(m_TurbulenceRandomSeed);
+                EditorGUI.indentLevel--;
             }
 
             if (GUI.changed) serializedObject.ApplyModifiedProperties();

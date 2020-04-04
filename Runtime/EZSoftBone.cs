@@ -10,15 +10,24 @@ using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
 {
+    public delegate Vector3 CustomForce(float normalizedLength, Transform forceSpace);
+
     public class EZSoftBone : MonoBehaviour
     {
-        public static readonly double Delta_Min = 1e-6;
+        public static readonly float DeltaTime_Min = 1e-6f;
 
         public enum UnificationMode
         {
             None,
             Rooted,
             Unified,
+        }
+
+        public enum DeltaTimeMode
+        {
+            DeltaTime,
+            UnscaledDeltaTime,
+            Constant,
         }
 
         private class Bone : IDisposable
@@ -219,14 +228,13 @@ namespace EZhex1991.EZSoftBone
             }
         }
 
+        #region Structure
         [SerializeField]
         private List<Transform> m_RootBones;
         public List<Transform> rootBones { get { return m_RootBones; } }
         [SerializeField]
         private List<Transform> m_EndBones;
         public List<Transform> endBones { get { return m_EndBones; } }
-
-        [Header("Structure")]
         [SerializeField]
         private int m_StartDepth;
         public int startDepth { get { return m_StartDepth; } set { m_StartDepth = value; } }
@@ -245,8 +253,9 @@ namespace EZhex1991.EZSoftBone
         [SerializeField]
         private bool m_ClosedSiblings = false;
         public bool closedSiblings { get { return m_ClosedSiblings; } set { m_ClosedSiblings = value; } }
+        #endregion
 
-        [Header("Collision")]
+        #region Collision
         [SerializeField]
         private LayerMask m_CollisionLayers = 1;
         public LayerMask collisionLayers { get { return m_CollisionLayers; } set { m_CollisionLayers = value; } }
@@ -259,8 +268,16 @@ namespace EZhex1991.EZSoftBone
         [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_RadiusCurve = AnimationCurve.Linear(0, 1, 1, 1);
         public AnimationCurve radiusCurve { get { return m_RadiusCurve; } }
+        #endregion
 
-        [Header("Performance")]
+        #region Performance
+        [SerializeField]
+        private DeltaTimeMode m_DeltaTimeMode = DeltaTimeMode.DeltaTime;
+        public DeltaTimeMode deltaTimeMode { get { return m_DeltaTimeMode; } set { m_DeltaTimeMode = value; } }
+        [SerializeField]
+        private float m_ConstantDeltaTime = 0.03f;
+        public float constantDeltaTime { get { return m_ConstantDeltaTime; } set { m_ConstantDeltaTime = value; } }
+
         [SerializeField, Range(1, 10)]
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
@@ -300,29 +317,41 @@ namespace EZhex1991.EZSoftBone
         [SerializeField]
         private float m_SleepThreshold = 0.005f;
         public float sleepThreshold { get { return m_SleepThreshold; } set { m_SleepThreshold = Mathf.Max(0, value); } }
+        #endregion
 
-        [Header("Force")]
-        [SerializeField]
-        private Vector3 m_Gravity;
-        public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
-        [SerializeField, EZNestedEditor]
-        private EZSoftBoneForce m_ForceModule;
-        public EZSoftBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
-
-        [Header("References")]
+        #region Gravity
         [SerializeField]
         private Transform m_GravityAligner;
         public Transform gravityAligner { get { return m_GravityAligner; } set { m_GravityAligner = value; } }
         [SerializeField]
+        private Vector3 m_Gravity;
+        public Vector3 gravity { get { return m_Gravity; } set { m_Gravity = value; } }
+        #endregion
+
+        #region Force
+        [SerializeField, EZNestedEditor]
+        private EZSoftBoneForce m_ForceModule;
+        public EZSoftBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
+        [SerializeField]
         private Transform m_ForceSpace;
         public Transform forceSpace { get { return m_ForceSpace; } set { m_ForceSpace = value; } }
         [SerializeField]
+        private float m_ForceScale = 1;
+        public float forceScale { get { return m_ForceScale; } set { m_ForceScale = value; } }
+        #endregion
+
+        #region References
+        [SerializeField]
         private Transform m_SimulateSpace;
         public Transform simulateSpace { get { return m_SimulateSpace; } set { m_SimulateSpace = value; } }
+        #endregion
 
         public float globalRadius { get; private set; }
 
+        public CustomForce customForce;
+
         private List<Bone> m_Structures = new List<Bone>();
+        private float time;
 
         private void Awake()
         {
@@ -338,7 +367,18 @@ namespace EZhex1991.EZSoftBone
         }
         private void LateUpdate()
         {
-            UpdateStructures(Time.deltaTime);
+            switch (deltaTimeMode)
+            {
+                case DeltaTimeMode.DeltaTime:
+                    UpdateStructures(Time.deltaTime);
+                    break;
+                case DeltaTimeMode.UnscaledDeltaTime:
+                    UpdateStructures(Time.unscaledDeltaTime);
+                    break;
+                case DeltaTimeMode.Constant:
+                    UpdateStructures(constantDeltaTime);
+                    break;
+            }
             UpdateTransforms();
         }
         private void OnDisable()
@@ -350,6 +390,7 @@ namespace EZhex1991.EZSoftBone
         private void OnValidate()
         {
             m_StartDepth = Mathf.Max(0, m_StartDepth);
+            m_ConstantDeltaTime = Mathf.Max(DeltaTime_Min, m_ConstantDeltaTime);
             m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
@@ -370,7 +411,7 @@ namespace EZhex1991.EZSoftBone
 
             if (forceModule != null)
             {
-                forceModule.DrawGizmos(transform, forceSpace);
+                forceModule.DrawGizmos(transform.position, forceSpace, forceScale * 10);
             }
         }
         private void DrawBoneGizmos(Bone bone)
@@ -524,8 +565,10 @@ namespace EZhex1991.EZSoftBone
 
         private void UpdateStructures(float deltaTime)
         {
-            if (deltaTime <= Delta_Min) return;
+            if (deltaTime <= DeltaTime_Min) return;
+
             globalRadius = transform.lossyScale.Abs().Max() * radius;
+
             for (int j = 0; j < m_Structures.Count; j++)
             {
                 m_Structures[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
@@ -535,6 +578,7 @@ namespace EZhex1991.EZSoftBone
             deltaTime /= iterations;
             for (int i = 0; i < iterations; i++)
             {
+                time += deltaTime;
                 for (int j = 0; j < m_Structures.Count; j++)
                 {
                     UpdateNode(m_Structures[j], deltaTime);
@@ -569,7 +613,11 @@ namespace EZhex1991.EZSoftBone
                 }
                 if (forceModule != null)
                 {
-                    force += forceModule.GetForce(bone.normalizedLength, forceSpace);
+                    force += forceModule.GetForce(time, bone.normalizedLength, forceSpace) * forceScale;
+                }
+                if (customForce != null)
+                {
+                    force += customForce(bone.normalizedLength, forceSpace);
                 }
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;

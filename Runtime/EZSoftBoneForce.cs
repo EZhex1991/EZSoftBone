@@ -30,17 +30,17 @@ namespace EZhex1991.EZSoftBone
 
         [SerializeField]
         private TurbulenceMode m_TurbulenceMode = TurbulenceMode.Perlin;
-        public TurbulenceMode turbulenceMode { get { return m_TurbulenceMode; } }
+        public TurbulenceMode turbulenceMode { get { return m_TurbulenceMode; } set { m_TurbulenceMode = value; } }
 
         [SerializeField]
         private float m_TurbulenceTimeCycle = 2f;
         public float turbulenceTimeCycle { get { return m_TurbulenceTimeCycle; } set { m_TurbulenceTimeCycle = Mathf.Max(0, value); } }
 
-        [SerializeField, EZCurveRect(0, -1, 1, 2)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceXCurve = AnimationCurve.Linear(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, -1, 1, 2)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceYCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, -1, 1, 2)]
+        [SerializeField, EZCurveRect(0, 0, 1, 1)]
         private AnimationCurve m_TurbulenceZCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
 
         [SerializeField]
@@ -51,10 +51,10 @@ namespace EZhex1991.EZSoftBone
         private Vector3 m_TurbulenceRandomSeed = new Vector3(0, 0.5f, 1);
         public Vector3 turbulenceRandomSeed { get { return m_TurbulenceRandomSeed; } set { m_TurbulenceRandomSeed = value; } }
 
-        public Vector3 GetForce(float normalizedLength, Transform forceSpace)
+        public Vector3 GetForce(float time, float normalizedLength, Transform forceSpace)
         {
             Vector3 tbl = turbulence;
-            float time = Time.time - conductivity * normalizedLength;
+            time -= conductivity * normalizedLength;
             switch (turbulenceMode)
             {
                 case TurbulenceMode.Curve:
@@ -80,23 +80,27 @@ namespace EZhex1991.EZSoftBone
         }
 
 #if UNITY_EDITOR
-        public void DrawGizmos(Transform gizmosReference, Transform forceSpace)
+        public void DrawGizmos(Vector3 gizmosPosition, Transform forceSpace, float scale)
         {
-            Vector3 force0 = GetForce(0, forceSpace) * UnityEditor.HandleUtility.GetHandleSize(gizmosReference.position);
-            float width = force0.magnitude * 0.2f;
-
-            if (forceSpace == null)
+            Vector3 forceVector, turbulenceVector;
+            if (forceSpace != null)
             {
-                Gizmos.DrawRay(gizmosReference.position, force0);
-                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, Vector3.up);
-                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, Vector3.right);
+                forceVector = forceSpace.TransformDirection(direction) * scale;
+                turbulenceVector = forceSpace.TransformDirection(turbulence) * scale;
+                float width = forceVector.magnitude * 0.2f;
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosPosition, forceVector, width, forceSpace.up);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosPosition, forceVector, width, forceSpace.right);
             }
             else
             {
-                Gizmos.DrawRay(gizmosReference.position, force0);
-                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, gizmosReference.up);
-                EZSoftBoneUtility.DrawGizmosArrow(gizmosReference.position, force0, width, gizmosReference.right);
+                forceVector = direction * scale;
+                turbulenceVector = turbulence * scale;
+                float width = forceVector.magnitude * 0.2f;
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosPosition, forceVector, width, Vector3.up);
+                EZSoftBoneUtility.DrawGizmosArrow(gizmosPosition, forceVector, width, Vector3.right);
             }
+            Gizmos.DrawRay(gizmosPosition, forceVector);
+            Gizmos.DrawWireCube(gizmosPosition + forceVector + turbulenceVector * 0.5f, turbulenceVector);
         }
 #endif
     }
