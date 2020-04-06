@@ -16,6 +16,7 @@ namespace EZhex1991.EZSoftBone
 
         private SerializedProperty m_RootBones;
         private SerializedProperty m_EndBones;
+        private SerializedProperty m_Material;
 
         private SerializedProperty m_StartDepth;
         private SerializedProperty m_SiblingConstraints;
@@ -31,7 +32,6 @@ namespace EZhex1991.EZSoftBone
         private SerializedProperty m_DeltaTimeMode;
         private SerializedProperty m_ConstantDeltaTime;
         private SerializedProperty m_Iterations;
-        private SerializedProperty m_Material;
         private SerializedProperty m_SleepThreshold;
 
         private SerializedProperty m_Gravity;
@@ -49,6 +49,7 @@ namespace EZhex1991.EZSoftBone
 
             m_RootBones = serializedObject.FindProperty("m_RootBones");
             m_EndBones = serializedObject.FindProperty("m_EndBones");
+            m_Material = serializedObject.FindProperty("m_Material");
 
             m_StartDepth = serializedObject.FindProperty("m_StartDepth");
             m_SiblingConstraints = serializedObject.FindProperty("m_SiblingConstraints");
@@ -64,7 +65,6 @@ namespace EZhex1991.EZSoftBone
             m_DeltaTimeMode = serializedObject.FindProperty("m_DeltaTimeMode");
             m_ConstantDeltaTime = serializedObject.FindProperty("m_ConstantDeltaTime");
             m_Iterations = serializedObject.FindProperty("m_Iterations");
-            m_Material = serializedObject.FindProperty("m_Material");
             m_SleepThreshold = serializedObject.FindProperty("m_SleepThreshold");
 
             m_Gravity = serializedObject.FindProperty("m_Gravity");
@@ -89,9 +89,17 @@ namespace EZhex1991.EZSoftBone
             {
                 EditorGUILayout.PropertyField(m_RootBones, true);
                 EditorGUILayout.PropertyField(m_EndBones, true);
+            }
+            if (EditorGUI.EndChangeCheck())
+            {
+                initRequired = true;
+            }
+            EditorGUILayout.PropertyField(m_Material);
 
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Structure", EditorStyles.boldLabel);
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Structure", EditorStyles.boldLabel);
+            EditorGUI.BeginChangeCheck();
+            {
                 EditorGUILayout.PropertyField(m_StartDepth);
                 EditorGUILayout.PropertyField(m_SiblingConstraints);
                 EditorGUILayout.PropertyField(m_LengthUnification);
@@ -123,7 +131,6 @@ namespace EZhex1991.EZSoftBone
                 EditorGUILayout.PropertyField(m_ConstantDeltaTime);
             }
             EditorGUILayout.PropertyField(m_Iterations);
-            EditorGUILayout.PropertyField(m_Material);
             EditorGUILayout.PropertyField(m_SleepThreshold);
 
             EditorGUILayout.Space();

@@ -233,13 +233,46 @@ namespace EZhex1991.EZSoftBone
             }
         }
 
-        #region Structure
         [SerializeField]
         private List<Transform> m_RootBones;
         public List<Transform> rootBones { get { return m_RootBones; } }
         [SerializeField]
         private List<Transform> m_EndBones;
         public List<Transform> endBones { get { return m_EndBones; } }
+
+        [SerializeField]
+        private EZSoftBoneMaterial m_Material;
+        private EZSoftBoneMaterial m_InstanceMaterial;
+        public EZSoftBoneMaterial sharedMaterial
+        {
+            get
+            {
+                if (m_Material == null)
+                    m_Material = EZSoftBoneMaterial.defaultMaterial;
+                return m_Material;
+            }
+            set
+            {
+                m_Material = value;
+            }
+        }
+        public EZSoftBoneMaterial material
+        {
+            get
+            {
+                if (m_InstanceMaterial == null)
+                {
+                    m_InstanceMaterial = m_Material = Instantiate(sharedMaterial);
+                }
+                return m_InstanceMaterial;
+            }
+            set
+            {
+                m_InstanceMaterial = m_Material = value;
+            }
+        }
+
+        #region Structure
         [SerializeField]
         private int m_StartDepth;
         public int startDepth { get { return m_StartDepth; } set { m_StartDepth = value; } }
@@ -286,38 +319,6 @@ namespace EZhex1991.EZSoftBone
         [SerializeField, Range(1, 10)]
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
-
-        [SerializeField]
-        private EZSoftBoneMaterial m_Material;
-        private EZSoftBoneMaterial m_InstanceMaterial;
-        public EZSoftBoneMaterial sharedMaterial
-        {
-            get
-            {
-                if (m_Material == null)
-                    m_Material = EZSoftBoneMaterial.defaultMaterial;
-                return m_Material;
-            }
-            set
-            {
-                m_Material = value;
-            }
-        }
-        public EZSoftBoneMaterial material
-        {
-            get
-            {
-                if (m_InstanceMaterial == null)
-                {
-                    m_InstanceMaterial = m_Material = Instantiate(sharedMaterial);
-                }
-                return m_InstanceMaterial;
-            }
-            set
-            {
-                m_InstanceMaterial = m_Material = value;
-            }
-        }
 
         [SerializeField]
         private float m_SleepThreshold = 0.005f;
