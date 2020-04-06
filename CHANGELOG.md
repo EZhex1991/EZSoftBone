@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.6.1] - 2020-04-06
+
+### Fixed
+
+- EZNestedEditorAttribute is not suitable for EZSoftBoneMaterial (Default-Material editing should be disabled)
+
+### Chagned
+
+- Node can be moved freely if its depth is less than startDepth
+- Modified property orders in Inspector
+
+### Added
+
+- Custom startDepth can be specified with function RevertTransforms(int startDepth)
+
 ## [1.6.0] - 2020-03-26
 
 ### Changed

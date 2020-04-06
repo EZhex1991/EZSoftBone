@@ -24,7 +24,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 ![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
 
 - Root Bones: 骨骼根节点列表
-- End Bones: 末端节点列表
+- End Bones: 末端节点列表（通常用在当你的柔性骨骼层级下面有一部分需要不同的参数时）
+- Material: 使用的材质(`EZSoftBoneMaterial`)，如果不指定，运行时会自动使用默认材质
 - Structure
   - Start Depth: 从第几个层级开始起作用
   - Sibling Constraints: 同级约束，让深度相同的节点相互产生作用
@@ -43,17 +44,22 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
   - Radius: 骨骼的碰撞球大小
   - Radius Curve: 碰撞球大小的分布
 - Performance
+  - Delta Time Mode
+    - Delta Time: UnityEngine.Time.deltaTime
+    - Unscaled Delta Time: UnityEngine.Time.unscaledDeltaTime
+    - Constant: 可指定固定值
   - Iterations: 迭代计算的次数
-  - Material: 使用的材质(`EZSoftBoneMaterial`)，如果不指定，运行时会自动使用默认材质
   - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
-- Force
+- Gravity
   - Gravity: 应用于该骨骼的重力
-  - Force Module: 应用于该骨骼的其他力（可用来模拟风）
-- References:
   - Gravity Aligner: 指定一个Transform作为重力的参考系，重力对骨骼系统的影响大小与参考系的Y轴和世界坐标系的Y轴的点乘成负相关  
     - *例：创建新物体保持其世界坐标下的旋转为0，拖拽到人物头部节点下，将其作为头发的Aligner，则人物站立时头发不受重力影响，躺下或低头时重力影响加大*
     - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+- Force
+  - Force Module: 应用于该骨骼的其他力（可用来模拟风）
   - Force Space: Force Module的参考系
+  - Force Scale: 可以对ForceModule的输出进行缩放
+- References:
   - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
     - *例：人坐在移动的车中，头发应保持相对静止*
 

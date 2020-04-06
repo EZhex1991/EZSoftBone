@@ -24,9 +24,10 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 ![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
 
 - Root Bones: a list of root bone Transforms
-- End Bones: a list of end bone Transforms
+- End Bones: a list of end bone Transforms (useful for a hierarchy that has special parts, and you want to use different materials for these parts)
+- Material: `EZSoftBoneMaterial`, default material will be used if not specified
 - Structure
-  - Start Depth: start depth of this system. (Transforms would be relatively static to its parent if its depth is below this value)
+  - Start Depth: start depth of this system. (Transform will not be controlled if its depth is less than startDepth)
   - Sibling Constraints: add constraints to the nodes that have the same depth
     - None: no sibling constraints (chain simulation)
     - Rooted: use sibling constraints for each Root Bone separately
@@ -43,17 +44,22 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
   - Radius: collider size
   - Radius Curve: how should the size distribute on the bones
 - Performance
+  - Delta Time Mode
+    - Delta Time: UnityEngine.Time.deltaTime
+    - Unscaled Delta Time: UnityEngine.Time.unscaledDeltaTime
+    - Constant: a constant value can be specified
   - Iterations: how many times should the calculations done in one frame
-  - Material: `EZSoftBoneMaterial`, default material will be used if not specified
   - Sleep Threshold: speed below this threshold will go to sleep (useful for high frame rate)
-- Force
+- Gravity
   - Gravity: gravity
-  - Force Module: `EZSoftBoneForce`, wind simulation
-- References
   - Gravity Aligner: A transform can be specified to determine how much the gravity affects the system, inversely correlated to dot-production of aligner's y direction and world's y direction  
     - *eg: Create a new GameObject, leave its rotation unchanged (identical to the world space), drag it down to the head of a character, and set it as the aligner of the Hair system. You will see the grivity has no effect on the hair when the character stands still, and has maximum effect when the character lies down or bows*
     - To create a context menu to reset Transform's world rotation easily, Check this page: [EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+- Force
+  - Force Module: `EZSoftBoneForce`, wind simulation
   - Force Space: reference system of the Force Module
+  - Force Scale: the output amplification of ForceModule
+- References
   - Simulate Space: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (relatively static)  
     - *eg: a character in a moving car, hair should be relatively static to the car*
 
