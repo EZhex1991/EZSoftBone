@@ -65,6 +65,8 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 
 ## EZSoftBoneMaterial
 
+Assets/Create/EZSoftBone/SBMat
+
 ![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial_Inspector.png)
 
 - Damping: speed attenuation
@@ -83,6 +85,8 @@ Each value has a corresponding curve represent the value distribution on the bon
 - Inside Mode: 
 
 ## EZSoftBoneForce
+
+Assets/Create/EZSoftBone/SBForce
 
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)

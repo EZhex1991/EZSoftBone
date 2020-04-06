@@ -65,6 +65,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 ## EZSoftBoneMaterial
 
+Assets/Create/EZSoftBone/SBMat
+
 ![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial_Inspector.png)
 
 - Damping: 阻力（数值越大速度衰减越快，显得更“飘”）
@@ -83,6 +85,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 - Inside Mode: 
 
 ## EZSoftBoneForce
+
+Assets/Create/EZSoftBone/SBForce
 
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
