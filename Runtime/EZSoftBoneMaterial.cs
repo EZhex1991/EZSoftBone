@@ -38,7 +38,7 @@ namespace EZhex1991.EZSoftBone
         private AnimationCurve m_SlacknessCurve = AnimationCurve.Linear(0, 1, 1, 0.8f);
         public AnimationCurve slacknessCurve { get { return m_SlacknessCurve; } }
 
-        public static EZSoftBoneMaterial m_DefaultMaterial;
+        private static EZSoftBoneMaterial m_DefaultMaterial;
         public static EZSoftBoneMaterial defaultMaterial
         {
             get

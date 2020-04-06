@@ -282,7 +282,7 @@ namespace EZhex1991.EZSoftBone
         private int m_Iterations = 1;
         public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
 
-        [SerializeField, EZNestedEditor]
+        [SerializeField]
         private EZSoftBoneMaterial m_Material;
         private EZSoftBoneMaterial m_InstanceMaterial;
         public EZSoftBoneMaterial sharedMaterial
