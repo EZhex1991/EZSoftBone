@@ -137,60 +137,65 @@ namespace EZhex1991.EZSoftBone
                 }
             }
 
-            public void RevertTransforms()
+            public void RevertTransforms(int startDepth)
             {
-                transform.localPosition = originalLocalPosition;
-                transform.localRotation = originalLocalRotation;
+                if (depth > startDepth)
+                {
+                    transform.localPosition = originalLocalPosition;
+                    transform.localRotation = originalLocalRotation;
+                }
                 for (int i = 0; i < childBones.Count; i++)
                 {
-                    childBones[i].RevertTransforms();
+                    childBones[i].RevertTransforms(startDepth);
                 }
             }
-            public void UpdateTransform(bool siblingRotationConstraints)
+            public void UpdateTransform(bool siblingRotationConstraints, int startDepth)
             {
-                if (childBones.Count == 1)
+                if (depth > startDepth)
                 {
-                    Bone childBone = childBones[0];
-                    transform.rotation *= Quaternion.FromToRotation(childBone.originalLocalPosition,
-                                                                    transform.InverseTransformVector(childBone.worldPosition - worldPosition));
-
-                    if (siblingRotationConstraints)
+                    if (childBones.Count == 1)
                     {
-                        if (leftBone != null && rightBone != null)
-                        {
-                            Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
-                            Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
+                        Bone childBone = childBones[0];
+                        transform.rotation *= Quaternion.FromToRotation(childBone.originalLocalPosition,
+                                                                        transform.InverseTransformVector(childBone.worldPosition - worldPosition));
 
-                            Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
-                            Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
+                        if (siblingRotationConstraints)
+                        {
+                            if (leftBone != null && rightBone != null)
+                            {
+                                Vector3 directionLeft0 = positionToLeft;
+                                Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
+                                Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
 
-                            transform.rotation *= Quaternion.Lerp(rotationLeft, rotationRight, 0.5f);
-                        }
-                        else if (leftBone != null)
-                        {
-                            Vector3 directionLeft0 = positionToLeft;
-                            Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
-                            Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
-                            transform.rotation *= rotationLeft;
-                        }
-                        else if (rightBone != null)
-                        {
-                            Vector3 directionRight0 = positionToRight;
-                            Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
-                            Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
-                            transform.rotation *= rotationRight;
+                                Vector3 directionRight0 = positionToRight;
+                                Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
+                                Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
+
+                                transform.rotation *= Quaternion.Lerp(rotationLeft, rotationRight, 0.5f);
+                            }
+                            else if (leftBone != null)
+                            {
+                                Vector3 directionLeft0 = positionToLeft;
+                                Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
+                                Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
+                                transform.rotation *= rotationLeft;
+                            }
+                            else if (rightBone != null)
+                            {
+                                Vector3 directionRight0 = positionToRight;
+                                Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
+                                Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
+                                transform.rotation *= rotationRight;
+                            }
                         }
                     }
+                    transform.position = worldPosition;
                 }
 
-                transform.position = worldPosition;
                 if (systemSpace != null) systemPosition = systemSpace.InverseTransformPoint(worldPosition);
-
                 for (int i = 0; i < childBones.Count; i++)
                 {
-                    childBones[i].UpdateTransform(siblingRotationConstraints);
+                    childBones[i].UpdateTransform(siblingRotationConstraints, startDepth);
                 }
             }
 
@@ -440,7 +445,7 @@ namespace EZhex1991.EZSoftBone
         {
             for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_Structures[i].RevertTransforms();
+                m_Structures[i].RevertTransforms(startDepth);
             }
         }
         public void InitStructures()
@@ -677,7 +682,7 @@ namespace EZhex1991.EZSoftBone
             }
             else
             {
-                bone.transform.localPosition = bone.originalLocalPosition;
+                //bone.transform.localPosition = bone.originalLocalPosition;
                 bone.worldPosition = bone.transform.position;
             }
 
@@ -690,7 +695,7 @@ namespace EZhex1991.EZSoftBone
         {
             for (int i = 0; i < m_Structures.Count; i++)
             {
-                m_Structures[i].UpdateTransform(siblingRotationConstraints);
+                m_Structures[i].UpdateTransform(siblingRotationConstraints, startDepth);
             }
         }
     }
