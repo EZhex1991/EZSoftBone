@@ -368,7 +368,7 @@ namespace EZhex1991.EZSoftBone
         }
         private void Update()
         {
-            RevertTransforms();
+            RevertTransforms(startDepth);
         }
         private void LateUpdate()
         {
@@ -388,7 +388,7 @@ namespace EZhex1991.EZSoftBone
         }
         private void OnDisable()
         {
-            RevertTransforms();
+            RevertTransforms(startDepth);
         }
 
 #if UNITY_EDITOR
@@ -442,6 +442,10 @@ namespace EZhex1991.EZSoftBone
 #endif
 
         public void RevertTransforms()
+        {
+            RevertTransforms(startDepth);
+        }
+        public void RevertTransforms(int startDepth)
         {
             for (int i = 0; i < m_Structures.Count; i++)
             {
