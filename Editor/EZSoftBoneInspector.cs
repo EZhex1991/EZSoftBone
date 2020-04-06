@@ -94,6 +94,8 @@ namespace EZhex1991.EZSoftBone
             {
                 initRequired = true;
             }
+
+            EditorGUILayout.Space();
             EditorGUILayout.PropertyField(m_Material);
 
             EditorGUILayout.Space();
