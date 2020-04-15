@@ -14,7 +14,7 @@ MonoBehaviour:
   m_Direction: {x: -0.3, y: -0.1, z: -0.25}
   m_Conductivity: 0.1
   m_Turbulence: {x: 0.8, y: 0.25, z: 0.5}
-  m_TurbulenceMode: 1
+  m_TurbulenceMode: 0
   m_TurbulenceTimeCycle: 2
   m_TurbulenceXCurve:
     serializedVersion: 2
@@ -23,17 +23,47 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 1
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.2551282
+      value: 1
+      inSlope: 1.0000169
+      outSlope: 1.0000169
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.27544662
+      value: 0.15000007
+      inSlope: -0.4798174
+      outSlope: -0.4798174
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.50995034
+      value: 0.77810526
+      inSlope: 1.1587143
+      outSlope: 1.1587143
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.6860312
+      value: 0.4349664
+      inSlope: 0.1475215
+      outSlope: 0.1475215
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.7957087
+      value: 0.7577059
+      inSlope: 2.3689866
+      outSlope: 2.3689866
       tangentMode: 0
     - serializedVersion: 2
       time: 1
-      value: 1
+      value: 0
       inSlope: 1
-      outSlope: 0
+      outSlope: 1
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   m_TurbulenceYCurve:
     serializedVersion: 2
     m_Curve:
