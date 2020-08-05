@@ -3,7 +3,6 @@
  * Organization:    #ORGANIZATION#
  * Description:     
  */
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,15 +29,25 @@ namespace EZhex1991.EZSoftBone
             Constant,
         }
 
-        private class Bone : IDisposable
+        private class Bone
         {
             public Bone parentBone;
+            public Vector3 localPosition;
+            public Quaternion localRotation;
+
             public Bone leftBone;
+            public Vector3 leftPosition;
             public Bone rightBone;
+            public Vector3 rightPosition;
+
             public List<Bone> childBones = new List<Bone>();
+            public List<Vector3> childPositions = new List<Vector3>();
 
             public Transform transform;
+            public Vector3 worldPosition;
+
             public Transform systemSpace;
+            public Vector3 systemPosition;
 
             public int depth;
             public float boneLength;
@@ -51,14 +60,7 @@ namespace EZhex1991.EZSoftBone
             public float resistance;
             public float slackness;
 
-            public Vector3 worldPosition;
-            public Vector3 systemPosition;
             public Vector3 speed;
-
-            public Vector3 originalLocalPosition;
-            public Quaternion originalLocalRotation = Quaternion.identity;
-            public Vector3 positionToLeft;
-            public Vector3 positionToRight;
 
             public Bone(Transform systemSpace, Transform transform, IEnumerable<Transform> endBones, int startDepth, int depth, float nodeLength, float boneLength)
             {
@@ -66,8 +68,8 @@ namespace EZhex1991.EZSoftBone
                 this.systemSpace = systemSpace;
                 worldPosition = transform.position;
                 systemPosition = systemSpace == null ? worldPosition : systemSpace.InverseTransformPoint(worldPosition);
-                originalLocalPosition = transform.localPosition;
-                originalLocalRotation = transform.localRotation;
+                localPosition = transform.localPosition;
+                localRotation = transform.localRotation;
                 this.depth = depth;
                 if (depth > startDepth)
                 {
@@ -83,6 +85,7 @@ namespace EZhex1991.EZSoftBone
                         Bone childBone = new Bone(systemSpace, child, endBones, startDepth, depth + 1, Vector3.Distance(child.position, transform.position), this.boneLength);
                         childBone.parentBone = this;
                         childBones.Add(childBone);
+                        childPositions.Add(transform.InverseTransformVector(child.position - worldPosition));
                         treeLength = Mathf.Max(treeLength, childBone.treeLength);
                     }
                 }
@@ -103,17 +106,17 @@ namespace EZhex1991.EZSoftBone
                 }
             }
 
-            public void SetLeftSibling(Bone bone)
+            public void SetLeftSibling(Bone left)
             {
-                if (bone == this || bone == rightBone) return;
-                leftBone = bone;
-                positionToLeft = transform.InverseTransformVector(bone.worldPosition - worldPosition);
+                if (left == this || left == rightBone) return;
+                leftBone = left;
+                leftPosition = transform.InverseTransformPoint(left.worldPosition);
             }
-            public void SetRightSibling(Bone bone)
+            public void SetRightSibling(Bone right)
             {
-                if (bone == this || bone == leftBone) return;
-                rightBone = bone;
-                positionToRight = transform.InverseTransformVector(bone.worldPosition - worldPosition);
+                if (right == this || right == leftBone) return;
+                rightBone = right;
+                rightPosition = transform.InverseTransformPoint(right.worldPosition);
             }
 
             public void Inflate(float baseRadius, AnimationCurve radiusCurve)
@@ -141,8 +144,8 @@ namespace EZhex1991.EZSoftBone
             {
                 if (depth > startDepth)
                 {
-                    transform.localPosition = originalLocalPosition;
-                    transform.localRotation = originalLocalRotation;
+                    transform.localPosition = localPosition;
+                    transform.localRotation = localRotation;
                 }
                 for (int i = 0; i < childBones.Count; i++)
                 {
@@ -156,18 +159,18 @@ namespace EZhex1991.EZSoftBone
                     if (childBones.Count == 1)
                     {
                         Bone childBone = childBones[0];
-                        transform.rotation *= Quaternion.FromToRotation(childBone.originalLocalPosition,
+                        transform.rotation *= Quaternion.FromToRotation(childBone.localPosition,
                                                                         transform.InverseTransformVector(childBone.worldPosition - worldPosition));
 
                         if (siblingRotationConstraints)
                         {
                             if (leftBone != null && rightBone != null)
                             {
-                                Vector3 directionLeft0 = positionToLeft;
+                                Vector3 directionLeft0 = leftPosition;
                                 Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
                                 Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
 
-                                Vector3 directionRight0 = positionToRight;
+                                Vector3 directionRight0 = rightPosition;
                                 Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
                                 Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
 
@@ -175,14 +178,14 @@ namespace EZhex1991.EZSoftBone
                             }
                             else if (leftBone != null)
                             {
-                                Vector3 directionLeft0 = positionToLeft;
+                                Vector3 directionLeft0 = leftPosition;
                                 Vector3 directionLeft1 = transform.InverseTransformVector(leftBone.worldPosition - worldPosition);
                                 Quaternion rotationLeft = Quaternion.FromToRotation(directionLeft0, directionLeft1);
                                 transform.rotation *= rotationLeft;
                             }
                             else if (rightBone != null)
                             {
-                                Vector3 directionRight0 = positionToRight;
+                                Vector3 directionRight0 = rightPosition;
                                 Vector3 directionRight1 = transform.InverseTransformVector(rightBone.worldPosition - worldPosition);
                                 Quaternion rotationRight = Quaternion.FromToRotation(directionRight0, directionRight1);
                                 transform.rotation *= rotationRight;
@@ -217,19 +220,6 @@ namespace EZhex1991.EZSoftBone
                 {
                     childBones[i].UpdateSpace();
                 }
-            }
-
-            public void Dispose()
-            {
-                for (int i = 0; i < childBones.Count; i++)
-                {
-                    childBones[i].Dispose();
-                }
-                parentBone = null;
-                leftBone = null;
-                rightBone = null;
-                childBones.Clear();
-                transform = null;
             }
         }
 
@@ -353,6 +343,7 @@ namespace EZhex1991.EZSoftBone
         #endregion
 
         public float globalRadius { get; private set; }
+        public Vector3 globalForce { get; private set; }
 
         public CustomForce customForce;
 
@@ -417,7 +408,7 @@ namespace EZhex1991.EZSoftBone
 
             if (forceModule != null)
             {
-                forceModule.DrawGizmos(transform.position, forceSpace, forceScale * 10);
+                forceModule.DrawGizmos(transform.position, forceSpace, forceScale);
             }
         }
         private void DrawBoneGizmos(Bone bone)
@@ -577,12 +568,24 @@ namespace EZhex1991.EZSoftBone
         {
             if (deltaTime <= DeltaTime_Min) return;
 
+            // radius
             globalRadius = transform.lossyScale.Abs().Max() * radius;
 
+            // parameters
             for (int j = 0; j < m_Structures.Count; j++)
             {
                 m_Structures[j].Inflate(globalRadius, radiusCurve, sharedMaterial);
                 if (simulateSpace != null) m_Structures[j].UpdateSpace();
+            }
+
+            // force
+            globalForce = gravity;
+            if (gravityAligner != null)
+            {
+                Vector3 alignedDir = gravityAligner.TransformDirection(gravity).normalized;
+                Vector3 globalDir = gravity.normalized;
+                float attenuation = Mathf.Acos(Vector3.Dot(alignedDir, globalDir)) / Mathf.PI;
+                globalForce *= attenuation;
             }
 
             deltaTime /= iterations;
@@ -591,36 +594,19 @@ namespace EZhex1991.EZSoftBone
                 time += deltaTime;
                 for (int j = 0; j < m_Structures.Count; j++)
                 {
-                    UpdateNode(m_Structures[j], deltaTime);
+                    UpdateBones(m_Structures[j], deltaTime);
                 }
             }
         }
-        private void UpdateNode(Bone bone, float deltaTime)
+        private void UpdateBones(Bone bone, float deltaTime)
         {
             if (bone.depth > startDepth)
             {
-                Vector3 oldWorldPosition, newWorldPosition;
+                Vector3 oldWorldPosition, newWorldPosition, expectedPosition;
                 oldWorldPosition = newWorldPosition = bone.worldPosition;
 
-                // Damping (inertia attenuation)
-                if (bone.speed.sqrMagnitude < sleepThreshold)
-                {
-                    bone.speed = Vector3.zero;
-                }
-                else
-                {
-                    newWorldPosition += bone.speed * deltaTime * (1 - bone.damping);
-                }
-
                 // Resistance (force resistance)
-                Vector3 force = gravity;
-                if (gravityAligner != null)
-                {
-                    Vector3 alignedDir = gravityAligner.TransformDirection(gravity).normalized;
-                    Vector3 globalDir = gravity.normalized;
-                    float attenuation = Mathf.Acos(Vector3.Dot(alignedDir, globalDir)) / Mathf.PI;
-                    force *= attenuation;
-                }
+                Vector3 force = globalForce;
                 if (forceModule != null)
                 {
                     force += forceModule.GetForce(time, bone.normalizedLength, forceSpace) * forceScale;
@@ -632,40 +618,46 @@ namespace EZhex1991.EZSoftBone
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                newWorldPosition += force * (1 - bone.resistance) / iterations;
+                bone.speed += force * (1 - bone.resistance) / iterations;
+
+                // Damping (inertia attenuation)
+                bone.speed *= 1 - bone.damping;
+                if (bone.speed.sqrMagnitude > sleepThreshold)
+                {
+                    newWorldPosition += bone.speed * deltaTime;
+                }
 
                 // Stiffness (shape keeper)
-                Vector3 parentOffset = bone.parentBone.worldPosition - bone.parentBone.transform.position;
-                Vector3 expectedPos = bone.parentBone.transform.TransformPoint(bone.originalLocalPosition) + parentOffset;
-                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPos, bone.stiffness / iterations);
+                Vector3 parentMovement = bone.parentBone.worldPosition - bone.parentBone.transform.position;
+                expectedPosition = bone.parentBone.transform.TransformPoint(bone.localPosition) + parentMovement;
+                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPosition, bone.stiffness / iterations);
 
                 // Slackness (length keeper)
-                Vector3 nodeDir = (newWorldPosition - bone.parentBone.worldPosition).normalized;
-                float nodeLength = bone.parentBone.transform.TransformVector(bone.originalLocalPosition).magnitude;
-                nodeDir = bone.parentBone.worldPosition + nodeDir * nodeLength;
-                // Siblings
+                // Length needs to be calculated with TransformVector to match runtime scaling
+                Vector3 dirToParent = (newWorldPosition - bone.parentBone.worldPosition).normalized;
+                float lengthToParent = bone.parentBone.transform.TransformVector(bone.localPosition).magnitude;
+                expectedPosition = bone.parentBone.worldPosition + dirToParent * lengthToParent;
+                int lengthConstraints = 1;
+                // Sibling constraints
                 if (siblingConstraints != UnificationMode.None)
                 {
-                    int constraints = 1;
                     if (bone.leftBone != null)
                     {
-                        Vector3 leftDir = (newWorldPosition - bone.leftBone.worldPosition).normalized;
-                        float leftLength = bone.transform.TransformVector(bone.positionToLeft).magnitude;
-                        leftDir = bone.leftBone.worldPosition + leftDir * leftLength;
-                        nodeDir += leftDir;
-                        constraints++;
+                        Vector3 dirToLeft = (newWorldPosition - bone.leftBone.worldPosition).normalized;
+                        float lengthToLeft = bone.transform.TransformVector(bone.leftPosition).magnitude;
+                        expectedPosition += bone.leftBone.worldPosition + dirToLeft * lengthToLeft;
+                        lengthConstraints++;
                     }
                     if (bone.rightBone != null)
                     {
-                        Vector3 rightDir = (newWorldPosition - bone.rightBone.worldPosition).normalized;
-                        float rightLength = bone.transform.TransformVector(bone.positionToRight).magnitude;
-                        rightDir = bone.rightBone.worldPosition + rightDir * rightLength;
-                        nodeDir += rightDir;
-                        constraints++;
+                        Vector3 dirToRight = (newWorldPosition - bone.rightBone.worldPosition).normalized;
+                        float lengthToRight = bone.transform.TransformVector(bone.rightPosition).magnitude;
+                        expectedPosition += bone.rightBone.worldPosition + dirToRight * lengthToRight;
+                        lengthConstraints++;
                     }
-                    nodeDir /= constraints;
                 }
-                newWorldPosition = Vector3.Lerp(nodeDir, newWorldPosition, bone.slackness / iterations);
+                expectedPosition /= lengthConstraints;
+                newWorldPosition = Vector3.Lerp(expectedPosition, newWorldPosition, bone.slackness / iterations);
 
                 // Collision
                 if (bone.radius > 0)
@@ -682,18 +674,17 @@ namespace EZhex1991.EZSoftBone
                     }
                 }
 
-                bone.speed = (newWorldPosition - oldWorldPosition) / deltaTime;
+                bone.speed = (bone.speed + (newWorldPosition - oldWorldPosition) / deltaTime) * 0.5f;
                 bone.worldPosition = newWorldPosition;
             }
             else
             {
-                //bone.transform.localPosition = bone.originalLocalPosition;
                 bone.worldPosition = bone.transform.position;
             }
 
             for (int i = 0; i < bone.childBones.Count; i++)
             {
-                UpdateNode(bone.childBones[i], deltaTime);
+                UpdateBones(bone.childBones[i], deltaTime);
             }
         }
         private void UpdateTransforms()

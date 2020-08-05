@@ -1,12 +1,19 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Calculate force into speed instead of position
+- Average speed with last frame
+
 ## [1.6.1] - 2020-04-06
 
 ### Fixed
 
 - EZNestedEditorAttribute is not suitable for EZSoftBoneMaterial (Default-Material editing should be disabled)
 
-### Chagned
+### Changed
 
 - Node can be moved freely if its depth is less than startDepth
 - Modified property orders in Inspector

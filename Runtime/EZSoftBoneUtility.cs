@@ -68,7 +68,7 @@ namespace EZhex1991.EZSoftBone
             float radius = collider.radius * scale.Max();
             PointOutsideSphere(ref position, collider.transform.TransformPoint(collider.center), radius + spacing);
         }
-        public static void PointOutsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
+        private static void PointOutsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
         {
             Vector3 bounceDir = position - spherePosition;
             if (bounceDir.magnitude < radius)
@@ -81,7 +81,7 @@ namespace EZhex1991.EZSoftBone
         {
             PointInsideSphere(ref position, collider.transform.TransformPoint(collider.center), collider.radius - spacing);
         }
-        public static void PointInsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
+        private static void PointInsideSphere(ref Vector3 position, Vector3 spherePosition, float radius)
         {
             Vector3 bounceDir = position - spherePosition;
             if (bounceDir.magnitude > radius)
@@ -97,7 +97,7 @@ namespace EZhex1991.EZSoftBone
             GetCapsuleParams(collider, out center0, out center1, out radius);
             PointOutsideCapsule(ref position, center0, center1, radius + spacing);
         }
-        public static void PointOutsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
+        private static void PointOutsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
         {
             Vector3 capsuleDir = center1 - center0;
             Vector3 pointDir = position - center0;
@@ -129,7 +129,7 @@ namespace EZhex1991.EZSoftBone
             GetCapsuleParams(collider, out center0, out center1, out radius);
             PointInsideCapsule(ref position, center0, center1, radius - spacing);
         }
-        public static void PointInsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
+        private static void PointInsideCapsule(ref Vector3 position, Vector3 center0, Vector3 center1, float radius)
         {
             Vector3 capsuleDir = center1 - center0;
             Vector3 pointDir = position - center0;
@@ -161,7 +161,7 @@ namespace EZhex1991.EZSoftBone
             GetCylinderParams(transform, out center, out direction, out radius, out height);
             PointOutsideCylinder(ref position, center, direction, radius + spacing, height + spacing);
         }
-        public static void PointOutsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
+        private static void PointOutsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
         {
             Vector3 pointDir = position - center;
             Vector3 directionAlong = Vector3.Project(pointDir, direction);
@@ -191,7 +191,7 @@ namespace EZhex1991.EZSoftBone
             GetCylinderParams(transform, out center, out direction, out radius, out height);
             PointInsideCylinder(ref position, center, direction, radius - spacing, height - spacing);
         }
-        public static void PointInsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
+        private static void PointInsideCylinder(ref Vector3 position, Vector3 center, Vector3 direction, float radius, float height)
         {
             Vector3 pointDir = position - center;
             Vector3 directionAlong = Vector3.Project(pointDir, direction);
@@ -217,7 +217,7 @@ namespace EZhex1991.EZSoftBone
             PointOutsideBox(ref positionToCollider, collider.size.Abs() / 2 + collider.transform.InverseTransformVector(Vector3.one * spacing).Abs());
             position = collider.transform.TransformPoint(collider.center + positionToCollider);
         }
-        public static void PointOutsideBox(ref Vector3 position, Vector3 boxSize)
+        private static void PointOutsideBox(ref Vector3 position, Vector3 boxSize)
         {
             Vector3 distanceToCenter = position.Abs();
             if (distanceToCenter.x < boxSize.x && distanceToCenter.y < boxSize.y && distanceToCenter.z < boxSize.z)
@@ -254,7 +254,7 @@ namespace EZhex1991.EZSoftBone
             PointInsideBox(ref positionToCollider, collider.size.Abs() / 2 - collider.transform.InverseTransformVector(Vector3.one * spacing).Abs());
             position = collider.transform.TransformPoint(collider.center + positionToCollider);
         }
-        public static void PointInsideBox(ref Vector3 position, Vector3 boxSize)
+        private static void PointInsideBox(ref Vector3 position, Vector3 boxSize)
         {
             Vector3 distanceToCenter = position.Abs();
             if (distanceToCenter.x > boxSize.x) position.x = Mathf.Sign(position.x) * boxSize.x;
