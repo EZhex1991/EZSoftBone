@@ -50,9 +50,8 @@ namespace EZhex1991.EZSoftBone
             softBone = target as EZSoftBone;
 
             m_RootBones = serializedObject.FindProperty(nameof(m_RootBones));
-            rootBones = new ReorderableList(serializedObject, m_RootBones, true, true, true, true)
+            rootBones = new ReorderableList(serializedObject, m_RootBones, true, false, true, true)
             {
-                drawHeaderCallback = DrawRootBonesHeader,
                 drawElementCallback = DrawRootBonesElement,
             };
 
@@ -84,20 +83,6 @@ namespace EZhex1991.EZSoftBone
             m_SimulateSpace = serializedObject.FindProperty(nameof(m_SimulateSpace));
         }
 
-        private void DrawRootBonesHeader(Rect rect)
-        {
-            float indentWidth = 40;
-            Rect countRect = new Rect(rect);
-            countRect.width = indentWidth - 5;
-            int length = EditorGUI.DelayedIntField(countRect, rootBones.count, EditorStyles.miniTextField);
-            if (length != rootBones.count)
-            {
-                rootBones.serializedProperty.arraySize = length;
-            }
-            rect.x += indentWidth; rect.width -= indentWidth;
-            EditorGUI.LabelField(rect, "RootBones");
-        }
-
         private void DrawRootBonesElement(Rect rect, int index, bool isActive, bool isFocused)
         {
             SerializedProperty bone = m_RootBones.GetArrayElementAtIndex(index);
@@ -118,7 +103,18 @@ namespace EZhex1991.EZSoftBone
 
             EditorGUI.BeginChangeCheck();
             {
-                rootBones.DoLayoutList();
+                Rect rect = EditorGUILayout.GetControlRect();
+                float countRectWidth = 48;
+                Rect countRect = new Rect(rect.x + rect.width - countRectWidth, rect.y, countRectWidth, rect.height);
+                int count = EditorGUI.DelayedIntField(countRect, GUIContent.none, rootBones.count);
+                if (count != rootBones.count)
+                {
+                    rootBones.serializedProperty.arraySize = count;
+                }
+                if (m_RootBones.isExpanded = EditorGUI.Foldout(rect, m_RootBones.isExpanded, "Root Bones", true))
+                {
+                    rootBones.DoLayoutList();
+                }
                 EditorGUILayout.PropertyField(m_EndBones, true);
             }
             if (EditorGUI.EndChangeCheck())
