@@ -4,6 +4,7 @@
  * Description:     
  */
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using static EZhex1991.EZSoftBone.EZSoftBone;
 
@@ -15,6 +16,8 @@ namespace EZhex1991.EZSoftBone
         private EZSoftBone softBone;
 
         private SerializedProperty m_RootBones;
+        private ReorderableList rootBones;
+
         private SerializedProperty m_EndBones;
         private SerializedProperty m_Material;
 
@@ -47,6 +50,12 @@ namespace EZhex1991.EZSoftBone
             softBone = target as EZSoftBone;
 
             m_RootBones = serializedObject.FindProperty(nameof(m_RootBones));
+            rootBones = new ReorderableList(serializedObject, m_RootBones, true, true, true, true)
+            {
+                drawHeaderCallback = DrawRootBonesHeader,
+                drawElementCallback = DrawRootBonesElement,
+            };
+
             m_EndBones = serializedObject.FindProperty(nameof(m_EndBones));
             m_Material = serializedObject.FindProperty(nameof(m_Material));
 
@@ -75,6 +84,30 @@ namespace EZhex1991.EZSoftBone
             m_SimulateSpace = serializedObject.FindProperty(nameof(m_SimulateSpace));
         }
 
+        private void DrawRootBonesHeader(Rect rect)
+        {
+            float indentWidth = 40;
+            Rect countRect = new Rect(rect);
+            countRect.width = indentWidth - 5;
+            int length = EditorGUI.DelayedIntField(countRect, rootBones.count, EditorStyles.miniTextField);
+            if (length != rootBones.count)
+            {
+                rootBones.serializedProperty.arraySize = length;
+            }
+            rect.x += indentWidth; rect.width -= indentWidth;
+            EditorGUI.LabelField(rect, "RootBones");
+        }
+
+        private void DrawRootBonesElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            SerializedProperty bone = m_RootBones.GetArrayElementAtIndex(index);
+            float labelWidth = 25;
+            rect.y += 1;
+            EditorGUI.LabelField(new Rect(rect.x, rect.y, labelWidth, EditorGUIUtility.singleLineHeight), index.ToString("00"));
+            rect.x += labelWidth; rect.width -= labelWidth;
+            EditorGUI.PropertyField(new Rect(rect.x, rect.y, rect.width, EditorGUIUtility.singleLineHeight), bone, GUIContent.none);
+        }
+
         public override void OnInspectorGUI()
         {
             GUI.enabled = false;
@@ -85,7 +118,7 @@ namespace EZhex1991.EZSoftBone
 
             EditorGUI.BeginChangeCheck();
             {
-                EditorGUILayout.PropertyField(m_RootBones, true);
+                rootBones.DoLayoutList();
                 EditorGUILayout.PropertyField(m_EndBones, true);
             }
             if (EditorGUI.EndChangeCheck())
