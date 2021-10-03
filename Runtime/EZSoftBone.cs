@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
 {
-    public delegate Vector3 CustomForce(float normalizedLength, Transform forceSpace);
+    public delegate Vector3 CustomForce(float time, float normalizedLength);
 
     public class EZSoftBone : MonoBehaviour
     {
@@ -325,12 +325,9 @@ namespace EZhex1991.EZSoftBone
         #endregion
 
         #region Force
-        [SerializeField, EZNestedEditor]
-        private EZSoftBoneForce m_ForceModule;
-        public EZSoftBoneForce forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
         [SerializeField]
-        private Transform m_ForceSpace;
-        public Transform forceSpace { get { return m_ForceSpace; } set { m_ForceSpace = value; } }
+        private EZSoftBoneForceField m_ForceModule;
+        public EZSoftBoneForceField forceModule { get { return m_ForceModule; } set { m_ForceModule = value; } }
         [SerializeField]
         private float m_ForceScale = 1;
         public float forceScale { get { return m_ForceScale; } set { m_ForceScale = value; } }
@@ -408,7 +405,7 @@ namespace EZhex1991.EZSoftBone
 
             if (forceModule != null)
             {
-                forceModule.DrawGizmos(transform.position, forceSpace, forceScale);
+                forceModule.DrawGizmos();
             }
         }
         private void DrawBoneGizmos(Bone bone)
@@ -609,11 +606,11 @@ namespace EZhex1991.EZSoftBone
                 Vector3 force = globalForce;
                 if (forceModule != null)
                 {
-                    force += forceModule.GetForce(time, bone.normalizedLength, forceSpace) * forceScale;
+                    force += forceModule.GetForce(time, bone.normalizedLength) * forceScale;
                 }
                 if (customForce != null)
                 {
-                    force += customForce(bone.normalizedLength, forceSpace);
+                    force += customForce(time, bone.normalizedLength);
                 }
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;

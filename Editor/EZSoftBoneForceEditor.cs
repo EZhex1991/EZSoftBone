@@ -11,35 +11,30 @@ namespace EZhex1991.EZSoftBone
     [CustomEditor(typeof(EZSoftBoneForce))]
     public class EZSoftBoneForceEditor : Editor
     {
-        private SerializedProperty m_Direction;
-        private SerializedProperty m_Conductivity;
+        private SerializedProperty m_Force;
 
         private SerializedProperty m_Turbulence;
         private SerializedProperty m_TurbulenceMode;
 
-        private SerializedProperty m_TurbulenceTimeCycle;
-        private SerializedProperty m_TurbulenceXCurve;
-        private SerializedProperty m_TurbulenceYCurve;
-        private SerializedProperty m_TurbulenceZCurve;
+        private SerializedProperty m_Frequency;
 
-        private SerializedProperty m_TurbulenceSpeed;
-        private SerializedProperty m_TurbulenceRandomSeed;
+        private SerializedProperty m_TimeCycle;
+        private SerializedProperty m_CurveX;
+        private SerializedProperty m_CurveY;
+        private SerializedProperty m_CurveZ;
 
         private void OnEnable()
         {
-            m_Direction = serializedObject.FindProperty("m_Direction");
-            m_Conductivity = serializedObject.FindProperty("m_Conductivity");
+            m_Force = serializedObject.FindProperty(nameof(m_Force));
+            m_Turbulence = serializedObject.FindProperty(nameof(m_Turbulence));
+            m_TurbulenceMode = serializedObject.FindProperty(nameof(m_TurbulenceMode));
 
-            m_Turbulence = serializedObject.FindProperty("m_Turbulence");
-            m_TurbulenceMode = serializedObject.FindProperty("m_TurbulenceMode");
+            m_Frequency = serializedObject.FindProperty(nameof(m_Frequency));
 
-            m_TurbulenceTimeCycle = serializedObject.FindProperty("m_TurbulenceTimeCycle");
-            m_TurbulenceXCurve = serializedObject.FindProperty("m_TurbulenceXCurve");
-            m_TurbulenceYCurve = serializedObject.FindProperty("m_TurbulenceYCurve");
-            m_TurbulenceZCurve = serializedObject.FindProperty("m_TurbulenceZCurve");
-
-            m_TurbulenceSpeed = serializedObject.FindProperty("m_TurbulenceSpeed");
-            m_TurbulenceRandomSeed = serializedObject.FindProperty("m_TurbulenceRandomSeed");
+            m_TimeCycle = serializedObject.FindProperty(nameof(m_TimeCycle));
+            m_CurveX = serializedObject.FindProperty(nameof(m_CurveX));
+            m_CurveY = serializedObject.FindProperty(nameof(m_CurveY));
+            m_CurveZ = serializedObject.FindProperty(nameof(m_CurveZ));
         }
 
         public override void OnInspectorGUI()
@@ -50,26 +45,23 @@ namespace EZhex1991.EZSoftBone
 
             serializedObject.Update();
 
-            EditorGUILayout.PropertyField(m_Direction);
-            EditorGUILayout.PropertyField(m_Conductivity);
-
+            EditorGUILayout.PropertyField(m_Force);
             EditorGUILayout.PropertyField(m_Turbulence);
             EditorGUILayout.PropertyField(m_TurbulenceMode);
 
             if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Curve)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(m_TurbulenceTimeCycle);
-                EditorGUILayout.PropertyField(m_TurbulenceXCurve);
-                EditorGUILayout.PropertyField(m_TurbulenceYCurve);
-                EditorGUILayout.PropertyField(m_TurbulenceZCurve);
+                EditorGUILayout.PropertyField(m_TimeCycle);
+                EditorGUILayout.PropertyField(m_CurveX);
+                EditorGUILayout.PropertyField(m_CurveY);
+                EditorGUILayout.PropertyField(m_CurveZ);
                 EditorGUI.indentLevel--;
             }
             else if (m_TurbulenceMode.intValue == (int)EZSoftBoneForce.TurbulenceMode.Perlin)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(m_TurbulenceSpeed);
-                EditorGUILayout.PropertyField(m_TurbulenceRandomSeed);
+                EditorGUILayout.PropertyField(m_Frequency);
                 EditorGUI.indentLevel--;
             }
 

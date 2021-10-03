@@ -38,7 +38,6 @@ namespace EZhex1991.EZSoftBone
         private SerializedProperty m_GravityAligner;
 
         private SerializedProperty m_ForceModule;
-        private SerializedProperty m_ForceSpace;
         private SerializedProperty m_ForceScale;
 
         private SerializedProperty m_SimulateSpace;
@@ -47,34 +46,33 @@ namespace EZhex1991.EZSoftBone
         {
             softBone = target as EZSoftBone;
 
-            m_RootBones = serializedObject.FindProperty("m_RootBones");
-            m_EndBones = serializedObject.FindProperty("m_EndBones");
-            m_Material = serializedObject.FindProperty("m_Material");
+            m_RootBones = serializedObject.FindProperty(nameof(m_RootBones));
+            m_EndBones = serializedObject.FindProperty(nameof(m_EndBones));
+            m_Material = serializedObject.FindProperty(nameof(m_Material));
 
-            m_StartDepth = serializedObject.FindProperty("m_StartDepth");
-            m_SiblingConstraints = serializedObject.FindProperty("m_SiblingConstraints");
-            m_LengthUnification = serializedObject.FindProperty("m_LengthUnification");
-            m_SiblingRotationConstraints = serializedObject.FindProperty("m_SiblingRotationConstraints");
-            m_ClosedSiblings = serializedObject.FindProperty("m_ClosedSiblings");
+            m_StartDepth = serializedObject.FindProperty(nameof(m_StartDepth));
+            m_SiblingConstraints = serializedObject.FindProperty(nameof(m_SiblingConstraints));
+            m_LengthUnification = serializedObject.FindProperty(nameof(m_LengthUnification));
+            m_SiblingRotationConstraints = serializedObject.FindProperty(nameof(m_SiblingRotationConstraints));
+            m_ClosedSiblings = serializedObject.FindProperty(nameof(m_ClosedSiblings));
 
-            m_CollisionLayers = serializedObject.FindProperty("m_CollisionLayers");
-            m_ExtraColliders = serializedObject.FindProperty("m_ExtraColliders");
-            m_Radius = serializedObject.FindProperty("m_Radius");
-            m_RadiusCurve = serializedObject.FindProperty("m_RadiusCurve");
+            m_CollisionLayers = serializedObject.FindProperty(nameof(m_CollisionLayers));
+            m_ExtraColliders = serializedObject.FindProperty(nameof(m_ExtraColliders));
+            m_Radius = serializedObject.FindProperty(nameof(m_Radius));
+            m_RadiusCurve = serializedObject.FindProperty(nameof(m_RadiusCurve));
 
-            m_DeltaTimeMode = serializedObject.FindProperty("m_DeltaTimeMode");
-            m_ConstantDeltaTime = serializedObject.FindProperty("m_ConstantDeltaTime");
-            m_Iterations = serializedObject.FindProperty("m_Iterations");
-            m_SleepThreshold = serializedObject.FindProperty("m_SleepThreshold");
+            m_DeltaTimeMode = serializedObject.FindProperty(nameof(m_DeltaTimeMode));
+            m_ConstantDeltaTime = serializedObject.FindProperty(nameof(m_ConstantDeltaTime));
+            m_Iterations = serializedObject.FindProperty(nameof(m_Iterations));
+            m_SleepThreshold = serializedObject.FindProperty(nameof(m_SleepThreshold));
 
-            m_Gravity = serializedObject.FindProperty("m_Gravity");
-            m_GravityAligner = serializedObject.FindProperty("m_GravityAligner");
+            m_Gravity = serializedObject.FindProperty(nameof(m_Gravity));
+            m_GravityAligner = serializedObject.FindProperty(nameof(m_GravityAligner));
 
-            m_ForceModule = serializedObject.FindProperty("m_ForceModule");
-            m_ForceSpace = serializedObject.FindProperty("m_ForceSpace");
-            m_ForceScale = serializedObject.FindProperty("m_ForceScale");
+            m_ForceModule = serializedObject.FindProperty(nameof(m_ForceModule));
+            m_ForceScale = serializedObject.FindProperty(nameof(m_ForceScale));
 
-            m_SimulateSpace = serializedObject.FindProperty("m_SimulateSpace");
+            m_SimulateSpace = serializedObject.FindProperty(nameof(m_SimulateSpace));
         }
 
         public override void OnInspectorGUI()
@@ -143,7 +141,6 @@ namespace EZhex1991.EZSoftBone
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Force", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(m_ForceModule);
-            EditorGUILayout.PropertyField(m_ForceSpace);
             EditorGUILayout.PropertyField(m_ForceScale);
 
             EditorGUILayout.Space();

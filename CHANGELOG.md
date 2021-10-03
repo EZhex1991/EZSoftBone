@@ -1,9 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [1.7.1] - Unreleased
 
 ### Changed
 
+- Force module Rewrited
 - Calculate force into speed instead of position
 - Average speed with last frame
 
