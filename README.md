@@ -59,7 +59,6 @@ Tutorial Video: [https://www.bilibili.com/video/BV1mz4y1Q76o](https://www.bilibi
     - To create a context menu to reset Transform's world rotation easily, Check this page: [EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
 - Force
   - Force Module: `EZSoftBoneForce`, wind simulation
-  - Force Space: reference system of the Force Module
   - Force Scale: the output amplification of ForceModule
 - References
   - Simulate Space: A transform can be specified as a simulate space, it's useful when the system needs to be updated with a moving object (relatively static)  
@@ -93,13 +92,12 @@ Assets/Create/EZSoftBone/SBForce
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
 
-- Direction: base force vector
 - Conductivity:
+- Force: base force Strength (Z Direction)
 - Turbulence: force turbulence vector
 - Turbulence Mode:
-  - Curve:
+  - Curve: (useful for explosioin simulation)
     - Turbulence Time Cycle: turbulence time cycle
     - Turbulence Curve: turbulence variation curves for each axis
-  - Perlin:
-    - Turbulence Speed: x coordinate speed for 2d perlin noise
-    - Random seed: y coordinate position for 2d perlin noise
+  - Perlin: (useful for wind simulation)
+    - Frequency: turbulence frequency for each axis

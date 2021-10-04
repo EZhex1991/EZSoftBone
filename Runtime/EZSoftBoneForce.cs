@@ -39,11 +39,11 @@ namespace EZhex1991.EZSoftBone
         private float m_TimeCycle = 2f;
         public float timeCycle { get { return m_TimeCycle; } set { m_TimeCycle = Mathf.Max(0, value); } }
 
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_CurveX = AnimationCurve.Linear(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_CurveY = AnimationCurve.EaseInOut(0, 0, 1, 1);
-        [SerializeField, EZCurveRect(0, 0, 1, 1)]
+        [SerializeField, EZCurveRect(0, -1, 1, 2)]
         private AnimationCurve m_CurveZ = AnimationCurve.EaseInOut(0, 1, 1, 0);
         #endregion
 
@@ -73,7 +73,7 @@ namespace EZhex1991.EZSoftBone
         }
         private float Curve(AnimationCurve curve, float time)
         {
-            return curve.Evaluate(time) * 2 - 1;
+            return curve.Evaluate(time);
         }
     }
 }

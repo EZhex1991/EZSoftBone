@@ -29,9 +29,9 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 - Structure
   - Start Depth: 从第几个层级开始起作用
   - Sibling Constraints: 同级约束，让深度相同的节点相互产生作用
-    - None: 无同级约束（链）
-    - Rooted: 约束同一个Root下深度相同的节点
-    - Unified: 约束整个系统中深度相同的节点
+    - None: 无同级约束（链式结构）
+    - Rooted: 约束同一个Root下深度相同的节点（每个RootBone是一个独立的网）
+    - Unified: 约束整个系统中深度相同的节点（所有的RootBones形成一个网）
   - Length Unification: 树的总长度计算方式，参数的数值分布与该数值相关
     - None: 每个链单独计算（分叉点用最长子链的长度）
     - Rooted: 各Root使用其最长子链的长度
@@ -57,7 +57,6 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
     - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
 - Force
   - Force Module: 应用于该骨骼的其他力（可用来模拟风）
-  - Force Space: Force Module的参考系
   - Force Scale: 可以对ForceModule的输出进行缩放
 - References:
   - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
@@ -91,13 +90,12 @@ Assets/Create/EZSoftBone/SBForce
 ![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
 ![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
 
-- Direction: 基础力的向量
 - Conductivity: 传导性
+- Force: 基础力的大小 (Z轴方向)
 - Turbulence: 动荡大小
 - Turbulence Mode:
-  - Curve:
+  - Curve:（可用来模拟爆炸）
     - Turbulence Time Cycle: 动荡周期
     - Turbulence Curve: 各方向的动荡曲线
-  - Perlin:
-    - Turbulence Speed: 2D柏林噪声在X方向上的移动速度
-    - Random seed: 2D柏林噪声在Y方向上的采样位置
+  - Perlin:（可用来模拟自然风）
+    - Frequency: 各方向上动荡频率

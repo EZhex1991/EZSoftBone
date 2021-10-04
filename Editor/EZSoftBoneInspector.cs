@@ -103,18 +103,7 @@ namespace EZhex1991.EZSoftBone
 
             EditorGUI.BeginChangeCheck();
             {
-                Rect rect = EditorGUILayout.GetControlRect();
-                float countRectWidth = 48;
-                Rect countRect = new Rect(rect.x + rect.width - countRectWidth, rect.y, countRectWidth, rect.height);
-                int count = EditorGUI.DelayedIntField(countRect, GUIContent.none, rootBones.count);
-                if (count != rootBones.count)
-                {
-                    rootBones.serializedProperty.arraySize = count;
-                }
-                if (m_RootBones.isExpanded = EditorGUI.Foldout(rect, m_RootBones.isExpanded, "Root Bones", true))
-                {
-                    rootBones.DoLayoutList();
-                }
+                EditorGUILayout.PropertyField(m_RootBones, true);
                 EditorGUILayout.PropertyField(m_EndBones, true);
             }
             if (EditorGUI.EndChangeCheck())
