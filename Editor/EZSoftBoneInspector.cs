@@ -16,16 +16,15 @@ namespace EZhex1991.EZSoftBone
         private EZSoftBone softBone;
 
         private SerializedProperty m_RootBones;
-        private ReorderableList rootBones;
 
         private SerializedProperty m_EndBones;
         private SerializedProperty m_Material;
 
         private SerializedProperty m_StartDepth;
         private SerializedProperty m_SiblingConstraints;
-        private SerializedProperty m_LengthUnification;
-        private SerializedProperty m_SiblingRotationConstraints;
         private SerializedProperty m_ClosedSiblings;
+        private SerializedProperty m_SiblingRotationConstraints;
+        private SerializedProperty m_LengthUnification;
 
         private SerializedProperty m_CollisionLayers;
         private SerializedProperty m_ExtraColliders;
@@ -50,19 +49,15 @@ namespace EZhex1991.EZSoftBone
             softBone = target as EZSoftBone;
 
             m_RootBones = serializedObject.FindProperty(nameof(m_RootBones));
-            rootBones = new ReorderableList(serializedObject, m_RootBones, true, false, true, true)
-            {
-                drawElementCallback = DrawRootBonesElement,
-            };
 
             m_EndBones = serializedObject.FindProperty(nameof(m_EndBones));
             m_Material = serializedObject.FindProperty(nameof(m_Material));
 
             m_StartDepth = serializedObject.FindProperty(nameof(m_StartDepth));
             m_SiblingConstraints = serializedObject.FindProperty(nameof(m_SiblingConstraints));
-            m_LengthUnification = serializedObject.FindProperty(nameof(m_LengthUnification));
-            m_SiblingRotationConstraints = serializedObject.FindProperty(nameof(m_SiblingRotationConstraints));
             m_ClosedSiblings = serializedObject.FindProperty(nameof(m_ClosedSiblings));
+            m_SiblingRotationConstraints = serializedObject.FindProperty(nameof(m_SiblingRotationConstraints));
+            m_LengthUnification = serializedObject.FindProperty(nameof(m_LengthUnification));
 
             m_CollisionLayers = serializedObject.FindProperty(nameof(m_CollisionLayers));
             m_ExtraColliders = serializedObject.FindProperty(nameof(m_ExtraColliders));
@@ -120,9 +115,9 @@ namespace EZhex1991.EZSoftBone
             {
                 EditorGUILayout.PropertyField(m_StartDepth);
                 EditorGUILayout.PropertyField(m_SiblingConstraints);
-                EditorGUILayout.PropertyField(m_LengthUnification);
-                EditorGUILayout.PropertyField(m_SiblingRotationConstraints);
                 EditorGUILayout.PropertyField(m_ClosedSiblings);
+                EditorGUILayout.PropertyField(m_SiblingRotationConstraints);
+                EditorGUILayout.PropertyField(m_LengthUnification);
             }
             if (EditorGUI.EndChangeCheck())
             {
