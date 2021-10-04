@@ -41,7 +41,6 @@ namespace EZhex1991.EZSoftBone
             public Vector3 rightPosition;
 
             public List<Bone> childBones = new List<Bone>();
-            public List<Vector3> childPositions = new List<Vector3>();
 
             public Transform transform;
             public Vector3 worldPosition;
@@ -85,7 +84,6 @@ namespace EZhex1991.EZSoftBone
                         Bone childBone = new Bone(systemSpace, child, endBones, startDepth, depth + 1, Vector3.Distance(child.position, transform.position), this.boneLength);
                         childBone.parentBone = this;
                         childBones.Add(childBone);
-                        childPositions.Add(transform.InverseTransformVector(child.position - worldPosition));
                         treeLength = Mathf.Max(treeLength, childBone.treeLength);
                     }
                 }
@@ -271,16 +269,14 @@ namespace EZhex1991.EZSoftBone
         private UnificationMode m_SiblingConstraints = UnificationMode.None;
         public UnificationMode siblingConstraints { get { return m_SiblingConstraints; } set { m_SiblingConstraints = value; } }
         [SerializeField]
-        private UnificationMode m_LengthUnification = UnificationMode.None;
-        public UnificationMode lengthUnification { get { return m_LengthUnification; } set { m_LengthUnification = value; } }
-
+        private bool m_ClosedSiblings = false;
+        public bool closedSiblings { get { return m_ClosedSiblings; } set { m_ClosedSiblings = value; } }
         [SerializeField]
         private bool m_SiblingRotationConstraints = true;
         public bool siblingRotationConstraints { get { return m_SiblingRotationConstraints; } set { m_SiblingRotationConstraints = value; } }
-
         [SerializeField]
-        private bool m_ClosedSiblings = false;
-        public bool closedSiblings { get { return m_ClosedSiblings; } set { m_ClosedSiblings = value; } }
+        private UnificationMode m_LengthUnification = UnificationMode.None;
+        public UnificationMode lengthUnification { get { return m_LengthUnification; } set { m_LengthUnification = value; } }
         #endregion
 
         #region Collision
