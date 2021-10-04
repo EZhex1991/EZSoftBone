@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
 {
-    public delegate Vector3 CustomForce(float time, float normalizedLength);
+    public delegate Vector3 CustomForce(float normalizedLength);
 
     public class EZSoftBone : MonoBehaviour
     {
@@ -345,7 +345,6 @@ namespace EZhex1991.EZSoftBone
         public CustomForce customForce;
 
         private List<Bone> m_Structures = new List<Bone>();
-        private float time;
 
         private void Awake()
         {
@@ -588,7 +587,6 @@ namespace EZhex1991.EZSoftBone
             deltaTime /= iterations;
             for (int i = 0; i < iterations; i++)
             {
-                time += deltaTime;
                 for (int j = 0; j < m_Structures.Count; j++)
                 {
                     UpdateBones(m_Structures[j], deltaTime);
@@ -604,13 +602,13 @@ namespace EZhex1991.EZSoftBone
 
                 // Resistance (force resistance)
                 Vector3 force = globalForce;
-                if (forceModule != null)
+                if (forceModule != null && forceModule.isActiveAndEnabled)
                 {
-                    force += forceModule.GetForce(time, bone.normalizedLength) * forceScale;
+                    force += forceModule.GetForce(bone.normalizedLength) * forceScale;
                 }
                 if (customForce != null)
                 {
-                    force += customForce(time, bone.normalizedLength);
+                    force += customForce(bone.normalizedLength);
                 }
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;

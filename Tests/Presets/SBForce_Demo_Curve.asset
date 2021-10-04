@@ -16,7 +16,7 @@ MonoBehaviour:
   m_Turbulence: {x: 1, y: 1, z: 50}
   m_TurbulenceMode: 0
   m_Frequency: {x: 1, y: 1, z: 1}
-  m_TimeCycle: 10
+  m_TimeCycle: 12
   m_CurveX:
     serializedVersion: 2
     m_Curve:
@@ -108,34 +108,34 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      outSlope: Infinity
+      tangentMode: 97
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.103429966
-      value: 0.00060047023
-      inSlope: 0.021350248
-      outSlope: 0.021350248
-      tangentMode: 136
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.11249897
+      time: 0.1
       value: 1
-      inSlope: 0
+      inSlope: 9.90099
       outSlope: 0
+      tangentMode: 1
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.3497207
+      value: 0.84251773
+      inSlope: -1.5748228
+      outSlope: -1.5748228
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.49997354
-      value: 0.04090283
-      inSlope: -0.18435068
-      outSlope: -0.18435068
+      time: 0.5
+      value: 0.05
+      inSlope: -0.3075601
+      outSlope: -0.3075601
       tangentMode: 136
       weightedMode: 0
       inWeight: 0.33333334

@@ -17,10 +17,20 @@ namespace EZhex1991.EZSoftBone
         private EZSoftBoneForce m_Force;
         public EZSoftBoneForce force { get { return m_Force; } set { m_Force = value; } }
 
-        public Vector3 GetForce(float time, float normalizedLength)
+        public float time { get; set; }
+
+        private void OnEnable()
         {
-            time -= conductivity * normalizedLength;
-            return transform.TransformDirection(force.GetForce(time));
+            time = 0;
+        }
+        private void Update()
+        {
+            time += Time.deltaTime;
+        }
+
+        public Vector3 GetForce(float normalizedLength)
+        {
+            return transform.TransformDirection(force.GetForce(time - conductivity * normalizedLength));
         }
 
 #if UNITY_EDITOR
@@ -30,7 +40,7 @@ namespace EZhex1991.EZSoftBone
         }
         public void DrawGizmos()
         {
-            if (force == null) return;
+            if (force == null || !isActiveAndEnabled) return;
             Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
             if (Application.isPlaying)
             {
