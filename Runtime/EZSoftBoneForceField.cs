@@ -48,7 +48,7 @@ namespace EZhex1991.EZSoftBone
                 EZSoftBoneUtility.DrawGizmosArrow(Vector3.zero, forceVector, width, Vector3.right);
                 Gizmos.DrawRay(Vector3.zero, forceVector);
             }
-            Gizmos.DrawWireCube(new Vector3(0, 0, force.force), force.turbulence);
+            Gizmos.DrawWireCube(new Vector3(0, 0, force.force), force.turbulence * 2);
         }
 #endif
     }
