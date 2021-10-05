@@ -10,6 +10,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 [English Version](README.md)  
 
+视频教程: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
+
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 ![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
 

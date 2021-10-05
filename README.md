@@ -10,7 +10,7 @@ EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate h
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 [查看中文介绍](README_CN.md)  
 
-Tutorial Video: [https://www.bilibili.com/video/BV1mz4y1Q76o](https://www.bilibili.com/video/BV1mz4y1Q76o)
+Tutorial Videos: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 ![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
