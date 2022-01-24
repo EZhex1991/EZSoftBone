@@ -1,14 +1,14 @@
 # EZSoftBone
 
+[English ReadMe](README.md)  
+[View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
+
+EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头发、尾巴、胸部、裙子等柔性物体的运动效果。
+
 该资源完全**免费**并开源。  
 如果你觉得它对你有所帮助，你可以在[AssetStore](https://assetstore.unity.com/packages/slug/148136)上购买它来表示对作者的支持。或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
 
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
-
-EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头发、尾巴、胸部、裙子等柔性物体的运动效果。
-
-[View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
-[English Version](README.md)  
 
 视频教程: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 
