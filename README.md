@@ -26,7 +26,7 @@ Tutorial Videos: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftyp
 ![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
 
 - Root Bones: a list of root bone Transforms
-- End Bones: a list of end bone Transforms (useful for a hierarchy that has special parts, and you want to use different materials for these parts)
+- End Bones: a list of end bone Transforms
 - Material: `EZSoftBoneMaterial`, default material will be used if not specified
 - Structure
   - Start Depth: start depth of this system. (Transform will not be controlled if its depth is less than startDepth)
