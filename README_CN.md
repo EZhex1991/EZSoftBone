@@ -10,7 +10,9 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
 
-视频教程: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
+视频教程: 
+https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ
+https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 ![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)

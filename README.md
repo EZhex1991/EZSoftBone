@@ -10,7 +10,9 @@ If you feel it helpful, you can buy it on [AssetStore](https://assetstore.unity.
 
 If you need a refund, send your Invoice Number to ezhex1991@outlook.com. **Refund for any reason will be accepted**.
 
-Tutorial Videos: https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
+Tutorial Videos: 
+https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ
+https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 ![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
