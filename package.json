@@ -1,0 +1,17 @@
+{
+  "name": "com.ezhex1991.ezsoftbone",
+  "version": "1.7.1",
+  "displayName": "EZSoftBone",
+  "description": "EZSoftBone is a simple kinetic simulator for Unity, you can use it to simulate hair/tail/breast/skirt and other soft objects.",
+  "unity": "2017.4",
+  "unityRelease": "29f1",
+  "documentationUrl": "https://github.com/EZhex1991/EZSoftBone",
+  "changelogUrl": "https://github.com/EZhex1991/EZSoftBone",
+  "licensesUrl": "https://github.com/EZhex1991/EZSoftBone",
+  "keywords": [],
+  "author": {
+    "name": "Ethan Zack",
+    "email": "ezhex1991@outlook.com",
+    "url": "https://github.com/EZhex1991"
+  }
+}
