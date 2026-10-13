@@ -4,9 +4,12 @@
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 
 EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头发、尾巴、胸部、裙子等柔性物体的运动效果。
+ 
+如果你觉得它对你有所帮助，你可以在下面的链接购买：
+[AssetStore](https://assetstore.unity.com/packages/slug/148136)
+[AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
 
-该资源完全**免费**并开源。  
-如果你觉得它对你有所帮助，你可以在[AssetStore](https://assetstore.unity.com/packages/slug/148136)上购买它来表示对作者的支持。或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
+或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
 
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
 
@@ -19,9 +22,9 @@ https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
-- 材质"EZSoftBoneMaterial"调节表现效果，可重用于多个EZSoftBone对象
-- 继承EZSoftBoneColliderBase创建自定义碰撞
-- 自然风力模拟
+- 通过独立的材质`EZSoftBoneMaterial`调节表现效果，可重用于多个`EZSoftBone`对象
+- 可继承`EZSoftBoneColliderBase`创建自定义碰撞
+- 自然风力模拟组件`EZSoftBoneForce`
 
 ## EZSoftBone
 
@@ -47,7 +50,7 @@ https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
   - Extra Colliders: 让普通Collider也能起作用（本来是为了兼容老代码，不过有一定适用范围就保留了）
   - Radius: 骨骼的碰撞球大小
   - Radius Curve: 碰撞球大小的分布
-- Performance
+- Performance **(未完成)**
   - Delta Time Mode
     - Delta Time: UnityEngine.Time.deltaTime
     - Unscaled Delta Time: UnityEngine.Time.unscaledDeltaTime
