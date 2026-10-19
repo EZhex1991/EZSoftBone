@@ -9,7 +9,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 [AssetStore](https://assetstore.unity.com/packages/slug/148136)
 [AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
 
-或者，你可以选择其他方式表示[感谢](https://github.com/EZhex1991/Receipts)。
+或者，你可以选择其他方式表示感谢 [Donate](.SamplePicture/Donate.jpg)。
 
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
 

@@ -9,7 +9,7 @@ If you find it helpful, you may purchase it on AssetStore
 - [AssetStore](https://assetstore.unity.com/packages/slug/148136)  
 - [AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
 
-[Donations](https://github.com/EZhex1991/Receipts) are also always welcome.
+[Donations](.SamplePicture/Donate.jpg) are also always welcome.
 
 Should you need a refund, send your Invoice Number to ezhex1991@outlook.com. **Refunds are accepted for any reason**.
 
