@@ -33,7 +33,6 @@ namespace EZhex1991.EZSoftBone
 
         private SerializedProperty m_DeltaTimeMode;
         private SerializedProperty m_ConstantDeltaTime;
-        private SerializedProperty m_Iterations;
         private SerializedProperty m_SleepThreshold;
 
         private SerializedProperty m_Gravity;
@@ -66,7 +65,6 @@ namespace EZhex1991.EZSoftBone
 
             m_DeltaTimeMode = serializedObject.FindProperty(nameof(m_DeltaTimeMode));
             m_ConstantDeltaTime = serializedObject.FindProperty(nameof(m_ConstantDeltaTime));
-            m_Iterations = serializedObject.FindProperty(nameof(m_Iterations));
             m_SleepThreshold = serializedObject.FindProperty(nameof(m_SleepThreshold));
 
             m_Gravity = serializedObject.FindProperty(nameof(m_Gravity));
@@ -137,16 +135,6 @@ namespace EZhex1991.EZSoftBone
             }
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Performance", EditorStyles.boldLabel);
-            EditorGUILayout.PropertyField(m_DeltaTimeMode);
-            if (m_DeltaTimeMode.intValue == (int)DeltaTimeMode.Constant)
-            {
-                EditorGUILayout.PropertyField(m_ConstantDeltaTime);
-            }
-            EditorGUILayout.PropertyField(m_Iterations);
-            EditorGUILayout.PropertyField(m_SleepThreshold);
-
-            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Gravity", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(m_Gravity);
             EditorGUILayout.PropertyField(m_GravityAligner);
@@ -164,6 +152,15 @@ namespace EZhex1991.EZSoftBone
             {
                 initRequired = true;
             }
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Performance (Implementation Incomplete)", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(m_DeltaTimeMode);
+            if (m_DeltaTimeMode.intValue == (int)DeltaTimeMode.Constant)
+            {
+                EditorGUILayout.PropertyField(m_ConstantDeltaTime);
+            }
+            EditorGUILayout.PropertyField(m_SleepThreshold);
 
             serializedObject.ApplyModifiedProperties();
 

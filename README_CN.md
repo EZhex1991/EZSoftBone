@@ -14,8 +14,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
 
 视频教程: 
-https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ
-https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
+- [Youtube](https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ)
+- [BiliBili](https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create)
 
 ![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
 ![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
@@ -50,13 +50,6 @@ https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
   - Extra Colliders: 让普通Collider也能起作用（本来是为了兼容老代码，不过有一定适用范围就保留了）
   - Radius: 骨骼的碰撞球大小
   - Radius Curve: 碰撞球大小的分布
-- Performance **(未完成)**
-  - Delta Time Mode
-    - Delta Time: UnityEngine.Time.deltaTime
-    - Unscaled Delta Time: UnityEngine.Time.unscaledDeltaTime
-    - Constant: 可指定固定值
-  - Iterations: 迭代计算的次数
-  - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
 - Gravity
   - Gravity: 应用于该骨骼的重力
   - Gravity Aligner: 指定一个Transform作为重力的参考系，重力对骨骼系统的影响大小与参考系的Y轴和世界坐标系的Y轴的点乘成负相关  
@@ -68,6 +61,12 @@ https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create
 - References:
   - Simulate Space: 指定一个Transform作为模拟计算的空间参考系，当骨骼系统需要和某个物体同时移动（相对静止）时使用  
     - *例：人坐在移动的车中，头发应保持相对静止*
+- Performance **(未完成)**
+  - Delta Time Mode
+    - Delta Time: UnityEngine.Time.deltaTime
+    - Unscaled Delta Time: UnityEngine.Time.unscaledDeltaTime
+    - Constant: 可指定固定值
+  - Sleep Threshold: 小于该值的速度会视为静止（高帧率时调节该数值防止异常抖动）
 
 ## EZSoftBoneMaterial
 

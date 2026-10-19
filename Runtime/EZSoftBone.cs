@@ -302,10 +302,6 @@ namespace EZhex1991.EZSoftBone
         private float m_ConstantDeltaTime = 0.03f;
         public float constantDeltaTime { get { return m_ConstantDeltaTime; } set { m_ConstantDeltaTime = value; } }
 
-        [SerializeField, Range(1, 10)]
-        private int m_Iterations = 1;
-        public int iterations { get { return m_Iterations; } set { m_Iterations = value; } }
-
         [SerializeField]
         private float m_SleepThreshold = 0.005f;
         public float sleepThreshold { get { return m_SleepThreshold; } set { m_SleepThreshold = Mathf.Max(0, value); } }
@@ -380,7 +376,6 @@ namespace EZhex1991.EZSoftBone
         {
             m_StartDepth = Mathf.Max(0, m_StartDepth);
             m_ConstantDeltaTime = Mathf.Max(DeltaTime_Min, m_ConstantDeltaTime);
-            m_Iterations = Mathf.Max(1, m_Iterations);
             m_SleepThreshold = Mathf.Max(0, m_SleepThreshold);
             m_Radius = Mathf.Max(0, m_Radius);
         }
@@ -580,14 +575,10 @@ namespace EZhex1991.EZSoftBone
                 globalForce *= attenuation;
             }
 
-            deltaTime /= iterations;
-            for (int i = 0; i < iterations; i++)
-            {
                 for (int j = 0; j < m_Structures.Count; j++)
                 {
                     UpdateBones(m_Structures[j], deltaTime);
                 }
-            }
         }
         private void UpdateBones(Bone bone, float deltaTime)
         {
@@ -609,7 +600,7 @@ namespace EZhex1991.EZSoftBone
                 force.x *= transform.localScale.x;
                 force.y *= transform.localScale.y;
                 force.z *= transform.localScale.z;
-                bone.speed += force * (1 - bone.resistance) / iterations;
+                bone.speed += force * (1 - bone.resistance);
 
                 // Damping (inertia attenuation)
                 bone.speed *= 1 - bone.damping;
@@ -621,7 +612,7 @@ namespace EZhex1991.EZSoftBone
                 // Stiffness (shape keeper)
                 Vector3 parentMovement = bone.parentBone.worldPosition - bone.parentBone.transform.position;
                 expectedPosition = bone.parentBone.transform.TransformPoint(bone.localPosition) + parentMovement;
-                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPosition, bone.stiffness / iterations);
+                newWorldPosition = Vector3.Lerp(newWorldPosition, expectedPosition, bone.stiffness);
 
                 // Slackness (length keeper)
                 // Length needs to be calculated with TransformVector to match runtime scaling
@@ -648,7 +639,7 @@ namespace EZhex1991.EZSoftBone
                     }
                 }
                 expectedPosition /= lengthConstraints;
-                newWorldPosition = Vector3.Lerp(expectedPosition, newWorldPosition, bone.slackness / iterations);
+                newWorldPosition = Vector3.Lerp(expectedPosition, newWorldPosition, bone.slackness);
 
                 // Collision
                 if (bone.radius > 0)

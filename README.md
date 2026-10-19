@@ -50,12 +50,6 @@ Tutorial Videos:
   - Extra Colliders: Lets ordinary Unity colliders participate in simulation. Originally added for legacy-code compatibility, kept due to pratical use-cases.
   - Radius: Radius of bone collision spheres.
   - Radius Curve: Distribution profile for collision-sphere radius.
-- Performance **(Incomplete)**
-  - Delta Time Mode
-    - Delta Time: `UnityEngine.Time.deltaTime`.
-    - Unscaled Delta Time: `UnityEngine.Time.unscaledDeltaTime`.
-    - Constant: User-defined fixed time-step value.
-  - Sleep Threshold: Nodes with velocity below this value are considered stationary. Adjust this value at high frame-rates to suppress abnormal jitter.
 - Gravity
   - Gravity: Gravity magnitude applied to this bone system.
   - Gravity Aligner: Assign a Transform as gravity reference frame. Effective gravity strength is inversely correlated with the dot-product between the aligner's Y-axis and world-space Y-axis.
@@ -67,6 +61,12 @@ Tutorial Videos:
 - References
   - Simulate Space: Assign a Transform as reference frame for simulation calculations. Use this when soft bones need to move together with an object and stay relatively static.
     - *eg: For a character sitting inside a moving vehicle, hair should remain relatively static against the vehicle.*
+- Performance **(Implementation Incomplete)**
+  - Delta Time Mode
+    - Delta Time: `UnityEngine.Time.deltaTime`.
+    - Unscaled Delta Time: `UnityEngine.Time.unscaledDeltaTime`.
+    - Constant: User-defined fixed time-step value.
+  - Sleep Threshold: Nodes with velocity below this value are considered stationary. Adjust this value at high frame-rates to suppress abnormal jitter.
 
 ## EZSoftBoneMaterial
 
