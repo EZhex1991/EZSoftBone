@@ -1,5 +1,6 @@
 {
     "name": "EZhex1991.EZSoftBone.Editor",
+    "rootNamespace": "EZhex1991.EZSoftBone",
     "references": [
         "EZhex1991.EZSoftBone"
     ],

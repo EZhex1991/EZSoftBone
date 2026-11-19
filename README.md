@@ -9,7 +9,7 @@ If you find it helpful, you may purchase it on AssetStore
 - [AssetStore](https://assetstore.unity.com/packages/slug/148136)  
 - [AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
 
-[Donations](.SamplePicture/Donate.jpg) are also always welcome.
+[Donations](Documentation~/Images/Donate.jpg) are also always welcome.
 
 Should you need a refund, send your Invoice Number to ezhex1991@outlook.com. **Refunds are accepted for any reason**.
 
@@ -17,8 +17,8 @@ Tutorial Videos:
 - [Youtube](https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ)
 - [BiliBili](https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create)
 
-![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
-![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
+![EZSoftBone](Documentation~/Images/EZSoftBone_2.gif)
+![EZSoftBone](Documentation~/Images/EZSoftBone_3.gif)
 
 - Support all collider types (including MeshCollider)
 - Support mesh-like structures (cloth-style simulation)
@@ -28,7 +28,7 @@ Tutorial Videos:
 
 ## EZSoftBone
 
-![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
+![EZSoftBone](Documentation~/Images/EZSoftBone_Inspector.png)
 
 - Root Bones: List of root bone Transforms.
 - End Bones: List of end bone Transforms. (used when parts of your soft-bone hierachy require different parameter settings)
@@ -54,7 +54,7 @@ Tutorial Videos:
   - Gravity: Gravity magnitude applied to this bone system.
   - Gravity Aligner: Assign a Transform as gravity reference frame. Effective gravity strength is inversely correlated with the dot-product between the aligner's Y-axis and world-space Y-axis.
     - *eg: Create a GameObject with zero world-space rotation, parent it under the character's head, and assign it as the hair-system Gravity Aligner. You will see the Grivity barely affects hair while the character stands upright, and gravity effect increases when the character lies down or bows their head.*
-    - For a heady context-menu to reset a Transform's world rotation, refer to: [EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+    - For a context-menu to reset a Transform's world rotation, refer to: [EZTransformContextMenu](https://github.com/EZhex1991/EZEditorTools/blob/main/Editor/General/EZTransformContextMenu.cs)
 - Force
   - Force Module: `EZSoftBoneForce`, external force module applied to bones. (Can be used for wind simulation)
   - Force Scale: Global scale multiplier for Force Module output.
@@ -72,7 +72,7 @@ Tutorial Videos:
 
 Assets/Create/EZSoftBone/SBMat
 
-![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial_Inspector.png)
+![EZSoftBoneMaterial](Documentation~/Images/EZSoftBoneMaterial_Inspector.png)
 
 - Damping: Higher values produce faster velocity decay, making motion appare move "floaty".
 - Stiffness: Higher values presever original shape better, making the structure feel stiffer.
@@ -83,7 +83,7 @@ Each parameter have an associated Curve, defining how values distribute across t
 
 ## EZSoftBoneCollider
 
-![EZSoftBoneCollider](.SamplePicture/EZSoftBoneCollider_Inspector.png)
+![EZSoftBoneCollider](Documentation~/Images/EZSoftBoneCollider_Inspector.png)
 
 - Reference Collider: All type of Unity Collider can be referenced, **An EZSoftBoneCollider does not need to reside on the same GameObject as its reference collider.**
 - Margin: Collision margin
@@ -93,8 +93,8 @@ Each parameter have an associated Curve, defining how values distribute across t
 
 Assets/Create/EZSoftBone/SBForce
 
-![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
-![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
+![EZSoftBoneForce_Curve](Documentation~/Images/EZSoftBoneForce_Inspector_Curve.png)
+![EZSoftBoneForce_Perlin](Documentation~/Images/EZSoftBoneForce_Inspector_Perlin.png)
 
 - Conductivity: Force conductivity.
 - Force: Base force magnitude. (applied along local Z-axis)

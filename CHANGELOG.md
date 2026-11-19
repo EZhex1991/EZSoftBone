@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0] - 2026-11-19
+
+### Changed
+
+- Migrated the package to the Unity Package Manager layout.
+- Renamed the package identifier to `ezhex1991.ezsoftbone`.
+- Moved demo content to `Samples~/Demo`.
+- Moved documentation images to `Documentation~/Images`.
+- Preserved Sample asset `.meta` files to keep Prefab and asset references valid.
+- Updated Runtime and Editor assembly definitions.
+- Updated README documentation and package metadata.
+
 ## [1.7.1] - 2026-10-19
 
 ### Changed

@@ -9,7 +9,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 [AssetStore](https://assetstore.unity.com/packages/slug/148136)
 [AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
 
-或者，你可以选择其他方式表示感谢 [Donate](.SamplePicture/Donate.jpg)。
+或者，你可以选择其他方式表示感谢 [Donate](Documentation~/Images/Donate.jpg)。
 
 如果你需要退款，只需要发送你的购买凭据(Invoice Number)到我的邮箱ezhex1991@outlook.com即可。**任何理由的退款都会被接受**。
 
@@ -17,8 +17,8 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 - [Youtube](https://www.youtube.com/playlist?list=PLQq-xGF_CK-c5uPueOy_U7k3S5MIB32KJ)
 - [BiliBili](https://space.bilibili.com/57392896/favlist?fid=1267164296&ftype=create)
 
-![EZSoftBone](.SamplePicture/EZSoftBone_2.gif)
-![EZSoftBone](.SamplePicture/EZSoftBone_3.gif)
+![EZSoftBone](Documentation~/Images/EZSoftBone_2.gif)
+![EZSoftBone](Documentation~/Images/EZSoftBone_3.gif)
 
 - 支持所有碰撞体（包括MeshCollider）
 - 支持网状结构（模拟布料）
@@ -28,7 +28,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 ## EZSoftBone
 
-![EZSoftBone](.SamplePicture/EZSoftBone_Inspector.png)
+![EZSoftBone](Documentation~/Images/EZSoftBone_Inspector.png)
 
 - Root Bones: 骨骼根节点列表
 - End Bones: 末端节点列表（通常用在当你的柔性骨骼层级下面有一部分需要不同的参数时）
@@ -54,7 +54,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
   - Gravity: 应用于该骨骼的重力
   - Gravity Aligner: 指定一个Transform作为重力的参考系，重力对骨骼系统的影响大小与参考系的Y轴和世界坐标系的Y轴的点乘成负相关  
     - *例：创建新物体保持其世界坐标下的旋转为0，拖拽到人物头部节点下，将其作为头发的Aligner，则人物站立时头发不受重力影响，躺下或低头时重力影响加大*
-    - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZUnity/blob/master/Assets/EZhex1991/EZUnity/Editor/ContextMenu/EZTransformContextMenu.cs)
+    - 创建菜单来轻松重置一个Transform的世界旋转，你可以参考这个页面：[EZTransformContextMenu](https://github.com/EZhex1991/EZEditorTools/blob/main/Editor/General/EZTransformContextMenu.cs)
 - Force
   - Force Module: 应用于该骨骼的其他力（可用来模拟风）
   - Force Scale: 可以对ForceModule的输出进行缩放
@@ -72,7 +72,7 @@ EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头�
 
 Assets/Create/EZSoftBone/SBMat
 
-![EZSoftBoneMaterial](.SamplePicture/EZSoftBoneMaterial_Inspector.png)
+![EZSoftBoneMaterial](Documentation~/Images/EZSoftBoneMaterial_Inspector.png)
 
 - Damping: 阻力（数值越大速度衰减越快，显得更“飘”）
 - Stiffness: 强度（数值越大形状越不容易改变，显得更“硬”）
@@ -83,7 +83,7 @@ Assets/Create/EZSoftBone/SBMat
 
 ## EZSoftBoneCollider
 
-![EZSoftBoneCollider](.SamplePicture/EZSoftBoneCollider_Inspector.png)
+![EZSoftBoneCollider](Documentation~/Images/EZSoftBoneCollider_Inspector.png)
 
 - Reference Collider: 所有类型的Collider都可以作为Reference，**EZSoftBoneCollider并不需要和它的ReferenceCollider在同一GameObject上**
 - Margin:
@@ -93,8 +93,8 @@ Assets/Create/EZSoftBone/SBMat
 
 Assets/Create/EZSoftBone/SBForce
 
-![EZSoftBoneForce_Curve](.SamplePicture/EZSoftBoneForce_Inspector_Curve.png)
-![EZSoftBoneForce_Perlin](.SamplePicture/EZSoftBoneForce_Inspector_Perlin.png)
+![EZSoftBoneForce_Curve](Documentation~/Images/EZSoftBoneForce_Inspector_Curve.png)
+![EZSoftBoneForce_Perlin](Documentation~/Images/EZSoftBoneForce_Inspector_Perlin.png)
 
 - Conductivity: 传导性
 - Force: 基础力的大小 (Z轴方向)

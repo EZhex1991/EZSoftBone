@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace EZhex1991.EZSoftBone
 {
-    [CreateAssetMenu(fileName = "SBMat", menuName = "EZSoftBone/SBMaterial")]
+    [CreateAssetMenu(fileName = "SBMat", menuName = "EZSoftBone/SBMaterial", order = (int)EZAssetMenuOrder.SBMaterial)]
     public class EZSoftBoneMaterial : ScriptableObject
     {
         [SerializeField, Range(0, 1)]
