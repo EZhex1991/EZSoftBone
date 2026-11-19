@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.1] - 2026-11-19
+
+### Changed
+
+- Raised the minimum supported Unity version to 2020.3.
+
 ## [1.8.0] - 2026-11-19
 
 ### Changed

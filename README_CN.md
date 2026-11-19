@@ -4,6 +4,8 @@
 [View it on GitHub](https://github.com/EZhex1991/EZSoftBone)  
 
 EZSoftBone是一个简单动力学模拟器，你可以用它实现自然的头发、尾巴、胸部、裙子等柔性物体的运动效果。
+
+最低支持 Unity 版本：`2020.3`。
  
 如果你觉得它对你有所帮助，你可以在下面的链接购买：
 [AssetStore](https://assetstore.unity.com/packages/slug/148136)

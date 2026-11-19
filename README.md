@@ -5,6 +5,8 @@
 
 EZSoftBone is a simple kinematic simulator for Unity, designed to simulate soft objects such as hair, tail, breast, skirt and more.
 
+Minimum supported Unity version: `2020.3`.
+
 If you find it helpful, you may purchase it on AssetStore  
 - [AssetStore](https://assetstore.unity.com/packages/slug/148136)  
 - [AssetStoreChina](https://assetstore.u3d.cn/packages/tools/physics/assetstore-package-20007189)
