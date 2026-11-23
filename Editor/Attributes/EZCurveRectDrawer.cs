@@ -2,6 +2,9 @@
  * CreateTime:      2019-06-14 20:11:56
  * Organization:    #ORGANIZATION#
  * Description:     
+ * Source:           Assets/EZhex1991/EZUnity/Editor/Common/Attributes/EZCurveRectDrawer.cs
+ * Note:             This file is a complete copy kept by the independent package and does not depend on EZUnity assemblies.
+ * Sync:             Modify the source file first, then synchronize changes to this file.
  */
 using UnityEditor;
 using UnityEngine;

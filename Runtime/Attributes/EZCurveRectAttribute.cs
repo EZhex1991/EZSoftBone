@@ -2,6 +2,9 @@
  * CreateTime:      2018-12-24 13:22:59
  * Organization:    #ORGANIZATION#
  * Description:     
+ * Source:           Assets/EZhex1991/EZUnity/Runtime/Common/Attributes/EZCurveRectAttribute.cs
+ * Note:             This file is a complete copy kept by the independent package and does not depend on EZUnity assemblies.
+ * Sync:             Modify the source file first, then synchronize changes to this file.
  */
 using UnityEngine;
 
