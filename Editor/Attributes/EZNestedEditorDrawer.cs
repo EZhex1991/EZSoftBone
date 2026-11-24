@@ -32,6 +32,7 @@ namespace EZhex1991.EZSoftBone
                     if (property.isExpanded)
                     {
                         EditorGUI.indentLevel++;
+                        EditorGUILayout.BeginVertical(EditorStyles.helpBox);
                         if (property.type == "PPtr<$Material>")
                         {
                             Editor.CreateCachedEditor(property.objectReferenceValue, typeof(MaterialEditor), ref nestedEditor);
@@ -42,7 +43,57 @@ namespace EZhex1991.EZSoftBone
                             Editor.CreateCachedEditor(property.objectReferenceValue, null, ref nestedEditor);
                             nestedEditor.OnInspectorGUI();
                         }
+                        EditorGUILayout.EndVertical();
                         EditorGUI.indentLevel--;
+                    }
+                }
+            }
+            EditorGUI.EndProperty();
+        }
+    }
+
+    public abstract class EZNestedPropertyDrawer : PropertyDrawer
+    {
+        protected bool initialized;
+        protected SerializedObject serializedObject;
+
+        protected abstract void GetSerializedProperties();
+        protected abstract void OnNestedEditorGUI(Rect position, SerializedProperty property, GUIContent label);
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+            if (property.hasMultipleDifferentValues)
+            {
+                EditorGUI.PropertyField(position, property, label);
+            }
+            else
+            {
+                EditorGUI.BeginChangeCheck();
+                EditorGUI.PropertyField(position, property, label, true);
+                if (EditorGUI.EndChangeCheck() || !initialized)
+                {
+                    if (property.objectReferenceValue == null)
+                    {
+                        serializedObject = null;
+                    }
+                    else
+                    {
+                        serializedObject = new SerializedObject(property.objectReferenceValue);
+                        GetSerializedProperties();
+                    }
+                    initialized = true;
+                }
+                if (serializedObject != null)
+                {
+                    property.isExpanded = EditorGUI.Foldout(new Rect(position) { width = 0 }, property.isExpanded, GUIContent.none, false);
+                    if (property.isExpanded)
+                    {
+                        serializedObject.Update();
+                        EditorGUI.indentLevel++;
+                        OnNestedEditorGUI(position, property, label);
+                        EditorGUI.indentLevel--;
+                        serializedObject.ApplyModifiedProperties();
                     }
                 }
             }
